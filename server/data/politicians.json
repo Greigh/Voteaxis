@@ -533,14 +533,14 @@
   {
     "id": "nancy_pelosi",
     "name": "Nancy Pelosi",
-    "role": "Former Speaker of the House",
+    "role": "U.S. Representative (CA-11)",
     "party": "Democratic",
     "state": "CA",
     "officeType": "representative",
-    "current": false,
+    "current": true,
     "bio": "Longtime House Democratic leader who steered major health and climate legislation.",
     "officeHistory": [
-      "U.S. Representative, CA-11",
+      "U.S. Representative, CA-11 (1987\u2013present)",
       "Speaker of the House (2007\u20132011, 2019\u20132023)"
     ],
     "issues": {
@@ -27947,14 +27947,14 @@
   {
     "id": "rich_mccormick",
     "name": "Rich McCormick",
-    "role": "U.S. Representative (GA-6)",
+    "role": "U.S. Representative (GA-7)",
     "party": "Republican",
     "state": "GA",
     "officeType": "representative",
     "current": true,
     "bio": "Rich McCormick represents Atlanta's northern suburbs, an emergency-room physician and former Marine helicopter pilot who serves on the Education and Workforce Committee.",
     "officeHistory": [
-      "U.S. Representative, GA-6 (2023-present)"
+      "U.S. Representative, GA-6 (2023\u20132025), GA-7 (2025\u2013present)"
     ],
     "issues": {
       "jobs": 62,
@@ -28014,7 +28014,7 @@
         "blurb": "Signature contrast on health and entitlements."
       }
     ],
-    "bioguideId": "M001208"
+    "bioguideId": "M001218"
   },
   {
     "id": "hank_johnson",
@@ -28092,14 +28092,14 @@
   {
     "id": "lucy_mcbath",
     "name": "Lucy McBath",
-    "role": "U.S. Representative (GA-7)",
+    "role": "U.S. Representative (GA-6)",
     "party": "Democratic",
     "state": "GA",
     "officeType": "representative",
     "current": true,
-    "bio": "Lucy McBath represents Atlanta's northern suburbs; she became a gun-safety activist after her teenage son Jordan Davis was murdered in a 2012 dispute over loud music, and later flipped a longtime Republican district.",
+    "bio": "Lucy McBath represents a Fulton and DeKalb County-based Atlanta district, redrawn twice by court-ordered redistricting since she first flipped a longtime Republican seat in 2018; she became a national gun-safety advocate after her teenage son Jordan Davis was murdered in a 2012 dispute over loud music.",
     "officeHistory": [
-      "U.S. Representative, GA-6/GA-7 (2019-present)"
+      "U.S. Representative, GA-6 (2019\u20132023), GA-7 (2023\u20132025), GA-6 (2025\u2013present)"
     ],
     "issues": {
       "jobs": -52,
@@ -28156,7 +28156,7 @@
         "quote": "National spokesperson, Moms Demand Action, following the 2012 killing of her son Jordan Davis."
       }
     ],
-    "bioguideId": "M001218"
+    "bioguideId": "M001208"
   },
   {
     "id": "zell_miller",
