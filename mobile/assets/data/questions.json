@@ -1,0 +1,581 @@
+[
+  {
+    "id": "healthcare_a",
+    "issueId": "healthcare",
+    "text": "If someone can't afford health insurance, the government should help them get real coverage — not just tell them to shop for a private plan.",
+    "polarity": -1,
+    "steel_man_argument": "A market can still cover the poor through targeted subsidies and charity care without making government the buyer of last resort. When the state sets prices and benefits, shortages and waiting lists often replace the rationing that prices would have done in the open. Historically, medical innovation clustered where customers and insurers could pay, not where ministries assigned budgets."
+  },
+  {
+    "id": "healthcare_b",
+    "issueId": "healthcare",
+    "text": "Health care is a basic need. The government should make sure people can see a doctor even if they don't have much money.",
+    "polarity": -1,
+    "steel_man_argument": "Calling care a right does not create doctors, beds, or drugs. Public guarantees can crowd out private supply and hide cost until the system rations by queue. A narrower safety net plus portable insurance can protect the destitute without putting every visit on the public books."
+  },
+  {
+    "id": "healthcare_c",
+    "issueId": "healthcare",
+    "text": "I'd rather expand public health coverage than leave people stuck hoping private insurance works out.",
+    "polarity": -1,
+    "steel_man_argument": "Private insurance, for all its failures, still bids for new treatments and lets patients exit a bad plan. Expanding public coverage can freeze today's technology and politics into tomorrow's benefit package. The economic case for competition is that wasted care is easier to refuse when someone can take their premium elsewhere."
+  },
+  {
+    "id": "medicare_a",
+    "issueId": "medicare",
+    "text": "I'd rather expand Medicare for older Americans than cut it to save money for other things.",
+    "polarity": -1,
+    "steel_man_argument": "Medicare's open-ended promise collides with longer lives and costlier technology. Expanding it now shifts a larger bill onto fewer workers. Fiscal conservatives have long argued for a defined contribution or later eligibility so the program survives for people who will actually be old in 2050."
+  },
+  {
+    "id": "medicare_b",
+    "issueId": "medicare",
+    "text": "Protecting and strengthening Medicare for seniors should beat almost every plan to shrink it.",
+    "polarity": -1,
+    "steel_man_argument": "Strengthening an uncapped entitlement can be the opposite of protecting seniors if the trust fund is exhausted. Means-testing and premium support try to keep a floor under the poor elderly without treating every affluent retiree as a public charge."
+  },
+  {
+    "id": "medicare_c",
+    "issueId": "medicare",
+    "text": "Cutting Medicare to \"save money\" is the wrong trade — older Americans earned that coverage.",
+    "polarity": -1,
+    "steel_man_argument": "The payroll tax that 'earned' Medicare never prepaid the benefits now promised. Treating cuts as theft ignores that the next cohort is being asked to pay twice. A smaller, solvent program can be more honest than a large one that will break mid-retirement."
+  },
+  {
+    "id": "social_security_a",
+    "issueId": "social_security",
+    "text": "Social Security for retirees should be protected, even if that means higher taxes on the wealthy.",
+    "polarity": -1,
+    "steel_man_argument": "Pay-as-you-go pensions work when many workers support few retirees. That ratio has collapsed. Raising taxes on a thin slice of income delays the arithmetic; raising the retirement age or tilting benefits toward the poor faces it. Personal accounts, whatever their market risk, at least prefund claims."
+  },
+  {
+    "id": "social_security_b",
+    "issueId": "social_security",
+    "text": "Congress should keep Social Security strong for people who paid into it — not chip away at benefits.",
+    "polarity": -1,
+    "steel_man_argument": "Benefits that outrun contributions are not a locked box. Congress has already changed the formula and can again. A program that cannot describe its own 75-year gap is not 'kept strong' by leaving the formula untouched."
+  },
+  {
+    "id": "social_security_c",
+    "issueId": "social_security",
+    "text": "I'd rather ask the richest Americans to pay more than risk cutting Social Security checks.",
+    "polarity": -1,
+    "steel_man_argument": "Taxing a narrow peak of earnings still leaves a defined-benefit system exposed to demographics. The deeper dispute is whether retirement income should be a political transfer or a claim on real capital. Only the second can compound."
+  },
+  {
+    "id": "taxes_a",
+    "issueId": "taxes",
+    "text": "The richest Americans still don't pay enough in taxes — that should change.",
+    "polarity": -1,
+    "steel_man_argument": "High statutory rates on the rich often change the form of income more than the amount collected. Capital is mobile; labor that cannot leave pays more of the bill. The economic case for restraint is incidence and incentives, not sympathy for fortunes."
+  },
+  {
+    "id": "taxes_b",
+    "issueId": "taxes",
+    "text": "People at the very top should pay a bigger share of taxes than they do now.",
+    "polarity": -1,
+    "steel_man_argument": "A larger share at the top can mean less investment if the tax falls on returns to new capital rather than on rents. Historical bursts of growth often followed simpler, lower rates on incremental effort. Progressivity can still live in a consumed-income or land tax that does less damage to formation of tools."
+  },
+  {
+    "id": "taxes_c",
+    "issueId": "taxes",
+    "text": "Closing loopholes that mostly help the ultra-rich is more important than cutting their tax rates.",
+    "polarity": -1,
+    "steel_man_argument": "Loopholes are sometimes the only remaining margin of thrift in a high-rate code. Closing them while lifting rates can be a double hit on the activity that employs people. Broadening the base works best when marginal rates come down enough that avoidance stops paying."
+  },
+  {
+    "id": "deficit_a",
+    "issueId": "deficit",
+    "text": "Getting the national debt under control should matter more than almost any new government spending idea.",
+    "polarity": 1,
+    "steel_man_argument": "Public debt can finance assets that raise future income — ports, research, a war for survival — so the right test is return, not the headline balance. Austerity in a slump can shrink the denominator and make the ratio worse. Automatic stabilizers exist because private demand collapses first."
+  },
+  {
+    "id": "deficit_b",
+    "issueId": "deficit",
+    "text": "Washington spends too much borrowed money — balancing the budget should be a top priority.",
+    "polarity": 1,
+    "steel_man_argument": "Borrowed money is not automatically waste. It is a claim on future taxes that can be cheaper than leaving productive people idle. The 20th century's large debts were often retired by growth after the emergency, not by an immediate surplus."
+  },
+  {
+    "id": "deficit_c",
+    "issueId": "deficit",
+    "text": "I'd rather cut government spending than keep adding to the national debt.",
+    "polarity": 1,
+    "steel_man_argument": "Cutting spending to 'stop adding debt' can cut the very outlays that keep a recession from becoming a depression. The steel-man for borrowing is intertemporal: tax in good years, spend when private balance sheets are frozen."
+  },
+  {
+    "id": "jobs_a",
+    "issueId": "jobs",
+    "text": "If you work full time in America, the minimum wage should be high enough to live on.",
+    "polarity": -1,
+    "steel_man_argument": "A legal wage floor prices out the least productive hour. Teenagers, the formerly incarcerated, and thin-margin shops feel it first. Historically, much of the rise in living standards came from productivity, not from the statute that named a minimum."
+  },
+  {
+    "id": "jobs_b",
+    "issueId": "jobs",
+    "text": "A full-time job should pay enough for rent, food, and basics — the law should set that floor.",
+    "polarity": -1,
+    "steel_man_argument": "Rent and food are local; a national floor is not. Forcing a high wage in a low-productivity county can erase the job rather than raise the check. Earned-income subsidies can lift take-home pay without forbidding the hire."
+  },
+  {
+    "id": "jobs_c",
+    "issueId": "jobs",
+    "text": "Raising the minimum wage is worth it even if some businesses have to adjust.",
+    "polarity": -1,
+    "steel_man_argument": "Adjustment is not costless. Hours fall, tasks automate, and hiring standards rise. The worker who keeps the job may gain; the one who never gets interviewed does not appear in the 'winners' column."
+  },
+  {
+    "id": "inflation_a",
+    "issueId": "inflation",
+    "text": "I'd rather the economy expand more slowly if that brought grocery and rent prices down.",
+    "polarity": 1,
+    "steel_man_argument": "A slightly hotter economy can pull in people who had left the labor force and raise real wages even if the price index ticks up. Disinflation that slams demand can scar careers for a decade. Growth is one way households outrun a price level."
+  },
+  {
+    "id": "inflation_b",
+    "issueId": "inflation",
+    "text": "Keeping prices for food and housing under control matters more to me than pushing for faster economic growth.",
+    "polarity": 1,
+    "steel_man_argument": "Food and rent are sticky for many reasons besides 'too much growth' — zoning, war, and supply shocks. Sacrificing expansion to chase every spike can lock in a smaller economy. The Phillips-curve trade-off is real in the short run; so is hysteresis."
+  },
+  {
+    "id": "inflation_c",
+    "issueId": "inflation",
+    "text": "If fighting high prices meant the economy grew a little slower, I'd take that trade.",
+    "polarity": 1,
+    "steel_man_argument": "Slowing the whole machine to cool a few prices treats a relative-price problem as a monetary one. Targeted supply and a credible nominal anchor can stabilize expectations without a deliberate slump."
+  },
+  {
+    "id": "free_market_a",
+    "issueId": "free_market",
+    "text": "Most of the time, companies competing for customers works better than a new government regulation.",
+    "polarity": 1,
+    "steel_man_argument": "Competition fails when costs spill onto people who never signed the contract — smoke, systemic risk, a monopolized bottleneck. Regulation is sometimes the only way to make the price tell the truth. Antitrust exists because rivalry is not self-executing once a firm can buy the referee."
+  },
+  {
+    "id": "free_market_b",
+    "issueId": "free_market",
+    "text": "I'd rather let businesses compete freely than have Washington write more rules for them.",
+    "polarity": 1,
+    "steel_man_argument": "Washington's rules are clumsy, but so is a market with hidden information and lock-in. Licensing, pollution, and network effects are old reasons philosophers gave the state a corrective role. The question is design, not whether a rulebook exists."
+  },
+  {
+    "id": "free_market_c",
+    "issueId": "free_market",
+    "text": "Huge companies already have too much power — the government should break them up or put stricter limits on them.",
+    "polarity": -1,
+    "steel_man_argument": "Size can be the residue of serving customers at lower cost. Breaking a firm because it is large can raise prices if the alternative is a flock of weaker rivals. Many 'dominant' positions erode when a new technology arrives — if the law lets it."
+  },
+  {
+    "id": "free_market_d",
+    "issueId": "free_market",
+    "text": "When big corporations dominate an industry, government should step in to protect regular people.",
+    "polarity": -1,
+    "steel_man_argument": "Protecting 'regular people' by restraining a successful firm can protect incumbents' quieter rivals instead. Capture is a two-way risk: regulators can be used to freeze a market as easily as to open it. Consumer surplus is a better test than headcount of giants."
+  },
+  {
+    "id": "welfare_a",
+    "issueId": "welfare",
+    "text": "Help for people on government aid should come with tougher work requirements, not looser ones.",
+    "polarity": 1,
+    "steel_man_argument": "Aid without a work test can become a substitute wage in places where jobs are thin but not gone. Conditionality is an attempt to keep insurance from turning into a permanent parallel economy. The historical poor-law debate was exactly this tension between relief and dependency."
+  },
+  {
+    "id": "welfare_b",
+    "issueId": "welfare",
+    "text": "Government aid should push people toward work whenever they can work — not make it easy to stay on benefits long-term.",
+    "polarity": 1,
+    "steel_man_argument": "A floor that ignores behavior still shapes it. Time limits and work requirements try to keep the transfer for shocks — layoff, illness — rather than for a chosen exit from the labor market. Dignity arguments cut both ways: so does the dignity of being needed."
+  },
+  {
+    "id": "welfare_c",
+    "issueId": "welfare",
+    "text": "I'd rather tighten rules for welfare and food assistance than expand them without more conditions.",
+    "polarity": 1,
+    "steel_man_argument": "Expanding unconditional aid can raise reservation wages and thin the job ladder that used to teach punctuality. Tighter rules are a bet that most recipients can work and that the state should not pay them not to try."
+  },
+  {
+    "id": "abortion_a",
+    "issueId": "abortion",
+    "text": "In early and mid pregnancy, the decision should belong to the pregnant person — not politicians.",
+    "polarity": -1,
+    "steel_man_argument": "If a fetus is a rights-bearing human, 'who decides' is the wrong frame — we do not let one person end another's life because the timing is early. Viability and heartbeat are attempts to mark when the state's equal-protection duty begins. The philosophical case is continuity of the same organism, not a party platform."
+  },
+  {
+    "id": "abortion_b",
+    "issueId": "abortion",
+    "text": "Lawmakers should not ban abortion in the early months of pregnancy.",
+    "polarity": -1,
+    "steel_man_argument": "A ban in the early months follows from treating the unborn as a patient, not a possession. Legal systems already limit bodily choices that kill another: you may not harvest a kidney from a stranger. The hard question is status, not convenience."
+  },
+  {
+    "id": "abortion_c",
+    "issueId": "abortion",
+    "text": "Access to abortion should mostly be a personal medical choice, not a state ban.",
+    "polarity": -1,
+    "steel_man_argument": "Calling the choice purely medical assumes the second body is not yet a subject of justice. Embryology describes a distinct genome and a directional development. If that entity is due protection, the state's interest is not 'interference' but the oldest job of law."
+  },
+  {
+    "id": "lgbtq_a",
+    "issueId": "lgbtq",
+    "text": "Being LGBTQ shouldn't cost you a job, an apartment, or service at a business — federal law should say that clearly.",
+    "polarity": -1,
+    "steel_man_argument": "A general antidiscrimination rule can compel speech and association — a photographer, a landlord, a church employer. Liberal theory has long carved space for conscientious refusal when the service is expressive or intimate. The clash is two rights, not one."
+  },
+  {
+    "id": "lgbtq_b",
+    "issueId": "lgbtq",
+    "text": "LGBTQ people should have the same legal protections against discrimination as everyone else.",
+    "polarity": -1,
+    "steel_man_argument": "Equal protection can be secured against the state without deputizing every private actor. Sex-based rules in sports, prisons, and medicine rest on bodies, not animus. A law that cannot see sex will misfire in those domains."
+  },
+  {
+    "id": "lgbtq_c",
+    "issueId": "lgbtq",
+    "text": "Businesses and landlords shouldn't be allowed to refuse people just because they're LGBTQ.",
+    "polarity": -1,
+    "steel_man_argument": "Refusal is sometimes bigotry and sometimes a boundary around a vocation. Markets and alternative vendors can absorb most slights without a federal damages action. Compelled custom has a cost in pluralism that older liberals took seriously."
+  },
+  {
+    "id": "civil_rights_a",
+    "issueId": "civil_rights",
+    "text": "When local governments treat some people unfairly, the federal government should step in and push back.",
+    "polarity": -1,
+    "steel_man_argument": "Local majorities can be cruel; they can also know a fact Washington does not. Federal commands that freeze a snapshot of justice can outlive the problem and create new ones. Federalism was designed as a brake on a single moral bureaucracy."
+  },
+  {
+    "id": "civil_rights_b",
+    "issueId": "civil_rights",
+    "text": "Protecting civil rights is worth strong federal action — even when states don't like it.",
+    "polarity": -1,
+    "steel_man_argument": "National power used for rights can be reused for other crusades. A color-blind Constitution, applied evenly, may protect minorities better than race-conscious machinery that teaches citizens to sort themselves. The 14th Amendment's text is equal protection, not equal outcomes."
+  },
+  {
+    "id": "civil_rights_c",
+    "issueId": "civil_rights",
+    "text": "If a community faces discrimination, Washington should have the power to intervene.",
+    "polarity": -1,
+    "steel_man_argument": "Intervention assumes the center is wiser than the periphery. History also shows federal tools captured by the fashion of the decade. Remedies aimed at individuals, not groups, keep the law from becoming a spoils system."
+  },
+  {
+    "id": "education_a",
+    "issueId": "education",
+    "text": "Public K–12 money should follow the student, even if they go to a private school.",
+    "polarity": 1,
+    "steel_man_argument": "Public money leaving with the student can drain the common school that teaches a shared civic language. Private operators can select, exclude, and preach. A republic has an interest in one messy classroom where unlike children still meet."
+  },
+  {
+    "id": "education_b",
+    "issueId": "education",
+    "text": "Parents should be able to use public education money at a private school if that's a better fit for their kid.",
+    "polarity": 1,
+    "steel_man_argument": "Choice sounds like exit; for the child who stays, it can mean a thinner neighborhood school. Accountability is harder when funds scatter across unregulated vendors. The public system is a bet that education is a civic good, not only a consumer good."
+  },
+  {
+    "id": "education_c",
+    "issueId": "education",
+    "text": "School choice — including private options with public dollars — would improve American education.",
+    "polarity": 1,
+    "steel_man_argument": "Vouchers can cream the motivated and leave concentrated disadvantage behind. Evidence on achievement is mixed; evidence on segregation by religion and income is not. Improving the existing system may beat fragmenting it."
+  },
+  {
+    "id": "traditional_values_a",
+    "issueId": "traditional_values",
+    "text": "We've gotten too loose with cultural standards; bringing back more traditional norms would be good for the country.",
+    "polarity": 1,
+    "steel_man_argument": "Norms that once fit a farm household can crush people who do not. Mill's harm principle still asks whether the state or the neighbor may punish a vice that stays private. Openness to new family forms is also a tradition: of experiment under liberty."
+  },
+  {
+    "id": "traditional_values_b",
+    "issueId": "traditional_values",
+    "text": "America would be better off if more people followed older, traditional values about family and behavior.",
+    "polarity": 1,
+    "steel_man_argument": "Older codes mixed wisdom with hierarchy that law later dismantled for good reasons. Family stability can be pursued by insurance, leave, and wages without restoring a single approved script. A free society lets people fail at new forms rather than freeze the last one."
+  },
+  {
+    "id": "traditional_values_c",
+    "issueId": "traditional_values",
+    "text": "Cultural change has gone too far — I'd welcome a stronger push back toward traditional norms.",
+    "polarity": 1,
+    "steel_man_argument": "Cultural 'pushback' often lands on the least powerful first. The historical record of moral legislation — sumptuary laws, censorship — is long on zeal and short on the virtue it promised. Persuasion and example scale better than nostalgia with a badge."
+  },
+  {
+    "id": "gun_control_a",
+    "issueId": "gun_control",
+    "text": "National gun laws should make it harder to buy a firearm than it is today.",
+    "polarity": -1,
+    "steel_man_argument": "A right to keep arms is a check on both crime and the state, which is why it was written down. Law-abiding owners are not the margin that produces mass attacks. Licensing that is slow or political becomes a prior restraint on a constitutional liberty."
+  },
+  {
+    "id": "gun_control_b",
+    "issueId": "gun_control",
+    "text": "There should be more national rules and background checks before someone can buy a gun.",
+    "polarity": -1,
+    "steel_man_argument": "Background systems already exist; adding friction mostly burdens the person who waits in line. Shall-issue research is contested, but the philosophical core is that self-defense cannot be rented from a delayed permit office. Criminals acquire outside the counter."
+  },
+  {
+    "id": "gun_control_c",
+    "issueId": "gun_control",
+    "text": "I'd support tighter federal gun laws even if that means more paperwork for legal buyers.",
+    "polarity": -1,
+    "steel_man_argument": "Paperwork that 'legal buyers' accept is still a tax on a right. Confiscatory or registry schemes teach owners to hide what they legally hold. Deterrence and armed defense are empirical claims; so is the claim that a form stops a determined attacker."
+  },
+  {
+    "id": "crime_death_a",
+    "issueId": "crime",
+    "text": "For the worst crimes, the death penalty should still be allowed.",
+    "polarity": 1,
+    "steel_man_argument": "Execution is irreversible and the record of exoneration is not empty. States that dropped the penalty did not obviously become more dangerous. Retribution can be served by life without parole without the ritual of killing a prisoner."
+  },
+  {
+    "id": "crime_death_b",
+    "issueId": "crime",
+    "text": "Some murders are so extreme that execution should remain a legal option.",
+    "polarity": 1,
+    "steel_man_argument": "Even 'the worst' cases are chosen by fallible juries and uneven counties. A penalty that depends on the quality of counsel is not equal justice. The European and several American experiments treat abolition as moral progress, not softness."
+  },
+  {
+    "id": "crime_police_a",
+    "issueId": "crime",
+    "text": "I'd rather have more police on the street and tougher charges than lighter policing and smaller forces.",
+    "polarity": 1,
+    "steel_man_argument": "More arrests can mean more errors, more alienated neighborhoods, and more juries that will not convict. Violence also falls when legitimate work returns and when police are trusted enough to hear witnesses. Force without legitimacy is expensive."
+  },
+  {
+    "id": "crime_police_b",
+    "issueId": "crime",
+    "text": "Public safety gets better with more cops and stricter prosecution — not with cutting police budgets.",
+    "polarity": 1,
+    "steel_man_argument": "Budgets are not the same as safety. Some of the drop in crime came from lead, aging, and private security. Overcharging can fill jails with people who would have aged out. A smaller, better-supervised force can outperform a larger unaccountable one."
+  },
+  {
+    "id": "immigration_path_a",
+    "issueId": "immigration",
+    "text": "People who have lived here a long time without papers should have a legal way to stay and eventually become citizens.",
+    "polarity": -1,
+    "steel_man_argument": "A path after unlawful entry tells the next cohort that the queue is optional. States are allowed to set members; that is what a border is. Fiscal and wage effects concentrate on the workers already here who compete with the new arrival."
+  },
+  {
+    "id": "immigration_path_b",
+    "issueId": "immigration",
+    "text": "Long-time undocumented residents who work and stay out of trouble deserve a path to legal status.",
+    "polarity": -1,
+    "steel_man_argument": "Legal status for long-stayers is compassion for one group and a signal to another. Guest-worker and visa expansion can meet labor demand without laundering a violation. Rule of law is a public good that erodes when exceptions become the system."
+  },
+  {
+    "id": "immigration_border_a",
+    "issueId": "immigration",
+    "text": "Until the southern border is under control, almost everything else about immigration can wait.",
+    "polarity": 1,
+    "steel_man_argument": "Asylum law and labor demand do not vanish because a crossing is disorderly. Enforcement-only eras have not ended unauthorized presence when employers still hire. Circular migration and faster legal work visas have, in some periods, reduced illegal entries more than walls alone."
+  },
+  {
+    "id": "immigration_border_b",
+    "issueId": "immigration",
+    "text": "Stopping illegal crossings at the border should come before new paths to citizenship.",
+    "polarity": 1,
+    "steel_man_argument": "Citizenship paths and border control are not a sequence so much as a bargain: people come when the law offers a door. Treating every crossing as the only issue ignores refugee conventions and the industries that petition for hands. Order can include expansion of lawful entry."
+  },
+  {
+    "id": "climate_a",
+    "issueId": "climate",
+    "text": "I'd pay more for electricity if it meant the U.S. actually hit serious climate goals.",
+    "polarity": -1,
+    "steel_man_argument": "Household energy is a necessity good. Raising its price to hit a date on a treaty taxes the poor twice if China and India keep building coal. Adaptation and nuclear research can cut risk without a planned scarcity of joules."
+  },
+  {
+    "id": "climate_b",
+    "issueId": "climate",
+    "text": "Fighting climate change is worth higher energy costs if it actually cuts pollution.",
+    "polarity": -1,
+    "steel_man_argument": "Carbon has a social cost, but so does deindustrializing faster than substitutes exist. Discount rates matter: impoverishing the present for a slightly cooler future can fail a Pareto test. Innovation prizes and a simple tax may beat a stack of industrial mandates."
+  },
+  {
+    "id": "climate_c",
+    "issueId": "climate",
+    "text": "The U.S. should move faster on climate policy even when that raises prices for households.",
+    "polarity": -1,
+    "steel_man_argument": "Speed that outruns the grid produces blackouts and political revolt, which then kills the policy. Developing countries still climb an energy ladder the West already used. A slower path that keeps consent may cut more tons by 2100."
+  },
+  {
+    "id": "energy_a",
+    "issueId": "energy",
+    "text": "We should produce more American oil and gas first; racing to clean energy can come after supply is solid.",
+    "polarity": 1,
+    "steel_man_argument": "Oil and gas lock in a stock of carbon the atmosphere will keep. 'After supply is solid' has no end date while the resource remains profitable. Public support for substitutes is how earlier transitions — from whale oil, from wood — were hurried when the externality was large."
+  },
+  {
+    "id": "energy_b",
+    "issueId": "energy",
+    "text": "Keeping U.S. oil and gas production strong matters more right now than speeding up the green energy transition.",
+    "polarity": 1,
+    "steel_man_argument": "Domestic hydrocarbons still dump a global cost. Energy security can include uranium, geothermal, and storage, not only wells. Waiting to transition is a bet that damages stay linear; the physical claim is that they may not."
+  },
+  {
+    "id": "energy_c",
+    "issueId": "energy",
+    "text": "I'd rather drill and produce more American energy than risk shortages while we wait on renewables.",
+    "polarity": 1,
+    "steel_man_argument": "Drilling more does not cancel the climate arithmetic; it can delay the learning that makes clean capacity cheap. Shortages are a planning failure as often as a geology failure. A state that can lease public land can also require a declining carbon intensity."
+  },
+  {
+    "id": "terrorism_a",
+    "issueId": "terrorism",
+    "text": "Stopping terrorist attacks is worth stronger security tools, even if that means less privacy for ordinary people.",
+    "polarity": 1,
+    "steel_man_argument": "Security tools that work in secret are the ones most prone to mission creep. A free society's comparative advantage is trust and error-correction, not omniscience. The Fourth Amendment was written after general warrants, not after a quiet century."
+  },
+  {
+    "id": "terrorism_b",
+    "issueId": "terrorism",
+    "text": "I'd accept more surveillance and security screening if it clearly helped stop terrorist attacks.",
+    "polarity": 1,
+    "steel_man_argument": "Surveillance that 'clearly helps' is rarely audited by the people it watches. False positives ruin lives and waste agents. History of wartime emergency powers is a history of their lingering after the war."
+  },
+  {
+    "id": "terrorism_c",
+    "issueId": "terrorism",
+    "text": "National security against terrorism should come before worries about privacy when the two conflict.",
+    "polarity": 1,
+    "steel_man_argument": "Privacy is not a luxury good opposed to survival; it is how opposition, journalism, and minority worship survive. Trading it away permanently for a temporary tactic inverts the usual emergency logic: the exception should expire."
+  },
+  {
+    "id": "military_a",
+    "issueId": "military",
+    "text": "Bringing U.S. troops home from bases overseas would make America weaker, not safer.",
+    "polarity": 1,
+    "steel_man_argument": "Forward bases can create the very commitments that produce wars of choice. Offshore balancing — come late, come heavy — has a long pedigree among realists. Solvency is a strategy: a hollow expeditionary force invites probes."
+  },
+  {
+    "id": "military_b",
+    "issueId": "military",
+    "text": "The U.S. should keep a strong military presence abroad — pulling back would invite more threats.",
+    "polarity": 1,
+    "steel_man_argument": "Presence can become a tripwire that local allies under-provide for. Empires overextend; republics are supposed to notice. Bringing force home can still leave a navy and a reserve that surge when a genuine hegemon appears."
+  },
+  {
+    "id": "military_c",
+    "issueId": "military",
+    "text": "Closing overseas bases and bringing troops home would leave America less prepared, not more peaceful.",
+    "polarity": 1,
+    "steel_man_argument": "Closing a base is not the same as disarming. Geography and missiles have shrunk the value of some garrisons. A cheaper, more reserved posture can fund the weapons that actually deter while cutting the occupations that do not."
+  },
+  {
+    "id": "foreign_policy_a",
+    "issueId": "foreign_policy",
+    "text": "Working with allies and talking first should be our default abroad; going it alone with military force should be rare.",
+    "polarity": -1,
+    "steel_man_argument": "Talking first only works if the other side believes you will fight. Coalitions can dilute aims until nothing is decided. Unilateral force, used rarely and finished quickly, has sometimes ended wars that conferences prolonged."
+  },
+  {
+    "id": "foreign_policy_b",
+    "issueId": "foreign_policy",
+    "text": "Diplomacy and coalitions should come before the U.S. uses military force on its own.",
+    "polarity": -1,
+    "steel_man_argument": "Diplomacy without a credible last resort is a request. Adversaries read hesitation as a bargain. The 20th century's failed settlements are the brief for keeping an option that does not need a committee's permission."
+  },
+  {
+    "id": "foreign_policy_c",
+    "issueId": "foreign_policy",
+    "text": "America should solve problems abroad by negotiating with partners first — not by acting alone with the military.",
+    "polarity": -1,
+    "steel_man_argument": "Partners free-ride when they know Washington will wait. Acting alone can restore deterrence that a slow consensus spent. The steel-man is not fondness for war; it is bargaining theory: threats must be costly to be real."
+  },
+  {
+    "id": "taxes_1912",
+    "issueId": "taxes",
+    "era": "historical",
+    "text": "I'd back a federal income tax on the very rich — the kind the 16th Amendment opened up — rather than lean only on tariffs.",
+    "polarity": -1,
+    "steel_man_argument": "Tariffs were the republic's original broad tax: they hit consumption at the port and needed no inquisition into household books. A federal income tax creates a permanent inspectorate and a new politics of exemption. For a still-rural country, customs were administrable in a way that inquisitorial assessment was not."
+  },
+  {
+    "id": "free_market_1912",
+    "issueId": "free_market",
+    "era": "historical",
+    "text": "Congress should bust the trusts. A handful of corporations should not set prices for the rest of the country.",
+    "polarity": -1,
+    "steel_man_argument": "Trusts often cut prices by integrating rail, ore, and mill — that was the efficiency side of the great combinations. Busting them to restore a picturesque swarm of small firms can raise costs for the very consumers reformers claimed to defend. Common-law fraud and publicity may police abuse without a new industrial court."
+  },
+  {
+    "id": "jobs_1912",
+    "issueId": "jobs",
+    "era": "historical",
+    "text": "The law should stop factories from working children and set a floor under adult wages.",
+    "polarity": -1,
+    "steel_man_argument": "A statutory childhood and a wage floor can push work into homework and tenements the inspector never sees. Immigrant families used children's wages to buy the next rung; forbidding the rung does not create a better one. Freedom of contract was the Progressive-era minority report: adults, even poor ones, know their trade-offs."
+  },
+  {
+    "id": "civil_rights_1912",
+    "issueId": "civil_rights",
+    "era": "historical",
+    "text": "Women should vote. The Constitution should not leave that to whatever a state machine decides.",
+    "polarity": -1,
+    "steel_man_argument": "Suffrage was still argued as a state police power over the household and the ballot's 'quality.' Opponents claimed a federal sex amendment would upend local compromise and the family as a voting unit. The steel-man is federalism and an older view of virtual representation — not a claim that women lack reason."
+  },
+  {
+    "id": "traditional_values_1912",
+    "issueId": "traditional_values",
+    "era": "historical",
+    "text": "I'd rather the government stay out of moral crusades like Prohibition than try to legislate private vice away.",
+    "polarity": -1,
+    "steel_man_argument": "Temperance leagues had a public-health brief: the saloon as a machine that ruined pay packets and filled police courts. Legislating vice was, to them, no different from legislating adulterated milk. If the state may quarantine a fever, they asked, why may it not quarantine a trade that diseased the home?"
+  },
+  {
+    "id": "immigration_1912",
+    "issueId": "immigration",
+    "era": "historical",
+    "text": "I'd tighten who can enter the country — literacy tests and national quotas — rather than keep the door as open as it was before World War I.",
+    "polarity": 1,
+    "steel_man_argument": "Open arrival built the cities and filled the factories that made the United States a power. Literacy tests and national quotas dressed racial fashion as science and cut off people fleeing pogroms and poverty. A republic confident in assimilation does not need a genealogical gate."
+  },
+  {
+    "id": "foreign_policy_1912",
+    "issueId": "foreign_policy",
+    "era": "historical",
+    "text": "The United States should not take colonies or act as policeman of the hemisphere. Republic, not empire.",
+    "polarity": -1,
+    "steel_man_argument": "A hemisphere without a navy invites European collection of debts by gunboat — the fear behind a prepared presence. Colonies and canal zones were defended as locks on trade routes, not as romance. Isolation that cannot keep the approaches open is not independence."
+  },
+  {
+    "id": "military_1912",
+    "issueId": "military",
+    "era": "historical",
+    "text": "A bigger navy and a prepared army are the price of staying independent in a world of empires.",
+    "polarity": 1,
+    "steel_man_argument": "Armies and battleships are how republics become garrisons. The anti-imperial brief of the period was that a large establishment needs wars to justify itself and taxes to feed itself. Militia and commerce, they said, had been enough for a country with oceans as moats."
+  },
+  {
+    "id": "energy_1912",
+    "issueId": "energy",
+    "era": "historical",
+    "text": "Public land, rivers, and forests should be conserved for the country — not sold off to the highest timber or mining bid.",
+    "polarity": -1,
+    "steel_man_argument": "Public reservation of timber and ore can freeze capital that would have employed a county. Homestead and patent traditions treated the continent as something to be used. Conservation that never cuts a tree is a museum; development that pays royalties can still leave a working forest."
+  },
+  {
+    "id": "deficit_1912",
+    "issueId": "deficit",
+    "era": "historical",
+    "text": "Sound money and a gold standard should beat experiments that cheapen the dollar to help debtors.",
+    "polarity": 1,
+    "steel_man_argument": "Gold can starve a growing country of currency when output outruns metal. Debtors and farmers in the 1890s were not imagining the deflation that raised the real weight of their mortgages. A managed standard — or silver — was offered as elasticity, not as theft."
+  },
+  {
+    "id": "welfare_1912",
+    "issueId": "welfare",
+    "era": "historical",
+    "text": "If industry maims a worker, the public owes a real compensation system — not leftover charity.",
+    "polarity": -1,
+    "steel_man_argument": "A public compensation scheme can become a political prize and a tax on the careful shop for the accidents of the careless. Voluntary mutual aid and liability suits already priced risk, however harshly. Charity that knows the face, they argued, wastes less than a bureau that knows a form."
+  },
+  {
+    "id": "healthcare_1912",
+    "issueId": "healthcare",
+    "era": "historical",
+    "text": "Cities and states should fund public health — clean water, vaccines, sanitation — instead of leaving epidemics to private luck.",
+    "polarity": -1,
+    "steel_man_argument": "Municipal clinics and vaccine mandates were attacked as a new priesthood over the body. Sanitation can be bought by cities without a standing hygiene state; epidemics also receded with wealth and plumbing that private building produced. Compulsion in the name of public health is still compulsion."
+  }
+]

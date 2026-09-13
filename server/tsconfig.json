@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    // The server runs on Bun, not Node. @types/bun is what supplies the
+    // `bun:test` / `bun:sqlite` module declarations, `import.meta.dir`, the
+    // `Bun` global, and Node's own built-ins — without it `tsc` cannot resolve
+    // any of them and every file reports phantom errors.
+    "types": ["bun"],
+    // Do not typecheck inside dependency .d.ts files; their problems are not
+    // ours to fix and they drown out real diagnostics. Matches web/.
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["src", "test"]
+}

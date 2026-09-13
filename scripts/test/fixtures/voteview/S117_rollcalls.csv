@@ -1,0 +1,4 @@
+congress,chamber,rollnumber,date,nominate_spread_1,bill_number,vote_desc,vote_question,dtl_desc
+117,Senate,1,2021-04-07,-0.45,S123,Corporate tax cut,On Passage of the Bill,To cut the corporate tax rate
+117,Senate,2,2021-04-08,-0.5,S123,Corporate tax cut,On the Amendment,Capital gains tax cut
+117,Senate,3,2021-04-09,-0.4,S123,Corporate tax cut,On the Motion,Internal revenue tax credit

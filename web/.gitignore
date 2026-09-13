@@ -1,0 +1,9 @@
+.next
+out
+.vercel
+.env
+.env*.local
+*.log
+.DS_Store
+node_modules
+data/waitlist.jsonl

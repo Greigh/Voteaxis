@@ -1,0 +1,19 @@
+# Copy to android/key.properties (gitignored) and point it at your own keystore.
+#
+#   keytool -genkeypair -v -keystore ~/voteaxis-upload.p12 -storetype PKCS12 \
+#     -keyalg RSA -keysize 4096 -validity 10000 -alias upload
+#
+# PKCS12, not JKS: keytool warns that JKS is a proprietary format and tells you
+# to migrate. Android accepts either.
+#
+# Back the keystore up somewhere that is not this machine, and put the password
+# in a password manager. Lose either and the Play listing can never be updated
+# again — the package is permanently bound to this key.
+#
+# Without this file the release build falls back to the SDK's shared debug key
+# and warns. That build runs locally and is not distributable.
+
+storeFile=/absolute/path/to/voteaxis-upload.p12
+storePassword=
+keyAlias=upload
+keyPassword=

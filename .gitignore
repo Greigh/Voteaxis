@@ -1,0 +1,65 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+web/.next/
+web/out/
+web/.vercel
+*.tsbuildinfo
+
+# Flutter
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/build/
+mobile/.pub-cache/
+mobile/.pub/
+mobile/**/Generated.xcconfig
+mobile/**/flutter_export_environment.sh
+mobile/.idea/
+mobile/*.iml
+
+# Env / secrets
+.env*
+!.env.example
+.env*.bak
+.env*~
+.env*.orig
+.env*.save
+
+# API
+server/data/*.db
+server/data/*.db-*
+server/data/*.sqlite
+server/data/*.sqlite-*
+
+# BICAM / scrape caches
+.firecrawl/
+**/.firecrawl/
+server/.venv/
+server/data/bicam-cache/
+server/data/voteview-cache/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / IDE
+.DS_Store
+*.swp
+.idea/
+.vscode/
+*.log
+
+# Android release signing — never commit. Losing the keystore means the Play
+# listing can never be updated again, so back it up off this machine.
+mobile/android/key.properties
+*.jks
+*.p12
+*.keystore
+
+# Mail server credentials — never commit
+mail-server-logins.md

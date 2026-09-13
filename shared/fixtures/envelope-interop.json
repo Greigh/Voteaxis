@@ -1,0 +1,40 @@
+{
+  "_comment": "Cross-language proof that the app and the web reader agree on the share-link envelope. Each side seals this payload and the other opens it, so a change to either implementation that breaks already-shared links fails a test instead of shipping. Regenerate with scripts/gen-envelope-fixtures.sh. Low iteration count so the suites stay fast; production uses ResultEnvelope.defaultIterations.",
+  "password": "correct horse battery staple",
+  "iterations": 1000,
+  "payload": {
+    "axisScore": -42.5,
+    "issueScores": {
+      "taxes": -60,
+      "climate": -80
+    },
+    "issueWeights": {
+      "taxes": 2.5
+    },
+    "pillarScores": {
+      "economy": -55
+    },
+    "dealbreakerIssueIds": [
+      "climate"
+    ],
+    "homeState": "MI",
+    "label": "Set by hand — 2026",
+    "transferCode": "VX1-ABCDE-FGHJK"
+  },
+  "sealedByDart": {
+    "v": 1,
+    "kdf": "pbkdf2-sha256",
+    "iterations": 1000,
+    "salt": "aJe6iDMaRi02FXKZs8YXqA==",
+    "nonce": "8jePeOVMKI6BdM8c",
+    "ciphertext": "THrkHDOTJl1JJIDRnmG7kYJ0R3SN37tNplc6lOS7ccz9OO/OiZm7UMtwtgAdmc1p/VrGwvvQD7/sj/vNOS3m13UWnlCUdmplEhCxZnsfunLWVvd2/HzioFjx8ZeVe8jPledQZiT+1Yu7MjVZPO8BOS+A2SUB+9JRPKjH/y1xs+HxqwSYSgMA5bHlDqT6mmvV/POqAyh1pDetzB3UkO/c9bVikzY+3o7mVUiYET0H2peVnlYssZ+pYg6//K0BGxf+Jf6skDm9T+SxOLhVLtwQfklnqhl2Ib87e5ws6YicIRmyDcyiJNUTypWWOitXwn89wp1WQeQoBgUhVqSuQoRWZuxb"
+  },
+  "sealedByWebCrypto": {
+    "v": 1,
+    "kdf": "pbkdf2-sha256",
+    "iterations": 1000,
+    "salt": "8hM7YrrVb90fjhL0VDc/ng==",
+    "nonce": "YGZ5sglbOpJKhisg",
+    "ciphertext": "j6FEjViSa3QNujsc8BnPP6Hx8CVDZRrJTedgDGKruQOci+C6hFqZRBXEQ1FOT61G8qJJcNRsAeRPYXAGm0cEht7zQ2DL9djIQCoHY056JcLZHIIdv1RvLspY+UBHVQnO5QXIx1NZgctbsCDYpx/RgxRfmLC9P+a8FLYme5WPHEbW/LfP3ACrEHmVIXd2eJYACVC5L5so9lerz6xYAqr+6zpZO3bGif7TB22D0Cv95rGfuQ6cvhJVbznoWw4foSlkeUpS7vzpoFH/qAYvDI048pEL3EO8/mZ0aYcFxUbhYDKyGsyWXyEPk+VE4yIG/CxK4sj8L1TvR3kKcr1i"
+  }
+}

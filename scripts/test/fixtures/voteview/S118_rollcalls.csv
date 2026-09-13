@@ -1,0 +1,6 @@
+congress,chamber,rollnumber,date,nominate_spread_1,bill_number,vote_desc,vote_question,dtl_desc
+118,Senate,1,2023-05-17,0.4,S1655,Medicare for All Act,On Passage of the Bill,To establish a Medicare for all health program
+118,Senate,2,2023-05-17,0.5,S1655,Medicare for All Act,On the Amendment,Public option to the Affordable Care Act
+118,Senate,3,2023-05-18,0.35,S1655,Medicare for All Act,On the Motion,Medicaid expansion
+118,Senate,4,2023-06-01,-0.6,S25,Concealed carry reciprocity,On Passage of the Bill,Second amendment firearm concealed carry
+118,Senate,5,2023-06-02,0.0,SRES13,Unanimous resolution,On the Resolution,National ice cream day

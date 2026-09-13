@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Nothing leaves the device.
+
+  android:allowBackup="false" already covers API 30 and below. This file is the
+  API 31+ half of the same answer, and it says no to both channels explicitly
+  rather than relying on a default.
+
+  It is not only a promise the home screen makes ("Answers are stored encrypted
+  on this device"). A backup could not work anyway: flutter_secure_storage wraps
+  its values with a key held in the Android Keystore, which is not backed up, so
+  restored blobs would arrive on the new device undecryptable. Device transfer
+  is a deliberate, user-driven step — see Settings, Share & transfer.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>

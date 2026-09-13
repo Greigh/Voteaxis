@@ -1,0 +1,13 @@
+{
+  // The base tsconfig excludes test/ because Next.js reads that file for the
+  // build and would otherwise try to compile the suite into the app. Tests
+  // still deserve typechecking, so they get their own config that reuses the
+  // same options and points at the excluded directory.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["bun", "node"]
+  },
+  "include": ["test/**/*.ts", "lib/**/*.ts", "app/**/*.ts", "scripts/**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "voteaxis",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Voteaxis monorepo — Next.js marketing site + Flutter app (iOS/Android) + Bun API server",
+  "author": "Greigh Studios LLC",
+  "scripts": {
+    "setup": "bun install --cwd web && cd mobile && flutter pub get",
+    "dev": "bun run --cwd web dev",
+    "api": "bun run --cwd server dev",
+    "ios": "bash scripts/mobile-run.sh ios",
+    "android": "bash scripts/mobile-run.sh android",
+    "build": "cd mobile && GRADLE_OPTS=\"$GRADLE_OPTS --enable-native-access=ALL-UNNAMED\" flutter build apk && flutter build ios",
+    "typecheck": "bun run --cwd server typecheck && bun run --cwd web typecheck",
+    "lint": "bun run typecheck && bun run --cwd web lint && cd mobile && flutter analyze",
+    "test": "bun test --cwd server && bun test --cwd web && cd mobile && flutter test",
+    "deploy": "python3 scripts/deploy.py",
+    "deploy:api": "python3 scripts/deploy.py --only api",
+    "deploy:web": "python3 scripts/deploy.py --only web",
+    "deploy:rollback": "python3 scripts/deploy.py --rollback",
+    "api:sync": "bun run --cwd server sync:bicam",
+    "sync:politicians": "python3 scripts/sync_politicians.py",
+    "roster:check": "python3 scripts/check_roster_staleness.py",
+    "scores:rollcall": "python3 scripts/score_rollcalls.py",
+    "scores:test": "python3 scripts/test/test_score_rollcalls.py",
+    "waitlist:list": "bun run --cwd web waitlist:list"
+  }
+}

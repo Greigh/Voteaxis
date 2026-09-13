@@ -1,0 +1,702 @@
+[
+  {
+    "state": "Alabama",
+    "abbr": "AL",
+    "name": "Tommy Tuberville",
+    "party": "Republican",
+    "wiki": "Tommy_Tuberville"
+  },
+  {
+    "state": "Alabama",
+    "abbr": "AL",
+    "name": "Katie Britt",
+    "party": "Republican",
+    "wiki": "Katie_Britt"
+  },
+  {
+    "state": "Alaska",
+    "abbr": "AK",
+    "name": "Lisa Murkowski",
+    "party": "Republican",
+    "wiki": "Lisa_Murkowski"
+  },
+  {
+    "state": "Alaska",
+    "abbr": "AK",
+    "name": "Dan Sullivan",
+    "party": "Republican",
+    "wiki": "Dan_Sullivan_(U.S._senator)"
+  },
+  {
+    "state": "Arizona",
+    "abbr": "AZ",
+    "name": "Mark Kelly",
+    "party": "Democratic",
+    "wiki": "Mark_Kelly"
+  },
+  {
+    "state": "Arizona",
+    "abbr": "AZ",
+    "name": "Ruben Gallego",
+    "party": "Democratic",
+    "wiki": "Ruben_Gallego"
+  },
+  {
+    "state": "Arkansas",
+    "abbr": "AR",
+    "name": "John Boozman",
+    "party": "Republican",
+    "wiki": "John_Boozman"
+  },
+  {
+    "state": "Arkansas",
+    "abbr": "AR",
+    "name": "Tom Cotton",
+    "party": "Republican",
+    "wiki": "Tom_Cotton"
+  },
+  {
+    "state": "California",
+    "abbr": "CA",
+    "name": "Alex Padilla",
+    "party": "Democratic",
+    "wiki": "Alex_Padilla"
+  },
+  {
+    "state": "California",
+    "abbr": "CA",
+    "name": "Adam Schiff",
+    "party": "Democratic",
+    "wiki": "Adam_Schiff"
+  },
+  {
+    "state": "Colorado",
+    "abbr": "CO",
+    "name": "Michael Bennet",
+    "party": "Democratic",
+    "wiki": "Michael_Bennet"
+  },
+  {
+    "state": "Colorado",
+    "abbr": "CO",
+    "name": "John Hickenlooper",
+    "party": "Democratic",
+    "wiki": "John_Hickenlooper"
+  },
+  {
+    "state": "Connecticut",
+    "abbr": "CT",
+    "name": "Richard Blumenthal",
+    "party": "Democratic",
+    "wiki": "Richard_Blumenthal"
+  },
+  {
+    "state": "Connecticut",
+    "abbr": "CT",
+    "name": "Chris Murphy",
+    "party": "Democratic",
+    "wiki": "Chris_Murphy"
+  },
+  {
+    "state": "Delaware",
+    "abbr": "DE",
+    "name": "Chris Coons",
+    "party": "Democratic",
+    "wiki": "Chris_Coons"
+  },
+  {
+    "state": "Delaware",
+    "abbr": "DE",
+    "name": "Lisa Blunt Rochester",
+    "party": "Democratic",
+    "wiki": "Lisa_Blunt_Rochester"
+  },
+  {
+    "state": "Florida",
+    "abbr": "FL",
+    "name": "Rick Scott",
+    "party": "Republican",
+    "wiki": "Rick_Scott"
+  },
+  {
+    "state": "Florida",
+    "abbr": "FL",
+    "name": "Ashley Moody",
+    "party": "Republican",
+    "wiki": "Ashley_Moody"
+  },
+  {
+    "state": "Georgia",
+    "abbr": "GA",
+    "name": "Jon Ossoff",
+    "party": "Democratic",
+    "wiki": "Jon_Ossoff"
+  },
+  {
+    "state": "Georgia",
+    "abbr": "GA",
+    "name": "Raphael Warnock",
+    "party": "Democratic",
+    "wiki": "Raphael_Warnock"
+  },
+  {
+    "state": "Hawaii",
+    "abbr": "HI",
+    "name": "Brian Schatz",
+    "party": "Democratic",
+    "wiki": "Brian_Schatz"
+  },
+  {
+    "state": "Hawaii",
+    "abbr": "HI",
+    "name": "Mazie Hirono",
+    "party": "Democratic",
+    "wiki": "Mazie_Hirono"
+  },
+  {
+    "state": "Idaho",
+    "abbr": "ID",
+    "name": "Mike Crapo",
+    "party": "Republican",
+    "wiki": "Mike_Crapo"
+  },
+  {
+    "state": "Idaho",
+    "abbr": "ID",
+    "name": "Jim Risch",
+    "party": "Republican",
+    "wiki": "Jim_Risch"
+  },
+  {
+    "state": "Illinois",
+    "abbr": "IL",
+    "name": "Dick Durbin",
+    "party": "Democratic",
+    "wiki": "Dick_Durbin"
+  },
+  {
+    "state": "Illinois",
+    "abbr": "IL",
+    "name": "Tammy Duckworth",
+    "party": "Democratic",
+    "wiki": "Tammy_Duckworth"
+  },
+  {
+    "state": "Indiana",
+    "abbr": "IN",
+    "name": "Todd Young",
+    "party": "Republican",
+    "wiki": "Todd_Young"
+  },
+  {
+    "state": "Indiana",
+    "abbr": "IN",
+    "name": "Jim Banks",
+    "party": "Republican",
+    "wiki": "Jim_Banks"
+  },
+  {
+    "state": "Iowa",
+    "abbr": "IA",
+    "name": "Chuck Grassley",
+    "party": "Republican",
+    "wiki": "Chuck_Grassley"
+  },
+  {
+    "state": "Iowa",
+    "abbr": "IA",
+    "name": "Joni Ernst",
+    "party": "Republican",
+    "wiki": "Joni_Ernst"
+  },
+  {
+    "state": "Kansas",
+    "abbr": "KS",
+    "name": "Jerry Moran",
+    "party": "Republican",
+    "wiki": "Jerry_Moran"
+  },
+  {
+    "state": "Kansas",
+    "abbr": "KS",
+    "name": "Roger Marshall",
+    "party": "Republican",
+    "wiki": "Roger_Marshall"
+  },
+  {
+    "state": "Kentucky",
+    "abbr": "KY",
+    "name": "Mitch McConnell",
+    "party": "Republican",
+    "wiki": "Mitch_McConnell"
+  },
+  {
+    "state": "Kentucky",
+    "abbr": "KY",
+    "name": "Rand Paul",
+    "party": "Republican",
+    "wiki": "Rand_Paul"
+  },
+  {
+    "state": "Louisiana",
+    "abbr": "LA",
+    "name": "Bill Cassidy",
+    "party": "Republican",
+    "wiki": "Bill_Cassidy"
+  },
+  {
+    "state": "Louisiana",
+    "abbr": "LA",
+    "name": "John Kennedy",
+    "party": "Republican",
+    "wiki": "John_Kennedy_(Louisiana_politician)"
+  },
+  {
+    "state": "Maine",
+    "abbr": "ME",
+    "name": "Susan Collins",
+    "party": "Republican",
+    "wiki": "Susan_Collins"
+  },
+  {
+    "state": "Maine",
+    "abbr": "ME",
+    "name": "Angus King",
+    "party": "Independent",
+    "wiki": "Angus_King"
+  },
+  {
+    "state": "Maryland",
+    "abbr": "MD",
+    "name": "Chris Van Hollen",
+    "party": "Democratic",
+    "wiki": "Chris_Van_Hollen"
+  },
+  {
+    "state": "Maryland",
+    "abbr": "MD",
+    "name": "Angela Alsobrooks",
+    "party": "Democratic",
+    "wiki": "Angela_Alsobrooks"
+  },
+  {
+    "state": "Massachusetts",
+    "abbr": "MA",
+    "name": "Elizabeth Warren",
+    "party": "Democratic",
+    "wiki": "Elizabeth_Warren"
+  },
+  {
+    "state": "Massachusetts",
+    "abbr": "MA",
+    "name": "Ed Markey",
+    "party": "Democratic",
+    "wiki": "Ed_Markey"
+  },
+  {
+    "state": "Michigan",
+    "abbr": "MI",
+    "name": "Gary Peters",
+    "party": "Democratic",
+    "wiki": "Gary_Peters"
+  },
+  {
+    "state": "Michigan",
+    "abbr": "MI",
+    "name": "Elissa Slotkin",
+    "party": "Democratic",
+    "wiki": "Elissa_Slotkin"
+  },
+  {
+    "state": "Minnesota",
+    "abbr": "MN",
+    "name": "Amy Klobuchar",
+    "party": "Democratic",
+    "wiki": "Amy_Klobuchar"
+  },
+  {
+    "state": "Minnesota",
+    "abbr": "MN",
+    "name": "Tina Smith",
+    "party": "Democratic",
+    "wiki": "Tina_Smith"
+  },
+  {
+    "state": "Mississippi",
+    "abbr": "MS",
+    "name": "Roger Wicker",
+    "party": "Republican",
+    "wiki": "Roger_Wicker"
+  },
+  {
+    "state": "Mississippi",
+    "abbr": "MS",
+    "name": "Cindy Hyde-Smith",
+    "party": "Republican",
+    "wiki": "Cindy_Hyde-Smith"
+  },
+  {
+    "state": "Missouri",
+    "abbr": "MO",
+    "name": "Josh Hawley",
+    "party": "Republican",
+    "wiki": "Josh_Hawley"
+  },
+  {
+    "state": "Missouri",
+    "abbr": "MO",
+    "name": "Eric Schmitt",
+    "party": "Republican",
+    "wiki": "Eric_Schmitt"
+  },
+  {
+    "state": "Montana",
+    "abbr": "MT",
+    "name": "Steve Daines",
+    "party": "Republican",
+    "wiki": "Steve_Daines"
+  },
+  {
+    "state": "Montana",
+    "abbr": "MT",
+    "name": "Tim Sheehy",
+    "party": "Republican",
+    "wiki": "Tim_Sheehy"
+  },
+  {
+    "state": "Nebraska",
+    "abbr": "NE",
+    "name": "Deb Fischer",
+    "party": "Republican",
+    "wiki": "Deb_Fischer"
+  },
+  {
+    "state": "Nebraska",
+    "abbr": "NE",
+    "name": "Pete Ricketts",
+    "party": "Republican",
+    "wiki": "Pete_Ricketts"
+  },
+  {
+    "state": "Nevada",
+    "abbr": "NV",
+    "name": "Catherine Cortez Masto",
+    "party": "Democratic",
+    "wiki": "Catherine_Cortez_Masto"
+  },
+  {
+    "state": "Nevada",
+    "abbr": "NV",
+    "name": "Jacky Rosen",
+    "party": "Democratic",
+    "wiki": "Jacky_Rosen"
+  },
+  {
+    "state": "New Hampshire",
+    "abbr": "NH",
+    "name": "Jeanne Shaheen",
+    "party": "Democratic",
+    "wiki": "Jeanne_Shaheen"
+  },
+  {
+    "state": "New Hampshire",
+    "abbr": "NH",
+    "name": "Maggie Hassan",
+    "party": "Democratic",
+    "wiki": "Maggie_Hassan"
+  },
+  {
+    "state": "New Jersey",
+    "abbr": "NJ",
+    "name": "Cory Booker",
+    "party": "Democratic",
+    "wiki": "Cory_Booker"
+  },
+  {
+    "state": "New Jersey",
+    "abbr": "NJ",
+    "name": "Andy Kim",
+    "party": "Democratic",
+    "wiki": "Andy_Kim_(politician)"
+  },
+  {
+    "state": "New Mexico",
+    "abbr": "NM",
+    "name": "Martin Heinrich",
+    "party": "Democratic",
+    "wiki": "Martin_Heinrich"
+  },
+  {
+    "state": "New Mexico",
+    "abbr": "NM",
+    "name": "Ben Ray Luj\u00e1n",
+    "party": "Democratic",
+    "wiki": "Ben_Ray_Luj\u00e1n"
+  },
+  {
+    "state": "New York",
+    "abbr": "NY",
+    "name": "Chuck Schumer",
+    "party": "Democratic",
+    "wiki": "Chuck_Schumer"
+  },
+  {
+    "state": "New York",
+    "abbr": "NY",
+    "name": "Kirsten Gillibrand",
+    "party": "Democratic",
+    "wiki": "Kirsten_Gillibrand"
+  },
+  {
+    "state": "North Carolina",
+    "abbr": "NC",
+    "name": "Thom Tillis",
+    "party": "Republican",
+    "wiki": "Thom_Tillis"
+  },
+  {
+    "state": "North Carolina",
+    "abbr": "NC",
+    "name": "Ted Budd",
+    "party": "Republican",
+    "wiki": "Ted_Budd"
+  },
+  {
+    "state": "North Dakota",
+    "abbr": "ND",
+    "name": "John Hoeven",
+    "party": "Republican",
+    "wiki": "John_Hoeven"
+  },
+  {
+    "state": "North Dakota",
+    "abbr": "ND",
+    "name": "Kevin Cramer",
+    "party": "Republican",
+    "wiki": "Kevin_Cramer"
+  },
+  {
+    "state": "Ohio",
+    "abbr": "OH",
+    "name": "Bernie Moreno",
+    "party": "Republican",
+    "wiki": "Bernie_Moreno"
+  },
+  {
+    "state": "Ohio",
+    "abbr": "OH",
+    "name": "Jon Husted",
+    "party": "Republican",
+    "wiki": "Jon_Husted"
+  },
+  {
+    "state": "Oklahoma",
+    "abbr": "OK",
+    "name": "James Lankford",
+    "party": "Republican",
+    "wiki": "James_Lankford"
+  },
+  {
+    "state": "Oklahoma",
+    "abbr": "OK",
+    "name": "Alan Armstrong",
+    "party": "Republican",
+    "wiki": "Alan_S._Armstrong"
+  },
+  {
+    "state": "Oregon",
+    "abbr": "OR",
+    "name": "Ron Wyden",
+    "party": "Democratic",
+    "wiki": "Ron_Wyden"
+  },
+  {
+    "state": "Oregon",
+    "abbr": "OR",
+    "name": "Jeff Merkley",
+    "party": "Democratic",
+    "wiki": "Jeff_Merkley"
+  },
+  {
+    "state": "Pennsylvania",
+    "abbr": "PA",
+    "name": "John Fetterman",
+    "party": "Democratic",
+    "wiki": "John_Fetterman"
+  },
+  {
+    "state": "Pennsylvania",
+    "abbr": "PA",
+    "name": "Dave McCormick",
+    "party": "Republican",
+    "wiki": "Dave_McCormick"
+  },
+  {
+    "state": "Rhode Island",
+    "abbr": "RI",
+    "name": "Jack Reed",
+    "party": "Democratic",
+    "wiki": "Jack_Reed_(Rhode_Island_politician)"
+  },
+  {
+    "state": "Rhode Island",
+    "abbr": "RI",
+    "name": "Sheldon Whitehouse",
+    "party": "Democratic",
+    "wiki": "Sheldon_Whitehouse"
+  },
+  {
+    "state": "South Carolina",
+    "abbr": "SC",
+    "name": "Tim Scott",
+    "party": "Republican",
+    "wiki": "Tim_Scott"
+  },
+  {
+    "state": "South Carolina",
+    "abbr": "SC",
+    "name": "Darline Graham",
+    "party": "Republican",
+    "wiki": "Darline_Graham"
+  },
+  {
+    "state": "South Dakota",
+    "abbr": "SD",
+    "name": "John Thune",
+    "party": "Republican",
+    "wiki": "John_Thune"
+  },
+  {
+    "state": "South Dakota",
+    "abbr": "SD",
+    "name": "Mike Rounds",
+    "party": "Republican",
+    "wiki": "Mike_Rounds"
+  },
+  {
+    "state": "Tennessee",
+    "abbr": "TN",
+    "name": "Marsha Blackburn",
+    "party": "Republican",
+    "wiki": "Marsha_Blackburn"
+  },
+  {
+    "state": "Tennessee",
+    "abbr": "TN",
+    "name": "Bill Hagerty",
+    "party": "Republican",
+    "wiki": "Bill_Hagerty"
+  },
+  {
+    "state": "Texas",
+    "abbr": "TX",
+    "name": "John Cornyn",
+    "party": "Republican",
+    "wiki": "John_Cornyn"
+  },
+  {
+    "state": "Texas",
+    "abbr": "TX",
+    "name": "Ted Cruz",
+    "party": "Republican",
+    "wiki": "Ted_Cruz"
+  },
+  {
+    "state": "Utah",
+    "abbr": "UT",
+    "name": "Mike Lee",
+    "party": "Republican",
+    "wiki": "Mike_Lee"
+  },
+  {
+    "state": "Utah",
+    "abbr": "UT",
+    "name": "John Curtis",
+    "party": "Republican",
+    "wiki": "John_Curtis"
+  },
+  {
+    "state": "Vermont",
+    "abbr": "VT",
+    "name": "Bernie Sanders",
+    "party": "Independent",
+    "wiki": "Bernie_Sanders"
+  },
+  {
+    "state": "Vermont",
+    "abbr": "VT",
+    "name": "Peter Welch",
+    "party": "Democratic",
+    "wiki": "Peter_Welch"
+  },
+  {
+    "state": "Virginia",
+    "abbr": "VA",
+    "name": "Mark Warner",
+    "party": "Democratic",
+    "wiki": "Mark_Warner"
+  },
+  {
+    "state": "Virginia",
+    "abbr": "VA",
+    "name": "Tim Kaine",
+    "party": "Democratic",
+    "wiki": "Tim_Kaine"
+  },
+  {
+    "state": "Washington",
+    "abbr": "WA",
+    "name": "Patty Murray",
+    "party": "Democratic",
+    "wiki": "Patty_Murray"
+  },
+  {
+    "state": "Washington",
+    "abbr": "WA",
+    "name": "Maria Cantwell",
+    "party": "Democratic",
+    "wiki": "Maria_Cantwell"
+  },
+  {
+    "state": "West Virginia",
+    "abbr": "WV",
+    "name": "Shelley Moore Capito",
+    "party": "Republican",
+    "wiki": "Shelley_Moore_Capito"
+  },
+  {
+    "state": "West Virginia",
+    "abbr": "WV",
+    "name": "Jim Justice",
+    "party": "Republican",
+    "wiki": "Jim_Justice"
+  },
+  {
+    "state": "Wisconsin",
+    "abbr": "WI",
+    "name": "Ron Johnson",
+    "party": "Republican",
+    "wiki": "Ron_Johnson"
+  },
+  {
+    "state": "Wisconsin",
+    "abbr": "WI",
+    "name": "Tammy Baldwin",
+    "party": "Democratic",
+    "wiki": "Tammy_Baldwin"
+  },
+  {
+    "state": "Wyoming",
+    "abbr": "WY",
+    "name": "John Barrasso",
+    "party": "Republican",
+    "wiki": "John_Barrasso"
+  },
+  {
+    "state": "Wyoming",
+    "abbr": "WY",
+    "name": "Cynthia Lummis",
+    "party": "Republican",
+    "wiki": "Cynthia_Lummis"
+  }
+]

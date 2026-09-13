@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_description">Agree or disagree on the issue of the day to nudge your Spectrum Issue Index.</string>
+    <string name="widget_agree">Agree</string>
+    <string name="widget_disagree">Disagree</string>
+</resources>

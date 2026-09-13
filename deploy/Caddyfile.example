@@ -1,0 +1,66 @@
+# Voteaxis reverse proxy. Copy to /etc/caddy/Caddyfile, swap the domains,
+# then: sudo caddy validate --config /etc/caddy/Caddyfile && sudo systemctl reload caddy
+#
+# Caddy gets certificates automatically — both A/AAAA records must already
+# point at this box, and ports 80/443 must be open, before the first reload.
+# Both upstreams bind 127.0.0.1, so this file is the only public entrance.
+
+voteaxis.org, www.voteaxis.org {
+	encode zstd gzip
+
+	# Next.js sets its own Cache-Control (immutable for hashed assets,
+	# no-store for dynamic routes). Do not override it here.
+	reverse_proxy 127.0.0.1:3000 {
+		header_up X-Real-IP {remote_host}
+
+		# Stripe verifies the webhook signature against the exact bytes,
+		# so nothing may rewrite the body of /api/contribute/webhook.
+		flush_interval -1
+	}
+
+	# Signups and checkout carry a few hundred bytes. Caddy, unlike nginx, has
+	# no default request-body ceiling at all.
+	request_body {
+		max_size 1MB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Frame-Options "DENY"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+		# Report-only to start: Next injects inline bootstrap and hydration
+		# scripts, so watch the browser console through a full pass of the site
+		# before renaming this to Content-Security-Policy. See the same block in
+		# nginx.voteaxis.org.example for what a nonce would replace.
+		Content-Security-Policy-Report-Only "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline' https://js.stripe.com; frame-src https://js.stripe.com; connect-src 'self' https://api.voteaxis.org"
+	}
+}
+
+api.voteaxis.org {
+	encode zstd gzip
+
+	# The API trusts X-Real-IP / CF-Connecting-IP for rate limiting and
+	# ignores client-supplied X-Forwarded-For. This header_up line is what
+	# makes the limiter real — without it every caller looks like one IP.
+	reverse_proxy 127.0.0.1:8787 {
+		header_up X-Real-IP {remote_host}
+	}
+
+	# The API enforces the same ceiling itself (MAX_BODY_BYTES in
+	# server/src/app.ts). Both, because whichever one you forget is the one
+	# that matters — and nothing upstream of Caddy caps this by default.
+	request_body {
+		max_size 64KB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+
+		# A JSON-only API renders nothing and frames nothing.
+		Content-Security-Policy "default-src 'none'; frame-ancestors 'none'"
+	}
+}

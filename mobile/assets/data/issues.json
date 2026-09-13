@@ -1,0 +1,134 @@
+[
+  {
+    "id": "jobs",
+    "label": "Jobs & the economy",
+    "pillarId": "economy",
+    "context": "This is about how government should treat jobs, wages, and growth — through spending, tax policy, or leaving more to private employers. People disagree on whether public programs or markets do more to create work."
+  },
+  {
+    "id": "taxes",
+    "label": "Taxes & government spending",
+    "pillarId": "economy",
+    "context": "Taxes fund public services. The debate is who should pay how much, and whether higher rates on high earners (or corporations) are fairer than keeping rates lower and spending less."
+  },
+  {
+    "id": "deficit",
+    "label": "Budget deficit",
+    "pillarId": "economy",
+    "context": "A deficit means the government spends more than it takes in during a year. Some treat cutting the deficit as a top priority; others accept short-term deficits to fund programs or tax cuts."
+  },
+  {
+    "id": "inflation",
+    "label": "Inflation & prices",
+    "pillarId": "economy",
+    "context": "Inflation is a general rise in prices. Responses range from tighter money and less spending to targeted relief and regulation of specific costs like housing or energy."
+  },
+  {
+    "id": "free_market",
+    "label": "Free markets vs regulation",
+    "pillarId": "economy",
+    "context": "Regulation sets rules for businesses (safety, environment, finance, competition). The tradeoff is consumer and worker protection versus cost, innovation, and economic freedom."
+  },
+  {
+    "id": "welfare",
+    "label": "Welfare & safety net",
+    "pillarId": "economy",
+    "context": "The safety net is programs that help people with low income — food, housing, cash, or job support. Disagreement is over how large those programs should be and what conditions should attach."
+  },
+  {
+    "id": "abortion",
+    "label": "Abortion",
+    "pillarId": "society",
+    "context": "This is about whether and when the law should allow ending a pregnancy. Views range from broad legal access to tight limits or bans, often with exceptions for health or rape."
+  },
+  {
+    "id": "civil_rights",
+    "label": "Civil rights & liberties",
+    "pillarId": "society",
+    "context": "Civil rights are legal protections against discrimination and unfair treatment. Civil liberties are limits on government power, such as speech, religion, and due process."
+  },
+  {
+    "id": "lgbtq",
+    "label": "LGBTQ rights",
+    "pillarId": "society",
+    "context": "This covers legal recognition and protections for lesbian, gay, bisexual, transgender, and queer people — including marriage, workplace rules, and how schools and health care handle gender."
+  },
+  {
+    "id": "education",
+    "label": "Education",
+    "pillarId": "society",
+    "context": "K–12 and college policy: public school funding, curriculum, testing, and whether public money should follow students to private or charter schools."
+  },
+  {
+    "id": "traditional_values",
+    "label": "Traditional values",
+    "pillarId": "society",
+    "context": "This is about how much law and public institutions should reflect long-standing religious or family norms versus changing social views on marriage, gender roles, and culture."
+  },
+  {
+    "id": "healthcare",
+    "label": "Health care",
+    "pillarId": "health",
+    "context": "The U.S. mixes private insurance, employers, and public programs. The debate is how far government should go to guarantee coverage versus leaving more to markets and personal choice."
+  },
+  {
+    "id": "medicare",
+    "label": "Medicare",
+    "pillarId": "health",
+    "context": "Medicare is the federal health program mainly for people 65 and older. Arguments are about expanding it, keeping it as-is, or slowing its growth to limit taxes and debt."
+  },
+  {
+    "id": "social_security",
+    "label": "Social Security",
+    "pillarId": "health",
+    "context": "Social Security pays retirement and disability benefits funded by payroll taxes. The long-run shortfall leads to proposals to raise taxes, trim benefits, or raise the retirement age."
+  },
+  {
+    "id": "crime",
+    "label": "Crime & criminal justice",
+    "pillarId": "justice",
+    "context": "This covers policing, prosecution, prisons, and reentry. Some emphasize longer sentences and more officers; others emphasize prevention, sentencing reform, and reducing incarceration."
+  },
+  {
+    "id": "gun_control",
+    "label": "Gun control",
+    "pillarId": "justice",
+    "context": "U.S. law recognizes a right to keep firearms, with room for regulation. Proposals include background checks, assault-weapon limits, or fewer restrictions on carry and ownership."
+  },
+  {
+    "id": "immigration",
+    "label": "Immigration & border",
+    "pillarId": "justice",
+    "context": "This is about who may enter and stay: border enforcement, asylum, visas, and whether people already here without status should get a path to legal residence or face removal."
+  },
+  {
+    "id": "climate",
+    "label": "Climate & environment",
+    "pillarId": "world",
+    "context": "Climate policy aims to limit greenhouse gases. Tools include regulations, subsidies for clean energy, carbon prices, or a slower approach that prioritizes cost and existing industry."
+  },
+  {
+    "id": "energy",
+    "label": "Energy",
+    "pillarId": "world",
+    "context": "Energy policy chooses among oil, gas, coal, nuclear, and renewables. The tradeoffs are prices, jobs, reliability, pollution, and dependence on other countries."
+  },
+  {
+    "id": "foreign_policy",
+    "label": "National security & foreign policy",
+    "pillarId": "world",
+    "context": "This is how the U.S. deals with other countries — alliances, aid, sanctions, and wars. Views range from active global leadership to a narrower focus on domestic interests."
+  },
+  {
+    "id": "terrorism",
+    "label": "Terrorism",
+    "pillarId": "world",
+    "context": "Counterterrorism includes intelligence, military force, and law-enforcement tools. The tension is security versus civil liberties and how much force to use overseas."
+  },
+  {
+    "id": "military",
+    "label": "Military posture",
+    "pillarId": "world",
+    "context": "Military posture is the size, budget, and overseas presence of the armed forces. Some want a larger deterrent; others want a smaller footprint and more diplomacy."
+  }
+]

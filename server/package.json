@@ -1,0 +1,24 @@
+{
+  "name": "voteaxis-api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Voteaxis VPS API \u2014 friend codes, editorial JSON, and BICAM receipts. Scoring stays on-device.",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:restart": "pm2 restart voteaxis-api",
+    "pm2:stop": "pm2 stop voteaxis-api",
+    "pm2:logs": "pm2 logs voteaxis-api",
+    "sync:bicam": "bash -c 'PY=python3; test -x .venv/bin/python3 && PY=.venv/bin/python3; BICAM_DATA=\"${BICAM_DATA:-data/bicam-cache}\" BICAM_DB=\"${BICAM_DB:-data/bicam-receipts.sqlite}\" \"$PY\" scripts/sync_bicam.py'",
+    "week:check": "bun run scripts/week.ts check",
+    "week:set": "bun run scripts/week.ts set"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.0",
+    "typescript": "^7.0.2"
+  }
+}

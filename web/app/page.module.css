@@ -1,0 +1,320 @@
+.shell {
+  position: relative;
+  min-height: 100svh;
+  overflow-x: hidden;
+}
+
+.flow {
+  max-width: var(--max);
+  margin: clamp(3.25rem, 8vh, 5rem) auto 0;
+  padding: 0 var(--gutter);
+}
+
+.flowHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1.85rem;
+}
+
+.flowHead h2,
+.ruler h2,
+.gets h2,
+.waitlist h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.textLink {
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  color: var(--liberal);
+  transition: opacity 0.15s ease;
+}
+
+.textLink:hover {
+  opacity: 0.75;
+}
+
+.flowTrack {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.75rem 2.25rem;
+}
+
+.flowTrack li {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+  padding-top: 0.35rem;
+  border-top: 2px solid var(--ink);
+}
+
+.flowIndex {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.flowTitle {
+  font-weight: 800;
+  font-size: 1.08rem;
+  letter-spacing: -0.025em;
+}
+
+.flowBody {
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.ruler {
+  margin-top: clamp(3.25rem, 8vh, 5rem);
+  padding: clamp(2.25rem, 5.5vh, 3.25rem) 0;
+  border-block: 1px solid var(--line);
+  background: color-mix(in srgb, var(--sheet) 70%, transparent);
+}
+
+.rulerInner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.rulerHead {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 0.75rem 3rem;
+  align-items: end;
+  margin-bottom: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.rulerKicker {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.rulerCopy {
+  margin: 0;
+  max-width: 38rem;
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.rulerScale {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.75rem 1.5rem;
+}
+
+.rulerScale > li {
+  display: grid;
+  align-content: start;
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--ink);
+}
+
+.pillarCount {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.pillarName {
+  margin: 0.2rem 0 0.65rem;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.pillarIssues {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.pillarIssues li {
+  position: relative;
+  padding-left: 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink-2);
+}
+
+/* Tick marks — the pillar list reads as a ruler face. */
+.pillarIssues li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 7px;
+  height: 1px;
+  background: var(--ink-3);
+  opacity: 0.65;
+}
+
+.gets {
+  margin-top: clamp(3.25rem, 8vh, 5rem);
+  padding: 0 0 clamp(3rem, 7vh, 4rem);
+}
+
+.getsInner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.getsKicker {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.getsList {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* A set, not a sequence — cards, so this never reads as steps 04–06. */
+.getsList li {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+  padding: 1.4rem 1.45rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) + 4px);
+  background: color-mix(in srgb, var(--sheet) 72%, transparent);
+  box-shadow: 0 14px 32px rgba(7, 17, 31, 0.04);
+}
+
+.getsTitle {
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.getsBody {
+  color: var(--ink-2);
+  line-height: 1.55;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.waitlist {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(160deg, #07111f 0%, #0f1c30 55%, #132033 100%);
+  color: var(--chalk);
+  padding: clamp(3rem, 8vh, 4.5rem) 0;
+}
+
+.waitlistField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 70% 80% at 70% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 80% at 70% 50%,
+    black,
+    transparent
+  );
+}
+
+.waitlistInner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 1.75rem 3rem;
+  align-items: start;
+}
+
+.waitlistKicker {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(248, 249, 251, 0.55);
+}
+
+.waitlistLede {
+  margin: 0.6rem 0 0;
+  max-width: 28rem;
+  color: rgba(248, 249, 251, 0.68);
+  line-height: 1.55;
+}
+
+@media (max-width: 1080px) {
+  .rulerScale {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .flowTrack,
+  .getsList,
+  .waitlistInner {
+    grid-template-columns: 1fr;
+  }
+
+  .rulerHead {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+}
+
+@media (max-width: 760px) {
+  .rulerScale {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 460px) {
+  .rulerScale {
+    grid-template-columns: 1fr;
+  }
+}

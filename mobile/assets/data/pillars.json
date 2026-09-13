@@ -1,0 +1,27 @@
+[
+  {
+    "id": "economy",
+    "label": "Economy & fiscal",
+    "description": "Jobs, taxes, spending, deficits, inflation, markets, and the safety net."
+  },
+  {
+    "id": "society",
+    "label": "Rights & society",
+    "description": "Abortion, civil rights, LGBTQ rights, education, and cultural values."
+  },
+  {
+    "id": "health",
+    "label": "Health & entitlements",
+    "description": "Health care coverage, Medicare, and Social Security."
+  },
+  {
+    "id": "justice",
+    "label": "Justice & homeland",
+    "description": "Crime, criminal justice, guns, and immigration."
+  },
+  {
+    "id": "world",
+    "label": "Climate, energy & world",
+    "description": "Climate, energy, military posture, foreign policy, and security abroad."
+  }
+]

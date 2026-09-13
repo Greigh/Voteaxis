@@ -1,0 +1,41 @@
+{
+  "name": "voteaxis-web",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Marketing site for Voteaxis",
+  "license": "UNLICENSED",
+  "author": "The Greigh Studios LLC",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check",
+    "lint:fix": "biome format --write",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:restart": "pm2 restart voteaxis-web",
+    "pm2:stop": "pm2 stop voteaxis-web",
+    "pm2:logs": "pm2 logs voteaxis-web",
+    "waitlist:list": "bun scripts/list-waitlist.ts",
+    "test": "bun test",
+    "mail:check": "bun scripts/mail-check.ts"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.15.0",
+    "next": "^16.3.2",
+    "nodemailer": "^9.0.5",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "stripe": "^22.5.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.10",
+    "@types/bun": "^1.4.0",
+    "@types/node": "^26.2.0",
+    "@types/nodemailer": "^8.0.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "typescript": "^7.0.2"
+  }
+}

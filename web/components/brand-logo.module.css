@@ -1,0 +1,28 @@
+.mark {
+  display: block;
+  border-radius: 22%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+  color: inherit;
+  line-height: 1;
+}
+
+.wordmark {
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .lockupCompact .wordmark {
+    display: none;
+  }
+}

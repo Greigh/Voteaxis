@@ -1,0 +1,482 @@
+.stage {
+  position: relative;
+  width: 100%;
+  margin: 0.25rem 0 0;
+  padding: 1.5rem 0 2rem;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse 50% 80% at 6% 55%,
+      rgba(26, 86, 232, 0.12),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 50% 80% at 94% 55%,
+      rgba(226, 58, 40, 0.1),
+      transparent 72%
+    ),
+    linear-gradient(180deg, rgba(244, 247, 251, 0.55), rgba(232, 238, 246, 0.2));
+  border-block: 1px solid var(--line);
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    black 22%,
+    black 78%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent,
+    black 22%,
+    black 78%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.panel {
+  position: relative;
+  padding: 1.85rem 1.65rem 1.5rem;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--sheet) 88%, transparent);
+  border: 1px solid rgba(7, 17, 31, 0.06);
+  box-shadow: 0 14px 36px rgba(7, 17, 31, 0.05);
+  backdrop-filter: blur(14px) saturate(1.1);
+}
+
+.readout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  column-gap: clamp(1.5rem, 4vw, 2.75rem);
+  max-width: 34rem;
+  margin: 0 auto 1.5rem;
+  padding-bottom: 1.35rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.readoutScoreBlock {
+  justify-self: end;
+  text-align: right;
+}
+
+.readoutLabel {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.readoutScore {
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: clamp(1.75rem, 3.4vw, 2.45rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: color 0.25s var(--ease);
+}
+
+.score_liberal {
+  color: var(--liberal);
+}
+
+.score_conservative {
+  color: var(--conservative);
+}
+
+.score_center {
+  color: var(--ink);
+}
+
+.matchCard {
+  display: grid;
+  gap: 0.2rem;
+  justify-self: start;
+  justify-items: start;
+  text-align: left;
+  min-width: 0;
+}
+
+.matchKicker {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.matchName {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.matchDelta {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.rail {
+  position: relative;
+  height: 13.25rem;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  outline: none;
+  border-radius: 16px;
+  background: transparent;
+}
+
+.railActive {
+  cursor: grabbing;
+}
+
+.rail:focus-visible {
+  box-shadow: 0 0 0 3px rgba(26, 86, 232, 0.28);
+}
+
+.trackGlow {
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  top: 50%;
+  height: 1.5rem;
+  translate: 0 -50%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(26, 86, 232, 0.16),
+    transparent 42%,
+    transparent 58%,
+    rgba(226, 58, 40, 0.14)
+  );
+  filter: blur(14px);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.track {
+  position: absolute;
+  left: 1.5%;
+  right: 1.5%;
+  top: calc(50% - 0.22rem);
+  height: 0.44rem;
+  transform-origin: center;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    #1a56e8 0%,
+    #5b86f0 28%,
+    #d5dce8 47%,
+    #eef2f7 50%,
+    #d5dce8 53%,
+    #ef7a72 72%,
+    #e23a28 100%
+  );
+  box-shadow: 0 1px 1px rgba(7, 17, 31, 0.1) inset;
+  pointer-events: none;
+}
+
+.trackSheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35),
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.ticks {
+  position: absolute;
+  left: 1.5%;
+  right: 1.5%;
+  top: 50%;
+  height: 0;
+  pointer-events: none;
+}
+
+.tick {
+  position: absolute;
+  top: 0.42rem;
+  width: 1px;
+  height: 0.32rem;
+  translate: -50% 0;
+  background: rgba(7, 17, 31, 0.12);
+}
+
+.tickCenter {
+  height: 0.48rem;
+  width: 1.5px;
+  background: rgba(7, 17, 31, 0.28);
+}
+
+.bridge {
+  position: absolute;
+  top: calc(50% - 0.06rem);
+  height: 0.12rem;
+  border-radius: 999px;
+  background: rgba(7, 17, 31, 0.28);
+  pointer-events: none;
+  transition:
+    left 0.08s linear,
+    width 0.08s linear;
+  z-index: 2;
+}
+
+.figure {
+  position: absolute;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: 6.5rem;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.figureAbove {
+  bottom: calc(50% - 0.14rem);
+}
+
+.figureBelow {
+  top: calc(50% - 0.14rem);
+}
+
+.figureLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  white-space: nowrap;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transition: color 0.2s ease;
+}
+
+.figureAbove .figureLabel {
+  margin-bottom: 0.32rem;
+}
+
+.figureBelow .figureLabel {
+  margin-top: 0.32rem;
+}
+
+.figureStem {
+  width: 1px;
+  height: 2.2rem;
+  flex: 0 0 auto;
+  background: rgba(7, 17, 31, 0.16);
+}
+
+.figureDot {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: #fff;
+  border: 1.5px solid rgba(7, 17, 31, 0.22);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s var(--ease),
+    box-shadow 0.2s ease;
+}
+
+.figureLeft .figureDot {
+  border-color: color-mix(in srgb, var(--liberal) 70%, #07111f);
+}
+
+.figureRight .figureDot {
+  border-color: color-mix(in srgb, var(--conservative) 70%, #07111f);
+}
+
+.figureHot .figureLabel {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.figureHot .figureDot {
+  background: var(--ink);
+  border-color: var(--ink);
+  transform: scale(1.12);
+  box-shadow: 0 0 0 3px rgba(7, 17, 31, 0.08);
+}
+
+.figureHot .figureStem {
+  background: rgba(7, 17, 31, 0.34);
+}
+
+.you {
+  position: absolute;
+  top: 0.45rem;
+  width: 2.6rem;
+  height: calc(50% + 0.28rem);
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.youActive {
+  filter: drop-shadow(0 6px 14px rgba(7, 17, 31, 0.14));
+}
+
+.youTag {
+  padding: 0.28rem 0.55rem;
+  border-radius: 7px;
+  background: var(--ink);
+  color: var(--chalk);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.youStem {
+  width: 1.5px;
+  flex: 1;
+  min-height: 1rem;
+  margin: 0.22rem 0;
+  background: rgba(7, 17, 31, 0.55);
+  border-radius: 2px;
+}
+
+.youPin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1.28rem;
+  height: 1.28rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--ink);
+  box-shadow: 0 0 0 3px rgba(7, 17, 31, 0.06);
+  transform-origin: center;
+}
+
+.youCore {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.youActive .youPin {
+  box-shadow: 0 0 0 5px rgba(7, 17, 31, 0.08);
+}
+
+.axisLabels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 0.7rem;
+  padding: 0 0.2rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.axisLabels em {
+  font-style: normal;
+  font-weight: 800;
+}
+
+.axisLabels span:first-child {
+  color: var(--liberal);
+}
+
+.axisLabels span:last-child {
+  color: var(--conservative);
+}
+
+.axisLabels span:nth-child(2) {
+  color: var(--ink-3);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 700px) {
+  .panel {
+    padding: 1.35rem 1.05rem 1.15rem;
+    border-radius: 18px;
+  }
+
+  .readout {
+    max-width: 22rem;
+    column-gap: 1.15rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.1rem;
+  }
+
+  .rail {
+    height: 10.25rem;
+  }
+
+  .figureLabel {
+    font-size: 0.82rem;
+  }
+
+  .figureStem {
+    height: 1.55rem;
+  }
+
+  .axisLabels {
+    font-size: 0.88rem;
+  }
+
+  .you {
+    top: 0.55rem;
+    height: calc(50% + 0.15rem);
+  }
+
+  /*
+   * Eighteen names will not fit across a phone. Landmarks keep their label;
+   * everyone else keeps a dot and a short stem, and gets their name back the
+   * moment they become the closest match.
+   */
+  .figureMuted .figureLabel {
+    display: none;
+  }
+
+  .figureMuted .figureStem {
+    height: 0.8rem;
+    opacity: 0.6;
+  }
+}
