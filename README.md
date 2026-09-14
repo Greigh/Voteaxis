@@ -21,7 +21,7 @@ Package READMEs: [`web/README.md`](web/README.md) · [`mobile/README.md`](mobile
 
 | File | Contents |
 |------|----------|
-| `politicians.json` | 738 figures (453 sitting, 285 former), covering all 50 states plus D.C. at a curated marquee tier — statewide officers, chamber leaders, notable Congress members, and historical figures — with issue vectors, office history, signature stances, and a confidence tag |
+| `politicians.json` | 738 figures (454 sitting, 284 former), covering all 50 states plus D.C. at a curated marquee tier — statewide officers, chamber leaders, notable Congress members, and historical figures — with issue vectors, office history, signature stances, and a confidence tag |
 | `questions.json` | 81-item Likert bank (69 modern + 12 Progressive Era), each with a steel-man argument for the opposite stance |
 | `issues.json` | 22 issues mapped to five pillars |
 | `pillars.json` | Pillar labels |
@@ -104,13 +104,13 @@ Requires [Bun](https://bun.sh) and [Flutter](https://docs.flutter.dev/get-starte
 ```bash
 bun run setup          # web deps + flutter pub get
 bun run dev            # marketing site → http://localhost:3000
-bun run mobile         # Flutter on a connected device/simulator
+bun run ios            # Flutter on iOS (or bun run android)
 bun run api            # local API → http://localhost:8787
-bun run test           # flutter + api + web tests
+bun run test           # server + web + flutter tests
 bun run lint           # typecheck + web lint + flutter analyze
 ```
 
-`bun run mobile` / `bun run mobile:android` target a platform directly; `bun run mobile:build` produces an APK and an unsigned iOS build.
+`bun run ios` / `bun run android` boot a simulator/emulator if one isn't already running, then `flutter run` to it; `bun run build` produces a release APK and an unsigned iOS build.
 
 ### Marketing site only
 
@@ -135,14 +135,14 @@ Contribution checkout needs Stripe keys and a webhook secret — see `web/.env.e
 ### Flutter app only
 
 ```bash
-bun run mobile
-# or: cd mobile && flutter pub get && flutter run
+bun run ios          # or: bun run android
+# or directly: cd mobile && flutter pub get && flutter run
 ```
 
 Friend compare, shared links, and Congress receipts talk to the VPS API (`https://api.voteaxis.org` by default). ProPublica’s Congress API is retired; we run our own REST API indexed from [BICAM](https://bicam.net/) via `python3 server/scripts/sync_bicam.py` (`bun run api:sync`). Optional `CONGRESS_API_KEY` hydrates latest action and official summaries on the cards already shown — it does not rescore SII. Floor votes that blend into SII issue scores are precomputed with `bun run scores:rollcall` (VoteView tape, not DW-NOMINATE member scores).
 
 ```bash
-VOTEAXIS_API_URL=http://127.0.0.1:8787 bun run mobile
+VOTEAXIS_API_URL=http://127.0.0.1:8787 bun run ios
 ```
 
 `/health` reports `congress: true` when `server/data/bicam-receipts.sqlite` exists (`bun run api:sync` builds it). The simulator cannot see production receipts until that file is on the VPS.
@@ -173,6 +173,8 @@ There is deliberately no `.env` for these. [`scripts/`](scripts/) is invoked dir
 | `python3 scripts/attach_bioguide.py` | Attach Congress.gov bioguide ids so receipts load. Nominees and state legislators are left unmatched on purpose |
 | `python3 scripts/sync_politicians.py` (`bun run sync:politicians`) | Copy `mobile/assets/data/politicians.json` to `server/data/politicians.json` so `/v1/politicians` serves it. Run after every roster edit, before `bun run deploy` |
 | `python3 scripts/check_roster_staleness.py` (`bun run roster:check`) | Cross-check every senator/representative against the live congress-legislators roster — flags resignations, party/chamber/district drift, and missing bioguide ids. Congress seat changes only; still web-search governors, AGs, state legislators, and in-flight races by hand |
+
+A weekly scheduled Claude Code routine runs `roster:check` on its own, verifies anything it flags against a fresh web search, and opens a PR with the fix — or reports the issue without touching the repo if it can't confirm a fact confidently. It never pushes to `main` directly.
 
 ## Deploy
 
