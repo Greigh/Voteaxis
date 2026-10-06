@@ -15,6 +15,7 @@ void main() {
   Future<void> pumpResults(
     WidgetTester tester, {
     String? homeState = 'MI',
+    int? homeDistrict,
     int figureFloor = 2000,
     bool handSet = false,
     dynamic data,
@@ -32,6 +33,7 @@ void main() {
           userProfile: profile ?? testProfile(),
           data: data ?? testAppData(),
           homeStateCode: homeState,
+          homeDistrict: homeDistrict,
           figureFloor: figureFloor,
           handSet: handSet,
           onRetake: () {},
@@ -304,6 +306,154 @@ void main() {
       await tester.tap(find.text('Clear filters'));
       await tester.pumpAndSettle();
       expect(find.text('No one is left'), findsNothing);
+    });
+  });
+
+  group('Search', () {
+    /// A national roster: an MI rep, a VT senator, and a president — so the
+    /// query, not the scope, is what narrows the list.
+    Future<void> pumpSearchable(WidgetTester tester) async {
+      await pumpResults(
+        tester,
+        homeState: null,
+        data: testAppData(
+          politicians: [
+            testPolitician(),
+            testPolitician(
+              id: 'tlaib',
+              name: 'Rashida Tlaib',
+              role: 'U.S. Representative (MI-12)',
+              state: 'MI',
+              officeType: 'representative',
+              current: true,
+              officeHistory: const [
+                'U.S. Representative, MI-12 (2019–present)',
+              ],
+              district: 12,
+            ),
+            testSenator(id: 'sanders', name: 'Bernie Sanders'),
+          ],
+        ),
+      );
+      await openMatches(tester);
+    }
+
+    testWidgets('narrows the list by name, case-insensitively', (tester) async {
+      await pumpSearchable(tester);
+      expect(find.text('Rashida Tlaib'), findsOneWidget);
+      expect(find.text('Bernie Sanders'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'tlaib');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Rashida Tlaib'), findsOneWidget);
+      expect(find.text('Bernie Sanders'), findsNothing);
+      expect(find.text('Barack Obama'), findsNothing);
+      expect(find.text('Matches · 1'), findsOneWidget);
+    });
+
+    testWidgets('matches office and state too, and clears', (tester) async {
+      await pumpSearchable(tester);
+      await tester.enterText(find.byType(TextField), 'vermont');
+      await tester.pumpAndSettle();
+      expect(find.text('Bernie Sanders'), findsOneWidget);
+      expect(find.text('Rashida Tlaib'), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.close_rounded));
+      await tester.pumpAndSettle();
+      expect(find.text('Rashida Tlaib'), findsOneWidget);
+      expect(find.text('Bernie Sanders'), findsOneWidget);
+    });
+
+    testWidgets('no hits offers to clear the search', (tester) async {
+      await pumpSearchable(tester);
+      await tester.enterText(find.byType(TextField), 'newsom');
+      await tester.pumpAndSettle();
+
+      expect(find.text('No one is left'), findsOneWidget);
+      expect(
+        find.text('No one in this slice matches “newsom”.'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Clear search'));
+      await tester.pumpAndSettle();
+      expect(find.text('No one is left'), findsNothing);
+      expect(find.text('Rashida Tlaib'), findsOneWidget);
+    });
+  });
+
+  group('Congressional district', () {
+    /// Two MI House districts plus the statewide offices — the district pick
+    /// should drop the other district but keep everyone else.
+    Future<void> pumpDistricted(
+      WidgetTester tester, {
+      int? homeDistrict,
+    }) async {
+      await pumpResults(
+        tester,
+        homeState: 'MI',
+        homeDistrict: homeDistrict,
+        data: testAppData(
+          politicians: [
+            testPolitician(
+              id: 'tlaib',
+              name: 'Rashida Tlaib',
+              role: 'U.S. Representative (MI-12)',
+              party: 'Democratic',
+              state: 'MI',
+              officeType: 'representative',
+              current: true,
+              officeHistory: const [
+                'U.S. Representative, MI-12 (2019–present)',
+              ],
+              district: 12,
+            ),
+            testPolitician(
+              id: 'thanedar',
+              name: 'Shri Thanedar',
+              role: 'U.S. Representative (MI-13)',
+              party: 'Democratic',
+              state: 'MI',
+              officeType: 'representative',
+              current: true,
+              officeHistory: const [
+                'U.S. Representative, MI-13 (2023–present)',
+              ],
+              district: 13,
+            ),
+            testSenator(id: 'peters', name: 'Gary Peters', state: 'MI'),
+            testPolitician(
+              id: 'whitmer',
+              name: 'Gretchen Whitmer',
+              role: 'Governor of Michigan',
+              party: 'Democratic',
+              state: 'MI',
+              officeType: 'governor',
+              current: true,
+              officeHistory: const ['Governor of Michigan (2019–present)'],
+            ),
+          ],
+        ),
+      );
+      await openMatches(tester);
+    }
+
+    testWidgets('narrows House matches to the picked district', (tester) async {
+      await pumpDistricted(tester, homeDistrict: 12);
+      expect(find.text('Rashida Tlaib'), findsOneWidget);
+      expect(find.text('Shri Thanedar'), findsNothing);
+      // Senators and governors answer to the whole state — they stay.
+      expect(find.text('Gary Peters'), findsOneWidget);
+      expect(find.text('Gretchen Whitmer'), findsOneWidget);
+      expect(find.textContaining('DIST. 12'), findsOneWidget);
+    });
+
+    testWidgets('statewide keeps every district on the ballot', (tester) async {
+      await pumpDistricted(tester);
+      expect(find.text('Rashida Tlaib'), findsOneWidget);
+      expect(find.text('Shri Thanedar'), findsOneWidget);
+      expect(find.textContaining('DIST.'), findsNothing);
     });
   });
 

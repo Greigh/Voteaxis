@@ -140,14 +140,12 @@ class _BallotBoxMarkPainter extends CustomPainter {
 }
 
 class VoteaxisWordmark extends StatelessWidget {
-  const VoteaxisWordmark({
-    super.key,
-    this.fontSize = 40,
-    this.color = AppColors.ink,
-  });
+  const VoteaxisWordmark({super.key, this.fontSize = 40, this.color});
 
   final double fontSize;
-  final Color color;
+
+  /// Null tracks the active palette — dark mode recolors the wordmark.
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +156,7 @@ class VoteaxisWordmark extends StatelessWidget {
         fontWeight: FontWeight.w800,
         letterSpacing: -1.4,
         height: 1,
-        color: color,
+        color: color ?? AppColors.ink,
       ),
     );
   }

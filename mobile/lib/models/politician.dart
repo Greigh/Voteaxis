@@ -79,6 +79,7 @@ class Politician {
     required this.confidence,
     required this.signatureStances,
     this.bioguideId,
+    this.district,
     this.rollcallCounts = const {},
     this.rollcallSessions = const [],
   });
@@ -103,6 +104,11 @@ class Politician {
 
   /// Biographical Directory id used to look up BICAM bill receipts.
   final String? bioguideId;
+
+  /// U.S. House district, 1-based — at-large seats (and DC's delegate) are 1.
+  /// Only meaningful on `current` representatives; former members served
+  /// different lines and carry null.
+  final int? district;
 
   /// Issue id → number of coded floor votes blended into this score.
   final Map<String, int> rollcallCounts;
@@ -134,6 +140,7 @@ class Politician {
           .map((e) => SignatureStance.fromJson(e as Map<String, dynamic>))
           .toList(),
       bioguideId: json['bioguideId'] as String?,
+      district: (json['district'] as num?)?.toInt(),
       rollcallCounts: (json['rollcallCounts'] as Map<String, dynamic>? ?? {})
           .map((k, v) => MapEntry(k, (v as num).toInt())),
       rollcallSessions: RollcallSession.listFrom(json['rollcallSessions']),
@@ -160,6 +167,7 @@ class Politician {
       confidence: confidence ?? this.confidence,
       signatureStances: signatureStances,
       bioguideId: bioguideId,
+      district: district,
       rollcallCounts: rollcallCounts ?? this.rollcallCounts,
       rollcallSessions: rollcallSessions ?? this.rollcallSessions,
     );

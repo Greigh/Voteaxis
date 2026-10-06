@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["365KR8NF53.com.greighstudios.voteaxis"],
+        "components": [
+          { "/": "/result/*" }
+        ]
+      }
+    ]
+  }
+}

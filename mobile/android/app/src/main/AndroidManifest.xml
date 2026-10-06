@@ -1,6 +1,12 @@
     <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- Daily Issue of the Day reminder. POST_NOTIFICATIONS is requested at
+         runtime on Android 13+; RECEIVE_BOOT_COMPLETED lets the pending local
+         notification survive a reboot. Scheduling is inexact, so no alarm
+         permission is needed or asked for. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false"/>
@@ -45,6 +51,16 @@
                      whole scheme) and silently does nothing on Android. -->
                 <data android:scheme="voteaxis" android:host="sync"/>
                 <data android:scheme="voteaxis" android:host="restore"/>
+            </intent-filter>
+            <!-- Shared-result links. autoVerify asks Android to confirm the
+                 /.well-known/assetlinks.json fingerprint; until the site is
+                 live and verified, taps still fall back to the browser. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https" android:host="voteaxis.org" android:pathPrefix="/result/"/>
+                <data android:scheme="https" android:host="www.voteaxis.org" android:pathPrefix="/result/"/>
             </intent-filter>
         </activity>
         <receiver

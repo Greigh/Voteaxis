@@ -801,6 +801,10 @@ def upload_api(remote: Remote, cfg: Config, repo_root: Path, *, with_index: bool
     issue = server / "data" / "issue-of-the-week.json"
     if issue.is_file():
         remote.rsync([issue], "server/data/")
+    # The rotation pool too — `bun run week:rotate` on the box reads it.
+    pool = server / "data" / "week-pool.json"
+    if pool.is_file():
+        remote.rsync([pool], "server/data/")
 
     # mobile/ is never shipped to the box (see the module docstring), so this
     # copy is the only way GET /v1/politicians has anything to serve. Keep it

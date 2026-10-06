@@ -78,6 +78,12 @@ export function SiteFooter() {
           <Link href="/contribute" prefetch={false}>
             Contribute
           </Link>
+          <Link href="/support" prefetch={false}>
+            Support
+          </Link>
+          <Link href="/privacy" prefetch={false}>
+            Privacy
+          </Link>
           <a href="/#waitlist">Waitlist</a>
         </div>
       </div>

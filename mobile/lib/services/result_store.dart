@@ -121,6 +121,7 @@ class ResultStore {
   static const _progressKey = 'quiz_progress_v1';
   static const _onboardedKey = 'has_onboarded_v1';
   static const _homeStateKey = 'home_state_v1';
+  static const _homeDistrictKey = 'home_district_v1';
   static const _figureFloorKey = 'figure_floor_v1';
   static const _includePastKey = 'include_past_v1';
   static const _timeBlindKey = 'time_blind_v1';
@@ -130,6 +131,8 @@ class ResultStore {
   static const _hapticsKey = 'haptics_v1';
   static const _reduceMotionKey = 'reduce_motion_v1';
   static const _issueWidgetKey = 'issue_widget_v1';
+  static const _themeKey = 'theme_v1';
+  static const _dailyReminderKey = 'daily_reminder_v1';
   static const _calibratedDayKey = 'micro_calibrated_day_v1';
   static const _maxRuns = 10;
 
@@ -138,6 +141,7 @@ class ResultStore {
   static const _prefKeys = [
     _onboardedKey,
     _homeStateKey,
+    _homeDistrictKey,
     _figureFloorKey,
     _includePastKey,
     _timeBlindKey,
@@ -147,6 +151,8 @@ class ResultStore {
     _hapticsKey,
     _reduceMotionKey,
     _issueWidgetKey,
+    _themeKey,
+    _dailyReminderKey,
     _calibratedDayKey,
   ];
 
@@ -197,6 +203,27 @@ class ResultStore {
   Future<void> saveHomeState(String code) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_homeStateKey, code);
+  }
+
+  /// The user's U.S. House district (1-based) inside [loadHomeState]'s state.
+  /// Null means the ballot only knows the state — House matches stay
+  /// state-wide rather than guessing a district.
+  Future<int?> loadHomeDistrict() async {
+    final prefs = await SharedPreferences.getInstance();
+    final stored = prefs.getInt(_homeDistrictKey);
+    if (stored == null || stored < 1) return null;
+    return stored;
+  }
+
+  /// Pass null to clear — e.g. when the home state changes and the stored
+  /// district belongs to the old map.
+  Future<void> saveHomeDistrict(int? district) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (district == null || district < 1) {
+      await prefs.remove(_homeDistrictKey);
+    } else {
+      await prefs.setInt(_homeDistrictKey, district);
+    }
   }
 
   Future<int> loadFigureFloor() async {
@@ -256,6 +283,10 @@ class ResultStore {
       haptics: prefs.getBool(_hapticsKey) ?? true,
       reduceMotion: prefs.getBool(_reduceMotionKey) ?? false,
       issueWidget: prefs.getBool(_issueWidgetKey) ?? true,
+      theme:
+          AppThemeMode.values.asNameMap()[prefs.getString(_themeKey)] ??
+          AppThemeMode.system,
+      dailyReminder: prefs.getBool(_dailyReminderKey) ?? false,
     ).normalized;
   }
 
@@ -270,6 +301,8 @@ class ResultStore {
     await prefs.setBool(_hapticsKey, next.haptics);
     await prefs.setBool(_reduceMotionKey, next.reduceMotion);
     await prefs.setBool(_issueWidgetKey, next.issueWidget);
+    await prefs.setString(_themeKey, next.theme.name);
+    await prefs.setBool(_dailyReminderKey, next.dailyReminder);
   }
 
   /// Wipes results, drafts, and preferences. The next launch starts at

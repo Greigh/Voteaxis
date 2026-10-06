@@ -30,12 +30,14 @@ function rulesFor(agent: string): Rule[] {
 }
 
 describe("marketing metadata", () => {
-  test("sitemap lists home, methodology, and contribute", () => {
+  test("sitemap lists home, methodology, contribute, support, and privacy", () => {
     const entries = sitemap();
     const urls = entries.map((row) => row.url);
     expect(urls.some((url) => url.endsWith("voteaxis.org"))).toBe(true);
     expect(urls.some((url) => url.includes("/methodology"))).toBe(true);
     expect(urls.some((url) => url.includes("/contribute"))).toBe(true);
+    expect(urls.some((url) => url.includes("/support"))).toBe(true);
+    expect(urls.some((url) => url.includes("/privacy"))).toBe(true);
   });
 
   test("sitemap omits the noindex thanks page", () => {
@@ -173,6 +175,8 @@ describe("social card images", () => {
   test.each([
     ["methodology", () => import("../app/methodology/page")],
     ["contribute", () => import("../app/contribute/page")],
+    ["support", () => import("../app/support/page")],
+    ["privacy", () => import("../app/privacy/page")],
   ])(
     "%s declares an image alongside its openGraph override",
     async (_name, load) => {

@@ -1,0 +1,115 @@
+{
+  "comment": "Evergreen Issue of the Week prompts, one per SII issue. 'bun run week:rotate' stamps the next one into issue-of-the-week.json, skipping whichever issue is currently live. Rewrite a prompt whenever the news makes it sharper — the pool is a floor, not a schedule.",
+  "prompts": [
+    {
+      "issueId": "jobs",
+      "headline": "Whose job is full employment?",
+      "question": "Should Washington actively create jobs and steer wages, or get out of the way and let the labor market clear itself?"
+    },
+    {
+      "issueId": "taxes",
+      "headline": "Who should carry the load?",
+      "question": "Should high earners and corporations pay more to fund services, or do lower and flatter taxes leave everyone better off?"
+    },
+    {
+      "issueId": "deficit",
+      "headline": "Is the debt a crisis or a tool?",
+      "question": "Should the federal government treat the deficit as an emergency to cut now, or as a manageable cost of investing in the country?"
+    },
+    {
+      "issueId": "inflation",
+      "headline": "What do prices deserve?",
+      "question": "When prices climb, should the government step in on groceries, rent, and gas — or does intervention usually make inflation worse?"
+    },
+    {
+      "issueId": "free_market",
+      "headline": "How tight should the rules be?",
+      "question": "Does regulation protect workers, consumers, and the air we breathe — or mostly strangle the competition that would?"
+    },
+    {
+      "issueId": "welfare",
+      "headline": "How strong is the safety net supposed to be?",
+      "question": "Should programs like food assistance and housing aid expand to guarantee a floor — or tighten so help stays temporary and targeted?"
+    },
+    {
+      "issueId": "abortion",
+      "headline": "Who decides?",
+      "question": "Should abortion access be set by a national standard, left to each state, or decided by the patient and their doctor?"
+    },
+    {
+      "issueId": "civil_rights",
+      "headline": "Whose rights need defending now?",
+      "question": "Are the bigger threats today discrimination that still needs federal enforcement — or federal enforcement that has become discrimination of its own?"
+    },
+    {
+      "issueId": "lgbtq",
+      "headline": "Where do rights end and parents begin?",
+      "question": "On schools, sports, and medical care for trans youth — should federal civil-rights law protect LGBTQ people uniformly, or should states and parents set the line?"
+    },
+    {
+      "issueId": "education",
+      "headline": "Public system or open market?",
+      "question": "Should education dollars follow the child to any school a family picks — or stay inside the public system to keep it strong for everyone?"
+    },
+    {
+      "issueId": "traditional_values",
+      "headline": "Whose country is it becoming?",
+      "question": "Should law and institutions work to preserve a shared traditional culture — or is policing values itself the threat to freedom?"
+    },
+    {
+      "issueId": "healthcare",
+      "headline": "A right, or a product?",
+      "question": "Should health coverage be guaranteed by the government like a public good — or delivered by a competitive market that rewards innovation?"
+    },
+    {
+      "issueId": "medicare",
+      "headline": "Fix it or expand it?",
+      "question": "Should Medicare grow to cover more people and more care — or be restructured now before its costs swamp the next generation?"
+    },
+    {
+      "issueId": "social_security",
+      "headline": "Promise kept how?",
+      "question": "To keep Social Security solvent, should the country raise taxes on higher earners, trim future benefits, or give workers private accounts?"
+    },
+    {
+      "issueId": "crime",
+      "headline": "Punishment or prevention?",
+      "question": "Does safer streets policy start with tougher policing and sentences — or with the poverty, addiction, and mental-health failures upstream of crime?"
+    },
+    {
+      "issueId": "gun_control",
+      "headline": "Which freedom comes first?",
+      "question": "Should gun ownership face tighter federal rules on what can be sold and to whom — or is the right to be armed the protection that makes the others real?"
+    },
+    {
+      "issueId": "immigration",
+      "headline": "Who belongs, and on what terms?",
+      "question": "Should the United States expand legal paths to stay, or tighten enforcement at the border and interior?"
+    },
+    {
+      "issueId": "climate",
+      "headline": "Fast transition or managed one?",
+      "question": "Should the government force a rapid shift off fossil fuels with mandates and spending — or let prices, technology, and adaptation set the pace?"
+    },
+    {
+      "issueId": "energy",
+      "headline": "Drill, or build?",
+      "question": "Should American energy policy pump more domestic oil and gas to keep prices low — or leave it in the ground and build the clean grid faster?"
+    },
+    {
+      "issueId": "foreign_policy",
+      "headline": "Leader, or come home?",
+      "question": "Does American security need engagement abroad — alliances, aid, deterrence — or has decades of policing the world made the country less safe?"
+    },
+    {
+      "issueId": "terrorism",
+      "headline": "How much watch is too much?",
+      "question": "In the name of preventing attacks, should surveillance and security powers stay broad — or have they already outgrown the threat?"
+    },
+    {
+      "issueId": "military",
+      "headline": "What is strength for?",
+      "question": "Should the United States keep spending to field the world's dominant military — or does real security come from doing less with fewer enemies?"
+    }
+  ]
+}

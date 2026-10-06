@@ -35,7 +35,7 @@ Curated catalogs in [`assets/data/`](assets/data/):
 | `questions.json` | 81-item Likert bank (69 modern + 12 Progressive Era) — issue, polarity, and a steel-man argument |
 | `issues.json` | 22 issues → five pillars |
 | `pillars.json` | Pillar labels |
-| `politicians.json` | 455 figures (228 sitting, 227 former) with issue vectors + confidence |
+| `politicians.json` | 738 figures (454 sitting, 284 former) with issue vectors + confidence |
 | `rollcall_scores.json` | VoteView overlay for 115 members: lifetime issue blend plus per-Congress coordinates for the profile slider |
 
 Scoring: [`lib/models/scoring.dart`](lib/models/scoring.dart) (SII v1).
@@ -47,9 +47,9 @@ Requires [Flutter](https://docs.flutter.dev/get-started/install).
 From the monorepo root:
 
 ```bash
-bun run mobile
-bun run mobile:test
-bun run mobile:analyze
+bun run ios        # or: bun run android
+bun run test
+bun run lint
 ```
 
 Or in this folder:
@@ -61,13 +61,13 @@ flutter test
 flutter analyze
 ```
 
-Device shortcuts from root: `bun run mobile:ios` · `bun run mobile:android`
+Device shortcuts from root: `bun run ios` · `bun run android`
 
 Congress receipts need the local API (production `api.voteaxis.org` will not have the BICAM index until that sqlite file is on the VPS):
 
 ```bash
 bun run api
-VOTEAXIS_API_URL=http://127.0.0.1:8787 bun run mobile
+VOTEAXIS_API_URL=http://127.0.0.1:8787 bun run ios
 ```
 
 ## Related

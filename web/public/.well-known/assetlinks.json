@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.greighstudios.voteaxis",
+      "sha256_cert_fingerprints": [
+        "22:A5:98:F9:FE:ED:1C:2D:EC:E8:E2:12:BF:2C:BF:72:74:AC:F8:7F:D5:39:7F:D5:CC:56:C7:9C:BE:15:37:96"
+      ]
+    }
+  }
+]

@@ -14,14 +14,18 @@ class PoliticianDetailScreen extends StatelessWidget {
   const PoliticianDetailScreen({
     super.key,
     required this.politician,
-    required this.userProfile,
+    this.userProfile,
     required this.data,
     this.match,
     this.figureFloor = FigureFloor.year2000,
   });
 
   final Politician politician;
-  final SpectrumProfile userProfile;
+
+  /// The viewer's placement. Null when the roster is being browsed without a
+  /// quiz (explore mode) — the page then shows their record and issue
+  /// positions but no match score, since there is nothing to compare to.
+  final SpectrumProfile? userProfile;
   final AppData data;
   final MatchResult? match;
   final int figureFloor;
@@ -29,46 +33,52 @@ class PoliticianDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = data.profileFor(politician);
-    final distance = Scoring.vectorDistance(
-      userProfile.issueScores,
-      politician.issues,
-      userProfile.issueWeights.isEmpty ? null : userProfile.issueWeights,
-    );
-    final closeness =
-        match?.closeness ?? Scoring.closenessFromDistance(distance);
-    final overlaps =
-        politician.issues.keys.where(userProfile.issueScores.containsKey).map((
-          id,
-        ) {
-          final u = userProfile.issueScores[id]!;
-          final p = politician.issues[id]!;
-          return IssueOverlap(
-            issueId: id,
-            diff: (u - p).abs(),
-            userScore: u,
-            politicianScore: p,
+    final user = userProfile;
+    final distance = user == null
+        ? null
+        : Scoring.vectorDistance(
+            user.issueScores,
+            politician.issues,
+            user.issueWeights.isEmpty ? null : user.issueWeights,
           );
-        }).toList()..sort((a, b) => a.diff.compareTo(b.diff));
+    final closeness =
+        match?.closeness ??
+        (distance == null ? null : Scoring.closenessFromDistance(distance));
+    final overlaps = user == null
+        ? const <IssueOverlap>[]
+        : (politician.issues.keys.where(user.issueScores.containsKey).map((id) {
+            final u = user.issueScores[id]!;
+            final p = politician.issues[id]!;
+            return IssueOverlap(
+              issueId: id,
+              diff: (u - p).abs(),
+              userScore: u,
+              politicianScore: p,
+            );
+          }).toList()..sort((a, b) => a.diff.compareTo(b.diff)));
 
     final agreements = match?.agreements ?? overlaps.take(3).toList();
     final disagreements =
         match?.disagreements ?? overlaps.reversed.take(2).toList();
     final issueLabels = {for (final i in data.issues) i.id: i.label};
-    final story = Scoring.matchStory(
-      agreements: agreements,
-      disagreements: disagreements,
-      issueLabels: issueLabels,
-    );
+    final story = user == null
+        ? ''
+        : Scoring.matchStory(
+            agreements: agreements,
+            disagreements: disagreements,
+            issueLabels: issueLabels,
+          );
     final pillarLabels = {for (final p in data.pillars) p.id: p.label};
-    final dealLabels =
-        (match?.dealbreakerHits ??
-                Scoring.dealbreakerHits(
-                  user: userProfile.issueScores,
-                  politician: politician.issues,
-                  dealbreakerIssueIds: userProfile.dealbreakerIssueIds,
-                ))
-            .map((id) => issueLabels[id] ?? id)
-            .toList();
+    final dealLabels = user == null
+        ? const <String>[]
+        : (match?.dealbreakerHits ??
+                  Scoring.dealbreakerHits(
+                    user: user.issueScores,
+                    politician: politician.issues,
+                    dealbreakerIssueIds: user.dealbreakerIssueIds,
+                  ))
+              .map((id) => issueLabels[id] ?? id)
+              .toList();
     final ancestor = FigureFloor.showsPastUi(figureFloor)
         ? Scoring.politicalAncestry(
             person: politician,
@@ -148,39 +158,75 @@ class PoliticianDetailScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.ink.withValues(alpha: 0.06)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$closeness% match',
-                  style: GoogleFonts.manrope(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.6,
+            child: user == null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        Scoring.formatScore(profile.axisScore),
+                        style: GoogleFonts.manrope(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.6,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        Scoring.labelForScore(profile.axisScore),
+                        style: GoogleFonts.manrope(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: profile.axisScore < 0
+                              ? AppColors.liberal
+                              : AppColors.conservative,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Take the quiz and this card shows your match '
+                        'instead — where you two line up and where you split.',
+                        style: GoogleFonts.manrope(
+                          fontSize: 13,
+                          height: 1.45,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.inkMuted,
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$closeness% match',
+                        style: GoogleFonts.manrope(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.6,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        story,
+                        style: GoogleFonts.manrope(
+                          fontSize: 15,
+                          height: 1.45,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.inkMuted,
+                        ),
+                      ),
+                      if (dealLabels.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        Text(
+                          'Dealbreaker clash on ${dealLabels.join(' and ')}.',
+                          style: GoogleFonts.manrope(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.conservative,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  story,
-                  style: GoogleFonts.manrope(
-                    fontSize: 15,
-                    height: 1.45,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.inkMuted,
-                  ),
-                ),
-                if (dealLabels.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Text(
-                    'Dealbreaker clash on ${dealLabels.join(' and ')}.',
-                    style: GoogleFonts.manrope(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.conservative,
-                    ),
-                  ),
-                ],
-              ],
-            ),
           ),
           if (ancestor != null) ...[
             const SizedBox(height: 12),
@@ -287,51 +333,76 @@ class PoliticianDetailScreen extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 24),
-          const SectionHeading('Side by side'),
+          SectionHeading(user == null ? 'Issue positions' : 'Side by side'),
           SurfaceCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: _StatRow(
-                        label: 'Their axis',
-                        value: Scoring.formatScore(profile.axisScore),
+            child: user == null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Where each issue lands them on the axis. A '
+                        'floor-vote mark means that score was blended with '
+                        'coded roll calls.',
+                        style: GoogleFonts.manrope(
+                          fontSize: 12.5,
+                          height: 1.4,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.inkMuted,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: _StatRow(
-                        label: 'Your axis',
-                        value: Scoring.formatScore(userProfile.axisScore),
+                      const SizedBox(height: 12),
+                      ...politician.issues.entries.map((entry) {
+                        return _IssuePositionRow(
+                          label: issueLabels[entry.key] ?? entry.key,
+                          score: entry.value,
+                          rollcallN: politician.rollcallCounts[entry.key],
+                        );
+                      }),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _StatRow(
+                              label: 'Their axis',
+                              value: Scoring.formatScore(profile.axisScore),
+                            ),
+                          ),
+                          Expanded(
+                            child: _StatRow(
+                              label: 'Your axis',
+                              value: Scoring.formatScore(user.axisScore),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Your score against theirs on the issues you share. A '
-                  'floor-vote mark means that issue was blended with coded '
-                  'roll calls.',
-                  style: GoogleFonts.manrope(
-                    fontSize: 12.5,
-                    height: 1.4,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.inkMuted,
+                      const SizedBox(height: 12),
+                      Text(
+                        'Your score against theirs on the issues you share. A '
+                        'floor-vote mark means that issue was blended with coded '
+                        'roll calls.',
+                        style: GoogleFonts.manrope(
+                          fontSize: 12.5,
+                          height: 1.4,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.inkMuted,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ...overlaps.map((o) {
+                        final label = issueLabels[o.issueId] ?? o.issueId;
+                        return _IssueCompareRow(
+                          label: label,
+                          userScore: o.userScore,
+                          politicianScore: o.politicianScore,
+                          rollcallN: politician.rollcallCounts[o.issueId],
+                        );
+                      }),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 12),
-                ...overlaps.map((o) {
-                  final label = issueLabels[o.issueId] ?? o.issueId;
-                  return _IssueCompareRow(
-                    label: label,
-                    userScore: o.userScore,
-                    politicianScore: o.politicianScore,
-                    rollcallN: politician.rollcallCounts[o.issueId],
-                  );
-                }),
-              ],
-            ),
           ),
           const SizedBox(height: 24),
           const SectionHeading('Pillars'),
@@ -376,7 +447,7 @@ class PoliticianDetailScreen extends StatelessWidget {
             const SectionHeading('On the spectrum'),
           VoteRecord(
             politician: politician,
-            userScore: userProfile.axisScore,
+            userScore: user?.axisScore,
             issueLabels: issueLabels,
             lifetimeAxis: profile.axisScore,
             lifetimeDistance: distance,
@@ -855,6 +926,71 @@ class _ReceiptCard extends StatelessWidget {
                 fontSize: 11,
                 height: 1.35,
                 color: AppColors.inkMuted,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// One issue line in browse mode — label plus where it lands them, with the
+/// same roll-call footnote the side-by-side rows carry.
+class _IssuePositionRow extends StatelessWidget {
+  const _IssuePositionRow({
+    required this.label,
+    required this.score,
+    this.rollcallN,
+  });
+
+  final String label;
+  final double score;
+  final int? rollcallN;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+        decoration: BoxDecoration(
+          color: AppColors.sheet,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.ink.withValues(alpha: 0.06)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: GoogleFonts.manrope(fontWeight: FontWeight.w700),
+                  ),
+                  if (rollcallN != null &&
+                      rollcallN! >= Scoring.rollcallMinVotes) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      '$rollcallN floor votes in the SII blend',
+                      style: GoogleFonts.ibmPlexMono(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.4,
+                        color: AppColors.inkMuted,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            Text(
+              Scoring.formatScore(score),
+              style: GoogleFonts.manrope(
+                fontWeight: FontWeight.w800,
+                fontSize: 13,
+                color: score < 0 ? AppColors.liberal : AppColors.conservative,
               ),
             ),
           ],

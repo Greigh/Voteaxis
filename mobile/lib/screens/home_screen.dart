@@ -23,6 +23,7 @@ class HomeScreen extends StatefulWidget {
     required this.onMethodology,
     this.onFriendCompare,
     this.onSetLevel,
+    this.onExplore,
     this.onSettings,
     this.week,
     this.skipQuiz = false,
@@ -41,6 +42,9 @@ class HomeScreen extends StatefulWidget {
 
   /// Bypass the quiz and hand-set a placement.
   final VoidCallback? onSetLevel;
+
+  /// Browse the roster without a placement — explore mode.
+  final VoidCallback? onExplore;
   final VoidCallback? onSettings;
   final IssueOfTheWeek? week;
 
@@ -119,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
                 trailing: active
-                    ? const Icon(Icons.check_rounded, color: AppColors.ink)
+                    ? Icon(Icons.check_rounded, color: AppColors.ink)
                     : Text(
                         s.code,
                         style: GoogleFonts.ibmPlexMono(
@@ -184,10 +188,10 @@ class _HomeScreenState extends State<HomeScreen>
                 margin: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(99),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
                       AppColors.liberal,
-                      Color(0xFFE8EEF6),
+                      AppColors.parchment,
                       AppColors.conservative,
                     ],
                   ),
@@ -261,6 +265,16 @@ class _HomeScreenState extends State<HomeScreen>
                           onTap: widget.onSetLevel!,
                         ),
                       ],
+                    ],
+                    if (widget.onExplore != null) ...[
+                      const SizedBox(height: 12),
+                      ActionRow(
+                        icon: Icons.manage_search_rounded,
+                        title: 'Explore the roster',
+                        subtitle:
+                            'Browse every figure and their record — no quiz needed',
+                        onTap: widget.onExplore!,
+                      ),
                     ],
                     if (widget.hasInProgress) ...[
                       const SizedBox(height: 12),
@@ -390,7 +404,7 @@ class _StatePill extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.place_outlined,
                 size: 16,
                 color: AppColors.inkMuted,

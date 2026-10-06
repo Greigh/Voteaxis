@@ -15,7 +15,8 @@
     "pm2:logs": "pm2 logs voteaxis-api",
     "sync:bicam": "bash -c 'PY=python3; test -x .venv/bin/python3 && PY=.venv/bin/python3; BICAM_DATA=\"${BICAM_DATA:-data/bicam-cache}\" BICAM_DB=\"${BICAM_DB:-data/bicam-receipts.sqlite}\" \"$PY\" scripts/sync_bicam.py'",
     "week:check": "bun run scripts/week.ts check",
-    "week:set": "bun run scripts/week.ts set"
+    "week:set": "bun run scripts/week.ts set",
+    "week:rotate": "bun run scripts/week.ts rotate"
   },
   "devDependencies": {
     "@types/bun": "^1.4.0",

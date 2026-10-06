@@ -248,6 +248,7 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          tooltip: 'Back',
           icon: const Icon(Icons.arrow_back),
           onPressed: _busy ? null : _back,
         ),
@@ -271,6 +272,10 @@ class _QuizScreenState extends State<QuizScreen> {
                 minHeight: 8,
                 backgroundColor: AppColors.parchment,
                 color: AppColors.navy,
+                semanticsLabel:
+                    'Quiz progress, question ${_index + 1} of '
+                    '${widget.questions.length}',
+                semanticsValue: '${(progress * 100).round()}',
               ),
             ),
             const SizedBox(height: 10),

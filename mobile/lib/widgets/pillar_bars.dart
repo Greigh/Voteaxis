@@ -76,78 +76,88 @@ class _PillarRow extends StatelessWidget {
         ? AppColors.conservative
         : AppColors.center;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    // Merged so a reader hears "Economy, moderately liberal, 40" once — the
+    // gradient bar itself carries no semantics.
+    return MergeSemantics(
+      child: Semantics(
+        label:
+            '$label: ${Scoring.labelForScore(score)}, '
+            '${Scoring.formatScore(score)}',
+        excludeSemantics: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Text(
-                label,
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.ink,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    style: GoogleFonts.manrope(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink,
+                    ),
+                  ),
                 ),
-              ),
+                Text(
+                  Scoring.formatScore(score),
+                  style: GoogleFonts.manrope(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: color,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              Scoring.formatScore(score),
-              style: GoogleFonts.manrope(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: color,
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 18,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final x = t * constraints.maxWidth;
+                  return Stack(
+                    alignment: Alignment.centerLeft,
+                    children: [
+                      Container(
+                        height: 8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(99),
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.liberal,
+                              AppColors.parchment,
+                              AppColors.conservative,
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: (x - 7).clamp(0.0, constraints.maxWidth - 14),
+                        child: Container(
+                          width: 14,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: AppColors.sheet,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: color, width: 2.5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.ink.withValues(alpha: 0.12),
+                                blurRadius: 4,
+                                offset: const Offset(0, 1),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 18,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final x = t * constraints.maxWidth;
-              return Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Container(
-                    height: 8,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(99),
-                      gradient: const LinearGradient(
-                        colors: [
-                          AppColors.liberal,
-                          Color(0xFFE8EEF6),
-                          AppColors.conservative,
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: (x - 7).clamp(0.0, constraints.maxWidth - 14),
-                    child: Container(
-                      width: 14,
-                      height: 14,
-                      decoration: BoxDecoration(
-                        color: AppColors.sheet,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: color, width: 2.5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.ink.withValues(alpha: 0.12),
-                            blurRadius: 4,
-                            offset: const Offset(0, 1),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -38,15 +38,22 @@ class AlignmentVenn extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 14),
-        SizedBox(
-          height: 168,
-          child: CustomPaint(
-            painter: _VennPainter(
-              left: venn.youMoreLiberal.length,
-              mid: venn.aligned.length,
-              right: venn.theyMoreLiberal.length,
+        Semantics(
+          label:
+              'Alignment chart: ${venn.youMoreLiberal.length} issues where you '
+              'are more liberal, ${venn.aligned.length} where you align, '
+              '${venn.theyMoreLiberal.length} where $friendLabel is more '
+              'liberal.',
+          child: SizedBox(
+            height: 168,
+            child: CustomPaint(
+              painter: _VennPainter(
+                left: venn.youMoreLiberal.length,
+                mid: venn.aligned.length,
+                right: venn.theyMoreLiberal.length,
+              ),
+              child: const SizedBox.expand(),
             ),
-            child: const SizedBox.expand(),
           ),
         ),
         const SizedBox(height: 8),

@@ -63,5 +63,55 @@ void main() {
       expect(parseFriendSyncCode(link, requireUri: true), isNull);
       expect(TransferCode.codeFromLink(link), isNull);
     });
+
+    test('an https result link routes to the viewer', () {
+      String? got;
+      routeDeepLink(
+        Uri.parse('https://voteaxis.org/result/a2b3c4d5e6f7g8h9'),
+        onResultLink: (id) => got = id,
+        onSyncCode: (_) => fail('sync should not fire'),
+        onRestoreCode: (_) => fail('restore should not fire'),
+      );
+      expect(got, 'a2b3c4d5e6f7g8h9');
+    });
+
+    test('a result link on an unrelated domain is ignored', () {
+      var fired = false;
+      routeDeepLink(
+        Uri.parse('https://evil.example/result/a2b3c4d5e6f7g8h9'),
+        onResultLink: (_) => fired = true,
+      );
+      expect(fired, isFalse);
+    });
+
+    test('a voteaxis://result link routes to the viewer', () {
+      String? got;
+      routeDeepLink(
+        Uri.parse('voteaxis://result?id=A2B3C4D5E6F7G8H9'),
+        onResultLink: (id) => got = id,
+      );
+      expect(got, 'a2b3c4d5e6f7g8h9');
+    });
+
+    test('sync and restore links still route where they did', () {
+      String? code;
+      routeDeepLink(
+        Uri.parse('voteaxis://sync?code=A2B3C4'),
+        onSyncCode: (c) => code = c,
+        onResultLink: (_) => fail('result link should not fire'),
+      );
+      expect(code, 'A2B3C4');
+
+      String? raw;
+      final transfer = TransferCode.link(
+        TransferCode.encode(const TransferPayload(issueScores: {'taxes': -20})),
+      );
+      routeDeepLink(
+        Uri.parse(transfer),
+        onRestoreCode: (r) => raw = r,
+        onResultLink: (_) => fail('result link should not fire'),
+      );
+      expect(raw, isNotNull);
+    });
   });
 }

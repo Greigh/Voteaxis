@@ -541,6 +541,8 @@ void main() {
         200,
         scrollable: page,
       );
+      await tester.ensureVisible(find.text('No internet?'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('No internet?'));
       await tester.pumpAndSettle();
 

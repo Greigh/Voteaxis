@@ -11,22 +11,32 @@
  *   bun run week:check            # exit 1 once it is stale, 0 otherwise
  *   bun run week:check --days 5   # warn earlier, e.g. from a Monday cron
  *   bun run week:set --issue immigration --headline "…" --question "…"
+ *   bun run week:rotate           # stamp the next pool prompt, no copy needed
  *
- * Cron on the box, Mondays at 09:00, mailing root on a non-zero exit:
+ * Cron on the box, Mondays at 09:00 — rotates automatically, and mails root
+ * only if even the pool write failed:
  *
- *   0 9 * * 1 cd /srv/voteaxis/server && /usr/local/bin/bun run week:check
+ *   0 9 * * 1 cd /srv/voteaxis/server && /usr/local/bin/bun run week:rotate
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const WEEK_PATH = join(import.meta.dir, "..", "data", "issue-of-the-week.json");
+const POOL_PATH = join(import.meta.dir, "..", "data", "week-pool.json");
 const DAY_MS = 24 * 60 * 60 * 1000;
 /** Matches weekMaxAgeMs in src/app.ts. Change both together. */
 const SERVED_FOR_DAYS = 10;
 
 type Week = {
   weekOf: string;
+  issueId: string;
+  headline: string;
+  question: string;
+  context?: string;
+};
+
+type PoolPrompt = {
   issueId: string;
   headline: string;
   question: string;
@@ -130,6 +140,66 @@ function set(input: Record<string, string>): number {
   return 0;
 }
 
+/**
+ * Stamps the next prompt from data/week-pool.json. The pool is one prompt per
+ * SII issue in a fixed order; rotation picks the first entry after the live
+ * issue's slot, wrapping around — so issues cycle evenly and a hand-written
+ * `set` only delays the pool by one turn. `--week YYYY-MM-DD` overrides the
+ * stamp date (testing).
+ */
+function rotate(input: Record<string, string>): number {
+  let pool: PoolPrompt[];
+  try {
+    pool = (
+      JSON.parse(readFileSync(POOL_PATH, "utf8")) as { prompts: PoolPrompt[] }
+    ).prompts;
+  } catch (err) {
+    console.error(`✗ Cannot read ${POOL_PATH}: ${String(err)}`);
+    return 1;
+  }
+  if (!Array.isArray(pool) || pool.length === 0) {
+    console.error(`✗ ${POOL_PATH} has no prompts`);
+    return 1;
+  }
+
+  const current = (() => {
+    try {
+      return read();
+    } catch {
+      return null;
+    }
+  })();
+
+  const currentIndex = pool.findIndex((p) => p.issueId === current?.issueId);
+  const next = pool[(currentIndex + 1) % pool.length];
+
+  const weekOf = input.week ?? new Date().toISOString().slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(weekOf)) {
+    console.error(`✗ --week must be YYYY-MM-DD, got ${weekOf}`);
+    return 1;
+  }
+
+  const week: Week = {
+    weekOf,
+    issueId: next.issueId,
+    headline: next.headline,
+    question: next.question,
+    context:
+      next.context ??
+      current?.context ??
+      "This is one of the 22 issues in the Spectrum Issue Index. A weekly prompt is editorial — it does not rescore your quiz until you retake.",
+  };
+
+  writeFileSync(WEEK_PATH, `${JSON.stringify(week, null, 2)}\n`);
+  console.log(`✓ Rotated Issue of the Week → ${WEEK_PATH}`);
+  console.log(`  ${weekOf} · ${week.issueId} · "${week.headline}"`);
+  if (current && current.weekOf === weekOf) {
+    console.log("  Note: same date as the previous prompt — it was already due.");
+  }
+  console.log("  Deploy it:  bun run deploy:api");
+  return 0;
+}
+
 const argv = process.argv.slice(2);
 const flags = args(argv);
 const command = argv.find((a) => !a.startsWith("--")) ?? "check";
@@ -137,5 +207,7 @@ const command = argv.find((a) => !a.startsWith("--")) ?? "check";
 process.exit(
   command === "set"
     ? set(flags)
-    : check(Number(flags.days ?? SERVED_FOR_DAYS) || SERVED_FOR_DAYS),
+    : command === "rotate"
+      ? rotate(flags)
+      : check(Number(flags.days ?? SERVED_FOR_DAYS) || SERVED_FOR_DAYS),
 );

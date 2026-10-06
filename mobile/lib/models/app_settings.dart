@@ -1,6 +1,10 @@
 import 'politician.dart';
 import 'quiz_bank.dart';
 
+/// Where the palette comes from. Pure Dart — main.dart maps it onto
+/// Flutter's ThemeMode so this file never imports the framework.
+enum AppThemeMode { system, light, dark }
+
 /// Every user-tunable preference in one value, so the shell, the settings
 /// screen, and a transferred backup all agree on the same defaults.
 class AppSettings {
@@ -13,6 +17,8 @@ class AppSettings {
     this.haptics = true,
     this.reduceMotion = false,
     this.issueWidget = true,
+    this.theme = AppThemeMode.system,
+    this.dailyReminder = false,
   });
 
   /// Earliest era of figures to match against.
@@ -36,6 +42,13 @@ class AppSettings {
   /// Keep the Issue of the Day home-screen widget fed.
   final bool issueWidget;
 
+  /// System / light / dark palette choice.
+  final AppThemeMode theme;
+
+  /// Local daily nudge for the Issue of the Day. Scheduled on-device; no
+  /// server or account is involved.
+  final bool dailyReminder;
+
   /// Time-blind only exists below the 2000s floor, so a stored `true` from an
   /// older floor must not leak back in when the floor moves up.
   AppSettings get normalized {
@@ -58,6 +71,8 @@ class AppSettings {
     bool? haptics,
     bool? reduceMotion,
     bool? issueWidget,
+    AppThemeMode? theme,
+    bool? dailyReminder,
   }) {
     return AppSettings(
       figureFloor: figureFloor ?? this.figureFloor,
@@ -68,6 +83,8 @@ class AppSettings {
       haptics: haptics ?? this.haptics,
       reduceMotion: reduceMotion ?? this.reduceMotion,
       issueWidget: issueWidget ?? this.issueWidget,
+      theme: theme ?? this.theme,
+      dailyReminder: dailyReminder ?? this.dailyReminder,
     );
   }
 
@@ -81,7 +98,9 @@ class AppSettings {
       other.dealbreakerPrompts == dealbreakerPrompts &&
       other.haptics == haptics &&
       other.reduceMotion == reduceMotion &&
-      other.issueWidget == issueWidget;
+      other.issueWidget == issueWidget &&
+      other.theme == theme &&
+      other.dailyReminder == dailyReminder;
 
   @override
   int get hashCode => Object.hash(
@@ -93,5 +112,7 @@ class AppSettings {
     haptics,
     reduceMotion,
     issueWidget,
+    theme,
+    dailyReminder,
   );
 }

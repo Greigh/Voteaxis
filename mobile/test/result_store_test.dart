@@ -212,6 +212,8 @@ void main() {
         haptics: false,
         reduceMotion: true,
         issueWidget: false,
+        theme: AppThemeMode.dark,
+        dailyReminder: true,
       );
       await store.saveSettings(saved);
       expect(await store.loadSettings(), saved);

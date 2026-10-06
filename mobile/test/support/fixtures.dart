@@ -65,6 +65,7 @@ Politician testPolitician({
     ),
   ],
   String? bioguideId,
+  int? district,
   List<RollcallSession> rollcallSessions = const [],
 }) {
   return Politician(
@@ -81,6 +82,7 @@ Politician testPolitician({
     confidence: confidence,
     signatureStances: signatureStances,
     bioguideId: bioguideId,
+    district: district,
     rollcallSessions: rollcallSessions,
   );
 }

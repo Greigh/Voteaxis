@@ -14,6 +14,8 @@ void main() {
     expect(settings.haptics, isTrue);
     expect(settings.reduceMotion, isFalse);
     expect(settings.issueWidget, isTrue);
+    expect(settings.theme, AppThemeMode.system);
+    expect(settings.dailyReminder, isFalse);
   });
 
   test('normalize drops time-blind above the 2000s floor', () {

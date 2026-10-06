@@ -31,6 +31,7 @@ class ResultsScreen extends StatefulWidget {
     required this.onRetake,
     required this.onHome,
     this.homeStateCode,
+    this.homeDistrict,
     this.figureFloor = FigureFloor.year2000,
     this.timeBlind = false,
     this.handSet = false,
@@ -41,6 +42,11 @@ class ResultsScreen extends StatefulWidget {
   final VoidCallback onRetake;
   final VoidCallback onHome;
   final String? homeStateCode;
+
+  /// The user's U.S. House district within [homeStateCode] (1-based).
+  /// Null keeps House matches state-wide — the ballot narrows only when the
+  /// user has actually picked one in Settings.
+  final int? homeDistrict;
   final int figureFloor;
   final bool timeBlind;
 
@@ -55,6 +61,7 @@ class ResultsScreen extends StatefulWidget {
 class _ResultsScreenState extends State<ResultsScreen>
     with SingleTickerProviderStateMixin {
   final _shareKey = GlobalKey();
+  final _searchCtrl = TextEditingController();
   late final TabController _tabs;
   String _officeFilter = 'all';
   String? _partyFilter;
@@ -69,6 +76,9 @@ class _ResultsScreenState extends State<ResultsScreen>
   /// True = only their state's ballot, false = nationwide. Their own state is
   /// the default because the whole point is who they can actually vote for.
   bool _stateScope = true;
+
+  /// Lowercase name/office/state substring filter on the match list.
+  String _query = '';
 
   /// Office chips, per tab. The value is what [_officeFilter] holds.
   static const _ballotOffices = [
@@ -106,6 +116,7 @@ class _ResultsScreenState extends State<ResultsScreen>
   @override
   void dispose() {
     _tabs.dispose();
+    _searchCtrl.dispose();
     super.dispose();
   }
 
@@ -172,6 +183,26 @@ class _ResultsScreenState extends State<ResultsScreen>
             p.officeType == 'state_representative';
         if (stateTied && (_ballotMode || !_showsPastUi)) return false;
       }
+      // District only narrows the current House slice — senators, governors,
+      // and state legislators answer to the whole state, and historical mode
+      // has no current district lines to compare against. A rep entry without
+      // a district stays in: hiding them would pretend we know a line we don't.
+      if (_scopedToState &&
+          (_ballotMode || !_showsPastUi) &&
+          widget.homeDistrict != null &&
+          p.officeType == 'representative' &&
+          p.current &&
+          p.district != null &&
+          p.district != widget.homeDistrict) {
+        return false;
+      }
+      if (_query.isNotEmpty) {
+        final haystack =
+            '${p.name} ${p.role} ${p.state} '
+                    '${UsStates.nameFor(p.state) ?? ''}'
+                .toLowerCase();
+        if (!haystack.contains(_query)) return false;
+      }
       if (_showsPastUi && _era != null && !p.servedDuring(_era!.$1, _era!.$2)) {
         return false;
       }
@@ -193,10 +224,18 @@ class _ResultsScreenState extends State<ResultsScreen>
   /// the filters that pick it sit far below the card.
   String get _matchScopeNote {
     final office = _officeNotes[_officeFilter];
+    final scope = _scopedToState
+        ? [
+            _scopeName.toUpperCase(),
+            if (widget.homeDistrict != null)
+              UsStates.districtCount(widget.homeStateCode) == 1
+                  ? 'AT-LARGE'
+                  : 'DIST. ${widget.homeDistrict}',
+          ].join(' ')
+        : 'NATIONWIDE';
     return [
       if (_showsPastUi) _ballotMode ? 'ACTIVE BALLOT' : 'HISTORICAL',
-      if (!_showsPastUi || _ballotMode)
-        _scopedToState ? _scopeName.toUpperCase() : 'NATIONWIDE',
+      if (!_showsPastUi || _ballotMode) scope,
       ?office?.toUpperCase(),
       ?_partyFilter?.toUpperCase(),
       if (_showsPastUi && _era != null) '${_era!.$1}s',
@@ -749,6 +788,55 @@ class _ResultsScreenState extends State<ResultsScreen>
                 ),
                 const SizedBox(height: 10),
               ],
+              TextField(
+                controller: _searchCtrl,
+                textInputAction: TextInputAction.search,
+                autocorrect: false,
+                onChanged: (value) => setState(() {
+                  _query = value.trim().toLowerCase();
+                  _matchLimit = _matchPageSize;
+                }),
+                decoration: InputDecoration(
+                  isDense: true,
+                  filled: true,
+                  fillColor: AppColors.sheet,
+                  hintText: 'Search name, office, or state',
+                  hintStyle: GoogleFonts.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.inkMuted,
+                  ),
+                  prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: 'Clear search',
+                          icon: const Icon(Icons.close_rounded, size: 18),
+                          onPressed: () => setState(() {
+                            _searchCtrl.clear();
+                            _query = '';
+                            _matchLimit = _matchPageSize;
+                          }),
+                        ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(
+                      color: AppColors.ink.withValues(alpha: 0.08),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(
+                      color: AppColors.ink.withValues(alpha: 0.08),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(color: AppColors.navy),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
@@ -797,12 +885,24 @@ class _ResultsScreenState extends State<ResultsScreen>
             children: [
               if (matches.isEmpty)
                 EmptyState(
-                  icon: Icons.filter_alt_off_outlined,
+                  icon: _query.isNotEmpty
+                      ? Icons.search_off_rounded
+                      : Icons.filter_alt_off_outlined,
                   title: 'No one is left',
-                  body: 'These filters rule out everyone in the roster.',
+                  body: _query.isNotEmpty
+                      ? 'No one in this slice matches “${_searchCtrl.text}”.'
+                      : 'These filters rule out everyone in the roster.',
                   action: OutlinedButton(
-                    onPressed: _resetFilters,
-                    child: const Text('Clear filters'),
+                    onPressed: _query.isNotEmpty
+                        ? () => setState(() {
+                            _searchCtrl.clear();
+                            _query = '';
+                            _matchLimit = _matchPageSize;
+                          })
+                        : _resetFilters,
+                    child: Text(
+                      _query.isNotEmpty ? 'Clear search' : 'Clear filters',
+                    ),
                   ),
                 )
               else
@@ -1105,7 +1205,7 @@ class _HandSetBanner extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.tune_rounded, size: 20, color: AppColors.ink),
+          Icon(Icons.tune_rounded, size: 20, color: AppColors.ink),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -1273,10 +1373,10 @@ class _ShareCard extends StatelessWidget {
             height: 12,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 colors: [
                   AppColors.liberal,
-                  Color(0xFFE8EEF6),
+                  AppColors.parchment,
                   AppColors.conservative,
                 ],
               ),

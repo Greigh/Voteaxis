@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../data/us_states.dart';
+import '../services/civic_links.dart';
 import '../models/app_settings.dart';
 import '../models/politician.dart';
 import '../models/quiz_bank.dart';
@@ -16,7 +17,9 @@ class SettingsScreen extends StatefulWidget {
     required this.settings,
     required this.onSettings,
     this.homeStateCode,
+    this.homeDistrict,
     this.onHomeState,
+    this.onHomeDistrict,
     this.onTransfer,
     this.onClearProgress,
     this.onDeleteEverything,
@@ -28,7 +31,9 @@ class SettingsScreen extends StatefulWidget {
   final AppSettings settings;
   final Future<void> Function(AppSettings next) onSettings;
   final String? homeStateCode;
+  final int? homeDistrict;
   final Future<void> Function(String stateCode)? onHomeState;
+  final Future<void> Function(int? district)? onHomeDistrict;
 
   /// Opens device-to-device transfer.
   final VoidCallback? onTransfer;
@@ -45,6 +50,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late AppSettings _settings = widget.settings.normalized;
   late String? _homeState = widget.homeStateCode;
+  late int? _homeDistrict = widget.homeDistrict;
   late bool _hasInProgress = widget.hasInProgress;
   late bool _hasSavedResult = widget.hasSavedResult;
 
@@ -78,7 +84,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 trailing: active
-                    ? const Icon(Icons.check_rounded, color: AppColors.ink)
+                    ? Icon(Icons.check_rounded, color: AppColors.ink)
                     : Text(
                         s.code,
                         style: GoogleFonts.ibmPlexMono(
@@ -94,8 +100,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
     if (selected == null) return;
     await onHomeState(selected);
+    await widget.onHomeDistrict?.call(null);
     if (!mounted) return;
-    setState(() => _homeState = selected);
+    setState(() {
+      _homeState = selected;
+      _homeDistrict = null;
+    });
+  }
+
+  Future<void> _pickDistrict() async {
+    final onHomeDistrict = widget.onHomeDistrict;
+    final seats = UsStates.districtCount(_homeState);
+    if (onHomeDistrict == null || seats == 0) return;
+    final selected = await showModalBottomSheet<int>(
+      context: context,
+      showDragHandle: true,
+      backgroundColor: AppColors.sheet,
+      builder: (context) {
+        return SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                title: Text(
+                  'Statewide',
+                  style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+                ),
+                subtitle: const Text('Show every House district'),
+                trailing: _homeDistrict == null
+                    ? Icon(Icons.check_rounded, color: AppColors.ink)
+                    : null,
+                onTap: () => Navigator.pop(context, -1),
+              ),
+              for (var n = 1; n <= seats; n++)
+                ListTile(
+                  title: Text(
+                    seats == 1 ? 'At-large' : 'District $n',
+                    style: GoogleFonts.manrope(
+                      fontWeight: _homeDistrict == n
+                          ? FontWeight.w800
+                          : FontWeight.w600,
+                    ),
+                  ),
+                  trailing: _homeDistrict == n
+                      ? Icon(Icons.check_rounded, color: AppColors.ink)
+                      : null,
+                  onTap: () => Navigator.pop(context, n),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+    if (selected == null) return;
+    final district = selected < 1 ? null : selected;
+    await onHomeDistrict(district);
+    if (!mounted) return;
+    setState(() => _homeDistrict = district);
+  }
+
+  /// vote.gov is the official federal voter-information site — the URL only
+  /// carries a state name, so opening it sends nothing personal anywhere.
+  Future<void> _openRegistration() async {
+    await CivicLinks.openVoterRegistration(_homeState);
   }
 
   Future<void> _clearProgress() async {
@@ -142,6 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _settings = const AppSettings();
       _homeState = null;
+      _homeDistrict = null;
       _hasInProgress = false;
       _hasSavedResult = false;
     });
@@ -288,6 +356,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   onTap: _pickState,
                 ),
+                ListTile(
+                  contentPadding: _rowPadding,
+                  title: _title('Congressional district'),
+                  subtitle: _subtitle(
+                    _homeState == null
+                        ? 'Set a home state first'
+                        : _homeDistrict == null
+                        ? 'Statewide — every House district'
+                        : UsStates.districtCount(_homeState) == 1
+                        ? 'At-large'
+                        : 'District $_homeDistrict — House matches narrow to it',
+                  ),
+                  trailing: Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.ink.withValues(alpha: 0.35),
+                  ),
+                  enabled: _homeState != null,
+                  onTap: _pickDistrict,
+                ),
+                ListTile(
+                  contentPadding: _rowPadding,
+                  title: _title('Register or check registration'),
+                  subtitle: _subtitle(
+                    _homeState == null
+                        ? 'vote.gov — pick your state there'
+                        : 'vote.gov for ${UsStates.nameFor(_homeState)}',
+                  ),
+                  trailing: Icon(
+                    Icons.open_in_new_rounded,
+                    size: 18,
+                    color: AppColors.ink.withValues(alpha: 0.35),
+                  ),
+                  onTap: _openRegistration,
+                ),
               ],
             ),
           ],
@@ -299,6 +401,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           _Group(
             children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _title('Theme'),
+                    const SizedBox(height: 6),
+                    _subtitle('Light, dark, or matching your device.'),
+                    const SizedBox(height: 12),
+                    _Segmented<AppThemeMode>(
+                      value: _settings.theme,
+                      options: AppThemeMode.values,
+                      labelFor: (theme) => switch (theme) {
+                        AppThemeMode.system => 'System',
+                        AppThemeMode.light => 'Light',
+                        AppThemeMode.dark => 'Dark',
+                      },
+                      onChanged: (theme) =>
+                          _update(_settings.copyWith(theme: theme)),
+                    ),
+                  ],
+                ),
+              ),
               SwitchListTile(
                 contentPadding: _rowPadding,
                 title: _title('Haptics'),
@@ -329,6 +454,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 value: _settings.issueWidget,
                 onChanged: (value) =>
                     _update(_settings.copyWith(issueWidget: value)),
+              ),
+              SwitchListTile(
+                contentPadding: _rowPadding,
+                title: _title('Daily reminder'),
+                subtitle: _subtitle(
+                  'A 9am nudge when a new Issue of the Day is up. Scheduled on '
+                  'this phone — nothing is sent anywhere.',
+                ),
+                value: _settings.dailyReminder,
+                onChanged: (value) =>
+                    _update(_settings.copyWith(dailyReminder: value)),
               ),
             ],
           ),
@@ -384,7 +520,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (widget.onDeleteEverything != null)
                   ListTile(
                     contentPadding: _rowPadding,
-                    leading: const Icon(
+                    leading: Icon(
                       Icons.delete_outline_rounded,
                       color: AppColors.conservative,
                     ),
@@ -564,26 +700,35 @@ class _Segmented<T> extends StatelessWidget {
         children: [
           for (final option in options)
             Expanded(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              child: Semantics(
+                button: true,
+                selected: option == value,
+                label: labelFor(option),
                 onTap: () => onChanged(option),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 140),
-                  constraints: const BoxConstraints(minHeight: 48),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: option == value ? AppColors.ink : Colors.transparent,
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Text(
-                    labelFor(option),
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.manrope(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                excludeSemantics: true,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => onChanged(option),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 140),
+                    constraints: const BoxConstraints(minHeight: 48),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
                       color: option == value
-                          ? AppColors.sheet
-                          : AppColors.inkMuted,
+                          ? AppColors.ink
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Text(
+                      labelFor(option),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.manrope(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: option == value
+                            ? AppColors.sheet
+                            : AppColors.inkMuted,
+                      ),
                     ),
                   ),
                 ),

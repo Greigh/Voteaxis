@@ -13,7 +13,7 @@ const HTML_CACHE_CONTROL =
 // Only the genuinely static pages. /contribute and /contribute/thanks render
 // dynamically and Next already marks them `private, no-cache, no-store` — they
 // touch Stripe, so a broad `/:path*` rule here would be a downgrade, not a fix.
-const STATIC_PAGES = ["/", "/methodology"];
+const STATIC_PAGES = ["/", "/methodology", "/support", "/privacy"];
 
 const nextConfig = {
   reactStrictMode: true,
@@ -22,20 +22,34 @@ const nextConfig = {
     root: process.cwd(),
   },
   async headers() {
-    return STATIC_PAGES.map((source) => ({
-      source,
-      headers: [{ key: "Cache-Control", value: HTML_CACHE_CONTROL }],
-    }));
+    return [
+      ...STATIC_PAGES.map((source) => ({
+        source,
+        headers: [{ key: "Cache-Control", value: HTML_CACHE_CONTROL }],
+      })),
+      // Universal-link manifests. Apple reads the extensionless AASA file and
+      // wants it as JSON; both must never come from a CDN cache — a stale
+      // fingerprint silently breaks app links for every install.
+      {
+        source: "/.well-known/apple-app-site-association",
+        headers: [
+          { key: "Content-Type", value: "application/json" },
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+        ],
+      },
+      {
+        source: "/.well-known/assetlinks.json",
+        headers: [
+          { key: "Content-Type", value: "application/json" },
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+        ],
+      },
+    ];
   },
-  // /support read as a help desk, so the page is /contribute. Permanent so any
-  // indexed or already-shared /support link folds into the new route.
+  // /support is a real help page now. The old /support/thanks alias still
+  // folds into the post-checkout receipt page.
   async redirects() {
     return [
-      {
-        source: "/support",
-        destination: "/contribute",
-        permanent: true,
-      },
       {
         source: "/support/thanks",
         destination: "/contribute/thanks",

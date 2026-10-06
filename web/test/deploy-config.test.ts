@@ -108,10 +108,10 @@ describe("deploy config references real routes", () => {
   });
 
   test("next.config redirects do not rescue a stale /api path", () => {
-    // /support -> /contribute is a page redirect. It matches the two page
-    // routes exactly and nothing under /api, which is precisely why a stale
-    // webhook URL 404s instead of being forwarded. If that ever changes, the
-    // reasoning in the comments above needs revisiting.
+    // /support/thanks -> /contribute/thanks is a page redirect. It matches the
+    // page route exactly and nothing under /api, which is precisely why a
+    // stale webhook URL 404s instead of being forwarded. If that ever changes,
+    // the reasoning in the comments above needs revisiting.
     const config = read("web/next.config.mjs");
     expect(config).not.toBeNull();
     const sources = [...(config ?? "").matchAll(/source:\s*"([^"]+)"/g)].map(

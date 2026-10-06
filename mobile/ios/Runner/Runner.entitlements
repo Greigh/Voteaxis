@@ -6,5 +6,10 @@
 	<array>
 		<string>group.com.greighstudios.voteaxis</string>
 	</array>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:voteaxis.org</string>
+		<string>applinks:www.voteaxis.org</string>
+	</array>
 </dict>
 </plist>

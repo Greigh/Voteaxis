@@ -11,14 +11,17 @@ class VoteRecord extends StatefulWidget {
   const VoteRecord({
     super.key,
     required this.politician,
-    required this.userScore,
+    this.userScore,
     required this.issueLabels,
     required this.lifetimeAxis,
     this.lifetimeDistance,
   });
 
   final Politician politician;
-  final double userScore;
+
+  /// The viewer's axis — the "you" pin on the session chart. Null when the
+  /// roster is being browsed without a placement.
+  final double? userScore;
   final Map<String, String> issueLabels;
   final double lifetimeAxis;
   final double? lifetimeDistance;
@@ -118,45 +121,54 @@ class _VoteRecordState extends State<VoteRecord> {
           children: [
             for (var i = 0; i < _sessions.length; i++)
               Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                child: Semantics(
+                  button: true,
+                  selected: i == _index,
+                  label:
+                      '${_sessions[i].label}, ${_sessions[i].year}, '
+                      'score ${Scoring.labelForScore(_sessions[i].axisScore)}',
                   onTap: () => _select(i),
-                  child: AnimatedOpacity(
-                    duration: reduce
-                        ? Duration.zero
-                        : const Duration(milliseconds: 180),
-                    opacity: i == _index ? 1 : 0.45,
-                    // A two-line label is 33pt tall on its own — pad it out so
-                    // the year tabs clear the 48dp minimum.
-                    child: Container(
-                      constraints: const BoxConstraints(minHeight: 48),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            _sessions[i].label.replaceAll(' Congress', ''),
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.ibmPlexMono(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.4,
-                              color: i == _index
-                                  ? AppColors.navy
-                                  : AppColors.inkMuted,
+                  excludeSemantics: true,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => _select(i),
+                    child: AnimatedOpacity(
+                      duration: reduce
+                          ? Duration.zero
+                          : const Duration(milliseconds: 180),
+                      opacity: i == _index ? 1 : 0.45,
+                      // A two-line label is 33pt tall on its own — pad it out so
+                      // the year tabs clear the 48dp minimum.
+                      child: Container(
+                        constraints: const BoxConstraints(minHeight: 48),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _sessions[i].label.replaceAll(' Congress', ''),
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.ibmPlexMono(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.4,
+                                color: i == _index
+                                    ? AppColors.navy
+                                    : AppColors.inkMuted,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${_sessions[i].year}',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.manrope(
-                              fontSize: 12,
-                              fontWeight: i == _index
-                                  ? FontWeight.w800
-                                  : FontWeight.w500,
+                            Text(
+                              '${_sessions[i].year}',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.manrope(
+                                fontSize: 12,
+                                fontWeight: i == _index
+                                    ? FontWeight.w800
+                                    : FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

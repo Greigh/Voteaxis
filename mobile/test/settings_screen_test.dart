@@ -152,9 +152,11 @@ void main() {
       String? picked;
       await pump(tester, onHomeState: (code) async => picked = code);
       await tester.scrollUntilVisible(find.text('Home state'), 200);
+      await tester.ensureVisible(find.text('Home state'));
+      await tester.pumpAndSettle();
       expect(find.text('Michigan'), findsOneWidget);
 
-      await tester.tap(find.text('Home state'));
+      await tester.tap(find.widgetWithText(ListTile, 'Home state'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Alabama'));
       await tester.pumpAndSettle();
@@ -184,7 +186,9 @@ void main() {
       var opened = false;
       await pump(tester, onTransfer: () => opened = true);
       await tester.scrollUntilVisible(find.text('Share & transfer'), 200);
-      await tester.tap(find.text('Share & transfer'));
+      await tester.ensureVisible(find.text('Share & transfer'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ListTile, 'Share & transfer'));
       expect(opened, isTrue);
     });
 
@@ -216,6 +220,7 @@ void main() {
         find.text('Discard in-progress quiz'),
         200,
       );
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Discard in-progress quiz'));
       await tester.pumpAndSettle();
       expect(cleared, isTrue);
@@ -233,6 +238,7 @@ void main() {
         onDeleteEverything: () async => deleted = true,
       );
       await tester.scrollUntilVisible(find.text('Delete everything'), 200);
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Delete everything'));
       await tester.pumpAndSettle();
       expect(find.text('Delete everything?'), findsOneWidget);
@@ -253,6 +259,7 @@ void main() {
         onDeleteEverything: () async => deleted = true,
       );
       await tester.scrollUntilVisible(find.text('Delete everything'), 200);
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Delete everything'));
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(FilledButton, 'Delete'));

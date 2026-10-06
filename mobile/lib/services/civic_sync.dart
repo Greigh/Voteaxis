@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 
+import 'share_link.dart';
 import 'transfer_code.dart';
 
 /// Sit-together friend sync. The API stores coordinates, not quiz answers.
@@ -37,23 +38,54 @@ String? parseFriendSyncCode(String raw, {bool requireUri = false}) {
   return _codeToken.firstMatch(trimmed.toUpperCase())?.group(1);
 }
 
-/// Every `voteaxis://` link the app answers to: `sync?code=` for friend
-/// compare, `restore?d=` for a device transfer.
+/// Dispatch a resolved link to the right handler. Kept separate from
+/// [listenDeepLinks] so the decision is testable without the app_links plugin.
+void routeDeepLink(
+  Uri? uri, {
+  void Function(String code)? onSyncCode,
+  void Function(String raw)? onRestoreCode,
+  void Function(String id)? onResultLink,
+}) {
+  if (uri == null) return;
+  final raw = uri.toString();
+
+  // Shared results — a universal https link or the voteaxis://result form.
+  // Hosts are constrained to the site the app publishes links on so a stray
+  // "…/result/<id>" URL on another domain does not open the viewer.
+  final id = ShareLink.idFrom(raw);
+  if (id != null &&
+      ((uri.scheme == 'https' &&
+              (uri.host == 'voteaxis.org' || uri.host == 'www.voteaxis.org')) ||
+          (uri.scheme == friendSyncScheme &&
+              (uri.host == ShareLink.segment ||
+                  uri.pathSegments.contains(ShareLink.segment))))) {
+    onResultLink?.call(id);
+    return;
+  }
+
+  final code = parseFriendSyncCode(raw, requireUri: true);
+  if (code != null) {
+    onSyncCode?.call(code);
+    return;
+  }
+  final restore = TransferCode.codeFromLink(raw);
+  if (restore != null) onRestoreCode?.call(restore);
+}
+
+/// Every link the app answers to: `voteaxis://sync?code=` for friend
+/// compare, `voteaxis://restore?d=` for a device transfer, and shared results
+/// — `voteaxis://result?id=` or the universal `https://voteaxis.org/result/<id>`.
 StreamSubscription<Uri>? listenDeepLinks({
   void Function(String code)? onSyncCode,
   void Function(String raw)? onRestoreCode,
+  void Function(String id)? onResultLink,
 }) {
-  void handle(Uri? uri) {
-    if (uri == null) return;
-    final raw = uri.toString();
-    final code = parseFriendSyncCode(raw, requireUri: true);
-    if (code != null) {
-      onSyncCode?.call(code);
-      return;
-    }
-    final restore = TransferCode.codeFromLink(raw);
-    if (restore != null) onRestoreCode?.call(restore);
-  }
+  void handle(Uri? uri) => routeDeepLink(
+    uri,
+    onSyncCode: onSyncCode,
+    onRestoreCode: onRestoreCode,
+    onResultLink: onResultLink,
+  );
 
   try {
     final links = AppLinks();

@@ -25,6 +25,7 @@ mobile/*.iml
 # Env / secrets
 .env*
 !.env.example
+.env*.local
 .env*.bak
 .env*~
 .env*.orig
@@ -63,3 +64,10 @@ mobile/android/key.properties
 
 # Mail server credentials — never commit
 mail-server-logins.md
+
+# AI assistant instructions
+AGENTS.md
+CLAUDE.md
+.claude/
+.freebuff/
+.gemini/

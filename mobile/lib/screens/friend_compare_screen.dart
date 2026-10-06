@@ -244,11 +244,11 @@ class _FriendCompareScreenState extends State<FriendCompareScreen> {
                           data: friendSyncPayload(_identity!.code),
                           size: 168,
                           backgroundColor: AppColors.sheet,
-                          eyeStyle: const QrEyeStyle(
+                          eyeStyle: QrEyeStyle(
                             eyeShape: QrEyeShape.square,
                             color: AppColors.ink,
                           ),
-                          dataModuleStyle: const QrDataModuleStyle(
+                          dataModuleStyle: QrDataModuleStyle(
                             dataModuleShape: QrDataModuleShape.square,
                             color: AppColors.ink,
                           ),

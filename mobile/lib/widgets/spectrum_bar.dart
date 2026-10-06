@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/scoring.dart';
 import '../theme/app_theme.dart';
 
 class SpectrumMarker {
@@ -15,7 +16,7 @@ class SpectrumMarker {
 class SpectrumBar extends StatefulWidget {
   const SpectrumBar({
     super.key,
-    required this.userScore,
+    this.userScore,
     required this.markers,
     this.height = 96,
     this.highlightId,
@@ -24,7 +25,9 @@ class SpectrumBar extends StatefulWidget {
     this.otherScore,
   });
 
-  final double userScore;
+  /// The "you" pin. Null in browse mode — the bar shows the roster without
+  /// pretending the viewer has a placement.
+  final double? userScore;
   final List<SpectrumMarker> markers;
   final double height;
   final String? highlightId;
@@ -102,62 +105,95 @@ class _SpectrumBarState extends State<SpectrumBar>
     super.dispose();
   }
 
+  /// One spoken summary of the chart: axis bounds, the user's pin, the
+  /// friend's pin, and how many roster dots are plotted. The painted bar and
+  /// the "Liberal 100 · 0 · Conservative 100" scale row are excluded so the
+  /// reader hears this once instead of as fragments.
+  String _describe() {
+    final buffer = StringBuffer(
+      'Political spectrum, from Liberal 100 to Conservative 100.',
+    );
+    if (widget.userScore != null) {
+      final score = widget.userScore!.round();
+      buffer.write(
+        ' Your position: ${Scoring.labelForScore(widget.userScore!)}, '
+        '$score.',
+      );
+    }
+    if (widget.otherScore != null) {
+      final score = widget.otherScore!.round();
+      buffer.write(
+        ' Friend position: ${Scoring.labelForScore(widget.otherScore!)}, '
+        '$score.',
+      );
+    }
+    if (widget.markers.isNotEmpty) {
+      buffer.write(' ${widget.markers.length} politicians plotted.');
+    }
+    return buffer.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          height: widget.height,
-          child: AnimatedBuilder(
-            animation: _t,
-            builder: (context, _) {
-              return CustomPaint(
-                painter: _SpectrumPainter(
-                  userScore: widget.userScore,
-                  markers: widget.markers,
-                  highlightId: widget.highlightId,
-                  trail: widget.trail,
-                  path: widget.path,
-                  otherScore: widget.otherScore,
-                  t: _t.value,
-                ),
-                child: const SizedBox.expand(),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Semantics(
+      label: _describe(),
+      child: ExcludeSemantics(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Liberal 100',
-              style: TextStyle(
-                color: AppColors.liberal,
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
+            SizedBox(
+              height: widget.height,
+              child: AnimatedBuilder(
+                animation: _t,
+                builder: (context, _) {
+                  return CustomPaint(
+                    painter: _SpectrumPainter(
+                      userScore: widget.userScore,
+                      markers: widget.markers,
+                      highlightId: widget.highlightId,
+                      trail: widget.trail,
+                      path: widget.path,
+                      otherScore: widget.otherScore,
+                      t: _t.value,
+                    ),
+                    child: const SizedBox.expand(),
+                  );
+                },
               ),
             ),
-            Text(
-              '0',
-              style: TextStyle(
-                color: AppColors.center,
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-              ),
-            ),
-            Text(
-              'Conservative 100',
-              style: TextStyle(
-                color: AppColors.conservative,
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-              ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Liberal 100',
+                  style: TextStyle(
+                    color: AppColors.liberal,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+                Text(
+                  '0',
+                  style: TextStyle(
+                    color: AppColors.center,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                ),
+                Text(
+                  'Conservative 100',
+                  style: TextStyle(
+                    color: AppColors.conservative,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -173,7 +209,7 @@ class _SpectrumPainter extends CustomPainter {
     this.otherScore,
   });
 
-  final double userScore;
+  final double? userScore;
   final List<SpectrumMarker> markers;
   final String? highlightId;
   final List<double> trail;
@@ -195,12 +231,12 @@ class _SpectrumPainter extends CustomPainter {
       const Radius.circular(8),
     );
 
-    const gradient = LinearGradient(
+    final gradient = LinearGradient(
       colors: [
         AppColors.liberal,
-        Color(0xFF6B8FE8),
-        Color(0xFFE8EEF6),
-        Color(0xFFE07A6A),
+        AppColors.liberal.withValues(alpha: 0.55),
+        AppColors.parchment,
+        AppColors.conservative.withValues(alpha: 0.55),
         AppColors.conservative,
       ],
     );
@@ -246,7 +282,10 @@ class _SpectrumPainter extends CustomPainter {
     }
 
     if (trail.isNotEmpty) {
-      drawPath([...trail, userScore], includeTip: true);
+      drawPath(
+        userScore == null ? trail : [...trail, userScore!],
+        includeTip: userScore != null,
+      );
     }
     if (path.length >= 2) {
       drawPath(path, includeTip: false);
@@ -269,27 +308,29 @@ class _SpectrumPainter extends CustomPainter {
       );
     }
 
-    final ux = _xFor(userScore, size.width);
-    final drop = (1 - t) * 22;
-    final pinPath = Path()
-      ..moveTo(ux, trackY - 28 - drop)
-      ..lineTo(ux - 8, trackY - 12 - drop)
-      ..lineTo(ux + 8, trackY - 12 - drop)
-      ..close();
-    canvas.drawPath(
-      pinPath,
-      Paint()..color = AppColors.navy.withValues(alpha: 0.35 + 0.65 * t),
-    );
-    canvas.drawCircle(
-      Offset(ux, trackY),
-      7,
-      Paint()..color = AppColors.navy.withValues(alpha: 0.35 + 0.65 * t),
-    );
-    canvas.drawCircle(
-      Offset(ux, trackY),
-      3.5,
-      Paint()..color = AppColors.cream.withValues(alpha: t),
-    );
+    if (userScore != null) {
+      final ux = _xFor(userScore!, size.width);
+      final drop = (1 - t) * 22;
+      final pinPath = Path()
+        ..moveTo(ux, trackY - 28 - drop)
+        ..lineTo(ux - 8, trackY - 12 - drop)
+        ..lineTo(ux + 8, trackY - 12 - drop)
+        ..close();
+      canvas.drawPath(
+        pinPath,
+        Paint()..color = AppColors.navy.withValues(alpha: 0.35 + 0.65 * t),
+      );
+      canvas.drawCircle(
+        Offset(ux, trackY),
+        7,
+        Paint()..color = AppColors.navy.withValues(alpha: 0.35 + 0.65 * t),
+      );
+      canvas.drawCircle(
+        Offset(ux, trackY),
+        3.5,
+        Paint()..color = AppColors.cream.withValues(alpha: t),
+      );
+    }
 
     if (otherScore != null) {
       final ox = _xFor(otherScore!, size.width);

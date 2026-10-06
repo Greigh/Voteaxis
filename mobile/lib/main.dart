@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'data/app_data.dart';
 import 'models/app_settings.dart';
@@ -10,6 +11,7 @@ import 'models/politician.dart';
 import 'models/question.dart';
 import 'models/quiz_bank.dart';
 import 'models/scoring.dart';
+import 'screens/explore_screen.dart';
 import 'screens/friend_compare_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/manual_profile_screen.dart';
@@ -18,9 +20,11 @@ import 'screens/onboarding_screen.dart';
 import 'screens/quiz_screen.dart';
 import 'screens/results_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/shared_result_screen.dart';
 import 'screens/transfer_screen.dart';
 import 'services/app_feel.dart';
 import 'services/civic_sync.dart';
+import 'services/issue_reminder.dart';
 import 'services/result_store.dart';
 import 'services/transfer_code.dart';
 import 'services/voteaxis_api.dart';
@@ -29,37 +33,39 @@ import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(_overlayStyle);
+  // Every font face the app uses is bundled under assets/fonts/. Blocking
+  // runtime fetches keeps "your answers never leave this phone" honest — no
+  // text render ever phones fonts.gstatic.com. If a bundled face is missing
+  // the call fails loudly in debug builds and falls back to the system face.
+  GoogleFonts.config.allowRuntimeFetching = false;
+  SystemChrome.setSystemUIOverlayStyle(_overlayStyleFor(Brightness.light));
   await initIssueWidget();
   runApp(const VoteaxisApp());
 }
 
-const _overlayStyle = SystemUiOverlayStyle(
-  statusBarColor: Colors.transparent,
-  statusBarIconBrightness: Brightness.dark,
-  statusBarBrightness: Brightness.light,
-  systemNavigationBarColor: Colors.transparent,
-  systemNavigationBarIconBrightness: Brightness.dark,
-  systemNavigationBarDividerColor: Colors.transparent,
-);
+SystemUiOverlayStyle _overlayStyleFor(Brightness brightness) {
+  final isDark = brightness == Brightness.dark;
+  return SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+    statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarIconBrightness: isDark
+        ? Brightness.light
+        : Brightness.dark,
+    systemNavigationBarDividerColor: Colors.transparent,
+  );
+}
 
 class VoteaxisApp extends StatelessWidget {
   const VoteaxisApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Voteaxis',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      builder: (context, child) {
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: _overlayStyle,
-          child: _RestoreSystemInsets(child: child ?? const SizedBox.shrink()),
-        );
-      },
-      home: const AppShell(),
-    );
+    // AppShell builds the MaterialApp itself — theme mode is a user setting
+    // that lives in shell state, and the shell also owns the navigator so
+    // deep links can push screens after bootstrap.
+    return const AppShell();
   }
 }
 
@@ -114,6 +120,8 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   final _store = ResultStore();
+  final _navKey = GlobalKey<NavigatorState>();
+  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
   _View _view = _View.loading;
   AppData? _data;
   SpectrumProfile? _profile;
@@ -130,10 +138,12 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   bool _resuming = false;
   List<Question> _quizQuestions = const [];
   String? _homeState;
+  int? _homeDistrict;
   AppSettings _settings = const AppSettings();
   IssueOfTheWeek? _week;
   String? _pendingSyncCode;
   String? _pendingRestoreCode;
+  String? _pendingResultId;
   StreamSubscription<Uri>? _syncLinks;
 
   @override
@@ -143,6 +153,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     _syncLinks = listenDeepLinks(
       onSyncCode: _onSyncCode,
       onRestoreCode: _onRestoreCode,
+      onResultLink: _onResultLink,
     );
     _bootstrap();
   }
@@ -174,10 +185,37 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     _applyTransfer(payload);
   }
 
+  /// A universal `voteaxis.org/result/<id>` link (or the voteaxis://result
+  /// form) opens the viewer — it never restores over this device's placement
+  /// without an explicit confirm inside the screen.
+  void _onResultLink(String id) {
+    if (!mounted) return;
+    if (_data == null || _view == _View.loading) {
+      _pendingResultId = id;
+      return;
+    }
+    _openSharedResult(id);
+  }
+
+  Future<void> _openSharedResult(String id) async {
+    final data = _data;
+    final nav = _navKey.currentState;
+    if (data == null || nav == null) return;
+    final outcome = await nav.push<TransferOutcome>(
+      MaterialPageRoute<TransferOutcome>(
+        builder: (_) =>
+            SharedResultScreen(resultId: id, data: data, userProfile: _profile),
+      ),
+    );
+    if (outcome == null || !mounted) return;
+    await _applyTransfer(outcome.payload);
+  }
+
   void _openFriendCompare([String? code]) {
     final data = _data;
-    if (data == null) return;
-    Navigator.of(context).push(
+    final nav = _navKey.currentState;
+    if (data == null || nav == null) return;
+    nav.push(
       MaterialPageRoute<void>(
         builder: (_) => FriendCompareScreen(
           data: data,
@@ -233,6 +271,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
       final data = await AppData.load();
       final onboarded = await _store.hasOnboarded();
       final homeState = await _store.loadHomeState();
+      final homeDistrict = await _store.loadHomeDistrict();
       final settings = await _store.loadSettings();
       AppFeel.apply(settings);
       IssueOfTheWeek? week;
@@ -246,10 +285,15 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
       }
       final latest = await _store.latestRun();
       final progress = await _store.loadProgress();
+      // Keep the pending reminder's copy in step with the live issue. This is
+      // a no-op unless the user enabled the daily nudge — nothing is scheduled
+      // just because the app launched.
+      unawaited(IssueReminder.refreshContent(week));
       if (!mounted) return;
       setState(() {
         _data = data;
         _homeState = homeState;
+        _homeDistrict = homeDistrict;
         _settings = settings;
         _week = week;
         _profile = latest?.toProfile();
@@ -300,6 +344,11 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         _pendingSyncCode = null;
         _openFriendCompare(pending);
       }
+      final pendingResult = _pendingResultId;
+      if (pendingResult != null && mounted) {
+        _pendingResultId = null;
+        await _openSharedResult(pendingResult);
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -336,8 +385,20 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
 
   Future<void> _changeHomeState(String stateCode) async {
     await _store.saveHomeState(stateCode);
+    // Districts are drawn per state — a stored number from the old state
+    // would silently filter the wrong House seat.
+    await _store.saveHomeDistrict(null);
     if (!mounted) return;
-    setState(() => _homeState = stateCode);
+    setState(() {
+      _homeState = stateCode;
+      _homeDistrict = null;
+    });
+  }
+
+  Future<void> _changeHomeDistrict(int? district) async {
+    await _store.saveHomeDistrict(district);
+    if (!mounted) return;
+    setState(() => _homeDistrict = district);
   }
 
   Future<void> _onQuizComplete(QuizResult result) async {
@@ -445,11 +506,27 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     });
   }
 
+  /// Browse mode — the roster with whatever placement exists, or none.
+  void _openExplore() {
+    final data = _data;
+    final nav = _navKey.currentState;
+    if (data == null || nav == null) return;
+    nav.push(
+      MaterialPageRoute<void>(
+        builder: (_) => ExploreScreen(
+          data: data,
+          userProfile: _profile,
+          figureFloor: _settings.figureFloor,
+        ),
+      ),
+    );
+  }
+
   /// Hand-set placement: skips the quiz but saves the same profile shape.
   Future<void> _openManualLevel() async {
     final data = _data;
     if (data == null) return;
-    final profile = await Navigator.of(context).push<SpectrumProfile>(
+    final profile = await _navKey.currentState?.push<SpectrumProfile>(
       MaterialPageRoute<SpectrumProfile>(
         builder: (_) =>
             ManualProfileScreen(data: data, initialProfile: _profile),
@@ -484,6 +561,18 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     // makes it the wrong list, so it cannot be resumed.
     final dropDraft = wasHistorical != nowHistorical || lengthChanged;
 
+    // Permission lives with the OS: if the user declines the prompt, store
+    // the honest state rather than a toggle that does nothing.
+    if (next.dailyReminder != _settings.dailyReminder) {
+      final armed = await IssueReminder.setEnabled(
+        next.dailyReminder,
+        week: _week,
+      );
+      if (armed != next.dailyReminder) {
+        next = next.copyWith(dailyReminder: armed);
+      }
+    }
+
     await _store.saveSettings(next);
     if (dropDraft) await _store.clearProgress();
     AppFeel.apply(next);
@@ -504,12 +593,14 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   Future<void> _deleteEverything() async {
     await _store.clearEverything();
     AppFeel.apply(const AppSettings());
+    unawaited(IssueReminder.setEnabled(false));
     if (!mounted) return;
     setState(() {
       _settings = const AppSettings();
       _profile = null;
       _handSet = false;
       _homeState = null;
+      _homeDistrict = null;
       _hasInProgress = false;
       _resumeAnswers = null;
       _resumeIndex = 0;
@@ -523,8 +614,15 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   Future<void> _applyTransfer(TransferPayload payload) async {
     final data = _data;
     if (data == null) return;
-    await _store.saveSettings(payload.settings);
-    AppFeel.apply(payload.settings);
+    var settings = payload.settings;
+    // A restored preference says the other device wanted reminders — this
+    // device still has to grant its own permission before anything fires.
+    if (settings.dailyReminder) {
+      final armed = await IssueReminder.setEnabled(true, week: _week);
+      if (!armed) settings = settings.copyWith(dailyReminder: false);
+    }
+    await _store.saveSettings(settings);
+    AppFeel.apply(settings);
     final state = payload.homeStateCode;
     if (state != null && state.isNotEmpty) {
       await _store.saveHomeState(state);
@@ -546,7 +644,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     }
     if (!mounted) return;
     setState(() {
-      _settings = payload.settings;
+      _settings = settings;
       if (state != null && state.isNotEmpty) _homeState = state;
       if (profile != null) {
         _profile = profile;
@@ -561,7 +659,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     });
     await _syncWidget();
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
+    _messengerKey.currentState?.showSnackBar(
       const SnackBar(content: Text('Restored from your other phone')),
     );
   }
@@ -580,7 +678,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
             takenAt: DateTime.fromMillisecondsSinceEpoch(latest!.timestampMs),
             handSet: latest.isHandSet,
           );
-    final outcome = await Navigator.of(context).push<TransferOutcome>(
+    final outcome = await _navKey.currentState?.push<TransferOutcome>(
       MaterialPageRoute<TransferOutcome>(
         builder: (_) => TransferScreen(
           payload: payload,
@@ -606,13 +704,15 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   }
 
   void _openSettings() {
-    Navigator.of(context).push(
+    _navKey.currentState?.push(
       MaterialPageRoute<void>(
         builder: (_) => SettingsScreen(
           settings: _settings,
           onSettings: _applySettings,
           homeStateCode: _homeState,
+          homeDistrict: _homeDistrict,
           onHomeState: _changeHomeState,
+          onHomeDistrict: _changeHomeDistrict,
           onTransfer: _openTransfer,
           onClearProgress: () async {
             await _store.clearProgress();
@@ -635,16 +735,45 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   }
 
   void _openMethodology() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => const MethodologyScreen()));
+    _navKey.currentState?.push(
+      MaterialPageRoute<void>(builder: (_) => const MethodologyScreen()),
+    );
   }
+
+  ThemeMode get _themeMode => switch (_settings.theme) {
+    AppThemeMode.light => ThemeMode.light,
+    AppThemeMode.dark => ThemeMode.dark,
+    AppThemeMode.system => ThemeMode.system,
+  };
 
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Voteaxis',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: _themeMode,
+      navigatorKey: _navKey,
+      scaffoldMessengerKey: _messengerKey,
+      builder: (context, child) {
+        // The palette is ambient — static AppColors reads resolve through the
+        // active brightness, synced here once per frame before any descendant
+        // builds.
+        final brightness = Theme.of(context).brightness;
+        AppColors.sync(brightness);
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: _overlayStyleFor(brightness),
+          child: _RestoreSystemInsets(child: child ?? const SizedBox.shrink()),
+        );
+      },
+      home: _currentView(),
+    );
+  }
+
+  Widget _currentView() {
     if (_view == _View.loading) {
       return Scaffold(
-        backgroundColor: const Color(0xFFF6F7F9),
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -656,6 +785,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
                   width: 88,
                   height: 88,
                   fit: BoxFit.cover,
+                  semanticLabel: 'Voteaxis',
                 ),
               ),
               const SizedBox(height: 20),
@@ -704,6 +834,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         week: _week,
         onFriendCompare: _openFriendCompare,
         onSetLevel: _openManualLevel,
+        onExplore: _openExplore,
       ),
       _View.quiz => QuizScreen(
         key: ValueKey(
@@ -726,6 +857,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         data: data,
         handSet: _handSet,
         homeStateCode: _homeState,
+        homeDistrict: _homeDistrict,
         figureFloor: _settings.figureFloor,
         timeBlind: _settings.timeBlind,
         onRetake: () => _openQuiz(),

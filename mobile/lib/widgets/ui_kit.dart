@@ -32,13 +32,16 @@ class SectionHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = Text(
-      label.toUpperCase(),
-      style: GoogleFonts.ibmPlexMono(
-        fontSize: 11,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1.2,
-        color: AppColors.inkMuted,
+    final text = Semantics(
+      header: true,
+      child: Text(
+        label.toUpperCase(),
+        style: GoogleFonts.ibmPlexMono(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 1.2,
+          color: AppColors.inkMuted,
+        ),
       ),
     );
     return Padding(
@@ -518,7 +521,7 @@ class ControlButton extends StatelessWidget {
                   width: 18,
                   height: 18,
                   alignment: Alignment.center,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.accent,
                     shape: BoxShape.circle,
                   ),
@@ -527,7 +530,7 @@ class ControlButton extends StatelessWidget {
                     style: GoogleFonts.ibmPlexMono(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.ink,
+                      color: AppColors.sheet,
                     ),
                   ),
                 ),

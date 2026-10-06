@@ -13,22 +13,26 @@ class MistBackdrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFEEF2F8), AppColors.paper, Color(0xFFF3F0F0)],
+          colors: [
+            AppColors.parchment,
+            AppColors.paper,
+            AppColors.accent.withValues(alpha: 0.05),
+          ],
         ),
       ),
       child: Stack(
         fit: StackFit.expand,
         children: [
-          const Positioned(
+          Positioned(
             left: -80,
             top: -60,
             child: _Wash(color: AppColors.liberal, size: 280, opacity: 0.10),
           ),
-          const Positioned(
+          Positioned(
             right: -70,
             top: 40,
             child: _Wash(
@@ -37,7 +41,7 @@ class MistBackdrop extends StatelessWidget {
               opacity: 0.09,
             ),
           ),
-          const Positioned(
+          Positioned(
             right: -40,
             bottom: -40,
             child: _Wash(color: AppColors.liberal, size: 180, opacity: 0.05),
@@ -147,12 +151,12 @@ class _HeroRailPainter extends CustomPainter {
       Radius.circular(trackH),
     );
 
-    final shader = const LinearGradient(
+    final shader = LinearGradient(
       colors: [
         AppColors.liberal,
-        Color(0xFF6B8FE8),
-        Color(0xFFE8EEF6),
-        Color(0xFFE07A6A),
+        AppColors.liberal.withValues(alpha: 0.55),
+        AppColors.parchment,
+        AppColors.conservative.withValues(alpha: 0.55),
         AppColors.conservative,
       ],
     ).createShader(track.outerRect);
