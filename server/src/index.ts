@@ -49,7 +49,7 @@ const app = createApp({
   enricher,
 });
 
-Bun.serve({
+const server = Bun.serve({
   port,
   // Loopback by default so the unsafe case is the one you have to ask for.
   // scripts/deploy.py pins this to 127.0.0.1 on the box regardless.
@@ -59,6 +59,18 @@ Bun.serve({
   maxRequestBodySize: MAX_REQUEST_BODY_BYTES,
   fetch: (req) => app.fetch(req),
 });
+
+// PM2's kill_timeout gives 4s before SIGKILL. Closing the store on the way
+// down checkpoints SQLite and drops the sweep timer rather than letting the
+// journal recover them on the next boot — invisible most times, the difference
+// between a clean and a messy stop on the day it matters.
+for (const signal of ["SIGINT", "SIGTERM"] as const) {
+  process.on(signal, () => {
+    server.stop();
+    store.close();
+    process.exit(0);
+  });
+}
 
 const congressNote = bicam.configured
   ? " (congress ready)"

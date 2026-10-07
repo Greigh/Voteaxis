@@ -226,6 +226,33 @@ describe("path parameters reject hostile input", () => {
     const res = await call(api.fetch, "/v1/codes/%27%20OR%201%3D1%20--");
     expect(res.status).toBe(400);
   });
+
+  test("malformed percent-encoding is 400, never a thrown 500", async () => {
+    // A bare "%" or truncated escape is legal inside a URL path but throws
+    // URIError in decodeURIComponent. Every dynamic route used to let that
+    // propagate to Bun's default 500; safeDecode turns it into the same 400
+    // any other non-matching id gets.
+    const api = bicamApp();
+    for (const bad of ["%", "%2", "%zz", "%e0%a4%a", "a%"]) {
+      for (const route of [
+        `/v1/codes/${bad}`,
+        `/v1/results/${bad}`,
+        `/v1/members/${bad}`,
+        `/v1/receipts/${bad}`,
+        `/v1/members/${bad}/bills`,
+        `/v1/bills/118/${bad}/1`,
+      ]) {
+        const res = await call(api.fetch, route);
+        expect(res.status).toBe(400);
+        const json = await res.json();
+        expect(json.ok).toBe(false);
+      }
+      // Politicians checks auth before id validation — a malformed id must
+      // still never throw past the gate, just answer the generic 401.
+      const gated = await call(api.fetch, `/v1/politicians/${bad}`);
+      expect(gated.status).toBe(401);
+    }
+  });
 });
 
 describe("friend payload validation", () => {

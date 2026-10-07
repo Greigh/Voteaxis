@@ -114,4 +114,51 @@ void main() {
       expect(raw, isNotNull);
     });
   });
+
+  group('isRepeatedLink', () {
+    // app_links delivers a cold-start link twice on Android — once from
+    // getInitialLink and again as the stream's first event. Without the guard
+    // the router pushes the same screen twice.
+    final t0 = DateTime(2026, 10, 5, 12);
+
+    test('an identical link inside the window is a repeat', () {
+      expect(
+        isRepeatedLink(
+          'voteaxis://result?id=abc',
+          lastRaw: 'voteaxis://result?id=abc',
+          lastAt: t0,
+          now: t0.add(const Duration(milliseconds: 800)),
+        ),
+        isTrue,
+      );
+    });
+
+    test('a different link inside the window is not a repeat', () {
+      expect(
+        isRepeatedLink(
+          'voteaxis://result?id=xyz',
+          lastRaw: 'voteaxis://result?id=abc',
+          lastAt: t0,
+          now: t0.add(const Duration(milliseconds: 800)),
+        ),
+        isFalse,
+      );
+    });
+
+    test('the same link after the window is fresh', () {
+      expect(
+        isRepeatedLink(
+          'voteaxis://result?id=abc',
+          lastRaw: 'voteaxis://result?id=abc',
+          lastAt: t0,
+          now: t0.add(const Duration(seconds: 3)),
+        ),
+        isFalse,
+      );
+    });
+
+    test('nothing handled yet means nothing can repeat', () {
+      expect(isRepeatedLink('voteaxis://sync?code=A2B3C4', now: t0), isFalse);
+    });
+  });
 }

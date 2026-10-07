@@ -161,6 +161,21 @@ function tooLarge(req: Request): boolean {
   return Number.isFinite(declared) && declared > MAX_BODY_BYTES;
 }
 
+/**
+ * decodeURIComponent throws a URIError on malformed escapes ("%", "%zz"), and
+ * every route param below comes off the URL — so a fuzzed request like
+ * GET /v1/codes/% would leave fetch() to answer 500 instead of the 400 the
+ * id regexes were going to produce. Returning "" keeps the verdict the same:
+ * no id pattern this file matches accepts an empty string.
+ */
+function safeDecode(raw: string): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return "";
+  }
+}
+
 type Bucket = { count: number; reset: number };
 
 function isProxyIp(value: string): boolean {
@@ -555,7 +570,7 @@ export function createApp(opts: AppOptions) {
         if (!rateLimit(`congress:${ip}`, 120, 60 * 60 * 1000)) {
           return json(req, 429, { ok: false, error: "Too many Congress lookups." });
         }
-        const bioguide = decodeURIComponent(memberBills[1] ?? "");
+        const bioguide = safeDecode(memberBills[1] ?? "");
         if (!BIOGUIDE.test(bioguide)) {
           return json(req, 400, { ok: false, error: "Invalid bioguide id." });
         }
@@ -589,7 +604,7 @@ export function createApp(opts: AppOptions) {
         if (!rateLimit(`congress:${ip}`, 120, 60 * 60 * 1000)) {
           return json(req, 429, { ok: false, error: "Too many Congress lookups." });
         }
-        const bioguide = decodeURIComponent(member[1] ?? "");
+        const bioguide = safeDecode(member[1] ?? "");
         if (!BIOGUIDE.test(bioguide)) {
           return json(req, 400, { ok: false, error: "Invalid bioguide id." });
         }
@@ -612,8 +627,8 @@ export function createApp(opts: AppOptions) {
           return json(req, 429, { ok: false, error: "Too many Congress lookups." });
         }
         const congress = Number(bill[1]);
-        const type = decodeURIComponent(bill[2] ?? "");
-        const number = decodeURIComponent(bill[3] ?? "");
+        const type = safeDecode(bill[2] ?? "");
+        const number = safeDecode(bill[3] ?? "");
         if (!Number.isInteger(congress) || !BILL_TYPE.test(type) || !number) {
           return json(req, 400, { ok: false, error: "Invalid bill citation." });
         }
@@ -635,7 +650,7 @@ export function createApp(opts: AppOptions) {
         if (!rateLimit(`receipts:${ip}`, 60, 60 * 60 * 1000)) {
           return json(req, 429, { ok: false, error: "Too many receipt lookups." });
         }
-        const bioguide = decodeURIComponent(receipts[1] ?? "");
+        const bioguide = safeDecode(receipts[1] ?? "");
         if (!BIOGUIDE.test(bioguide)) {
           return json(req, 400, { ok: false, error: "Invalid bioguide id." });
         }
@@ -717,7 +732,7 @@ export function createApp(opts: AppOptions) {
           politiciansAuthFailed(ip, path);
           return politiciansUnauthorized(req);
         }
-        const id = decodeURIComponent(politicianById[1] ?? "");
+        const id = safeDecode(politicianById[1] ?? "");
         if (!POLITICIAN_ID.test(id)) {
           return json(req, 400, { ok: false, error: "Invalid politician id." });
         }
@@ -816,7 +831,7 @@ export function createApp(opts: AppOptions) {
         if (!rateLimit(`get:${ip}`, 120, 60 * 60 * 1000)) {
           return json(req, 429, { ok: false, error: "Too many lookups. Try later." });
         }
-        const code = normalizeCode(decodeURIComponent(lookup[1] ?? ""));
+        const code = normalizeCode(safeDecode(lookup[1] ?? ""));
         if (!code) {
           return json(req, 400, { ok: false, error: "That code is not valid." });
         }
@@ -909,7 +924,7 @@ export function createApp(opts: AppOptions) {
 
       const resultLookup = path.match(/^\/v1\/results\/([^/]+)$/);
       if (resultLookup) {
-        const id = normalizeResultId(decodeURIComponent(resultLookup[1] ?? ""));
+        const id = normalizeResultId(safeDecode(resultLookup[1] ?? ""));
 
         if (req.method === "GET") {
           const ip = clientIp(req);

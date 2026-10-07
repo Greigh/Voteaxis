@@ -67,6 +67,11 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Voteaxis uses the camera to scan a friend’s sit-together sync code.</string>
+	<!-- The app seals shared results with standard AES-GCM/PBKDF2 on-device and
+	     talks TLS everywhere else — mass-market exempt crypto. Declaring it here
+	     stops App Store Connect pausing every upload on the export question. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>

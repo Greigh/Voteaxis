@@ -72,6 +72,19 @@ void routeDeepLink(
   if (restore != null) onRestoreCode?.call(restore);
 }
 
+/// True when [raw] repeats the link handled [window] ago or less. Pulled out
+/// of [listenDeepLinks] so the app_links double-delivery guard is testable
+/// without the plugin.
+bool isRepeatedLink(
+  String raw, {
+  String? lastRaw,
+  DateTime? lastAt,
+  required DateTime now,
+  Duration window = const Duration(seconds: 2),
+}) {
+  return raw == lastRaw && lastAt != null && now.difference(lastAt) < window;
+}
+
 /// Every link the app answers to: `voteaxis://sync?code=` for friend
 /// compare, `voteaxis://restore?d=` for a device transfer, and shared results
 /// — `voteaxis://result?id=` or the universal `https://voteaxis.org/result/<id>`.
@@ -89,8 +102,26 @@ StreamSubscription<Uri>? listenDeepLinks({
 
   try {
     final links = AppLinks();
-    links.getInitialLink().then(handle).catchError((_) {});
-    return links.uriLinkStream.listen(handle, onError: (_) {});
+    // app_links delivers a cold-start link twice on Android: once through
+    // getInitialLink and again as the stream's first event. Without a guard
+    // the router pushes the same screen twice — track the last link handled
+    // and ignore an identical repeat inside a short window.
+    String? lastRaw;
+    DateTime? lastAt;
+    void handleOnce(Uri? uri) {
+      if (uri == null) return;
+      final raw = uri.toString();
+      final now = DateTime.now();
+      if (isRepeatedLink(raw, lastRaw: lastRaw, lastAt: lastAt, now: now)) {
+        return;
+      }
+      lastRaw = raw;
+      lastAt = now;
+      handle(uri);
+    }
+
+    links.getInitialLink().then(handleOnce).catchError((_) {});
+    return links.uriLinkStream.listen(handleOnce, onError: (_) {});
   } catch (_) {
     return null;
   }

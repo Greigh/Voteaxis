@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import UserNotifications
 import home_widget
 
 @main
@@ -13,6 +14,10 @@ import home_widget
         GeneratedPluginRegistrant.register(with: registry)
       }
     }
+    // flutter_local_notifications presents a banner while the app is in the
+    // foreground only through this delegate; without it a reminder firing while
+    // the app happens to be open is silently swallowed.
+    UNUserNotificationCenter.current().delegate = self
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
