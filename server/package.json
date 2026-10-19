@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "Voteaxis VPS API \u2014 friend codes, editorial JSON, and BICAM receipts. Scoring stays on-device.",
+  "description": "Voteaxis VPS API — friend codes, editorial JSON, and BICAM receipts. Scoring stays on-device.",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
@@ -19,7 +19,7 @@
     "week:rotate": "bun run scripts/week.ts rotate"
   },
   "devDependencies": {
-    "@types/bun": "^1.4.0",
+    "@types/bun": "^1.4.3",
     "typescript": "^7.0.2"
   }
 }
