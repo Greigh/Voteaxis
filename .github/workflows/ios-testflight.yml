@@ -1,0 +1,92 @@
+name: iOS TestFlight (IPA)
+
+# Manual only — dispatch from the GitHub "Actions" tab. The workflow archives
+# and uploads the IPA to App Store Connect; it does not run on push. The
+# dispatch route exists so the App Store Connect API key can live in repo
+# secrets on machines that have no signed-in Xcode account and no
+# ~/.appstoreconnect/private_keys directory.
+#
+# Required repo secrets (Settings → Secrets and variables → Actions):
+#   APP_STORE_CONNECT_API_KEY_ID      e.g. XXXXXXXXXX
+#   APP_STORE_CONNECT_API_ISSUER_ID   e.g. xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+#   APP_STORE_CONNECT_API_KEY         contents of AuthKey_XXXXXXXXXX.p8
+# The API key needs the Developer role — App Manager can upload but cannot
+# create certificates (store/release-runbook.md).
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Bump build number first (needs docs/changelogs/<platform>/<N>.txt)"
+        required: false
+        type: boolean
+        default: false
+
+# Least-privilege default — this workflow only checks out, builds, and uploads;
+# it never needs to write to the repo, open PRs, etc.
+permissions:
+  contents: read
+
+jobs:
+  testflight:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+
+      # Pin the runner's default Xcode explicitly — macos runners ship several
+      # and the default moves between image releases. Printing the version keeps
+      # the archive reproducible in the log.
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
+
+      # Plain git clone, not subosito/flutter-action — third-party actions are
+      # not mirrored on the Forgejo runner, and a clone works on both hosts.
+      - name: Install Flutter SDK
+        run: |
+          git clone https://github.com/flutter/flutter.git \
+            --depth 1 --branch 3.47.5 "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/flutter/bin/flutter" --version
+
+      - run: flutter pub get
+        working-directory: mobile
+
+      # The whole build+upload lives in scripts/ios-testflight.sh so local and
+      # CI produce the same binary: obfuscation and symbol archiving are all
+      # enforced there.
+      #
+      # Signing: ExportOptions plists use signingStyle automatic with the team
+      # pinned; on a runner, -allowProvisioningUpdates authenticates to App
+      # Store Connect with the API key and creates the distribution cert and
+      # profile itself.
+      #
+      # Build number: ios/ExportOptionsUpload.plist sets
+      # manageAppVersionAndBuildNumber, so App Store Connect assigns the next
+      # free build number at upload — no pubspec bump is needed on the runner.
+      - name: Build and upload IPA
+        shell: bash
+        env:
+          # Inline .p8 contents — resolved by scripts/lib/asc-auth.sh, which
+          # materialises it to a mode-600 temp file and normalises it to
+          # ASC_KEY_PATH. APP_STORE_CONNECT_API_KEY_PATH stays for machines.
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          BUMP: ${{ inputs.bump }}
+        run: |
+          set -euo pipefail
+          ARGS=()
+          if [[ "$BUMP" == "true" ]]; then
+            ARGS+=(--bump)
+          fi
+          ./scripts/ios-testflight.sh "${ARGS[@]}"
+
+      - name: Upload debug symbols artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-symbols-${{ github.run_number }}
+          path: mobile/build/symbols/ios/
+          if-no-files-found: ignore
+          retention-days: 30

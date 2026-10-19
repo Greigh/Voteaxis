@@ -10,6 +10,7 @@ app actually does — the declarations are legal statements, not marketing.
 | `play-store.md` | Google Play listing copy |
 | `privacy-declarations.md` | App Privacy + Data Safety answers, permissions, crash reporting |
 | `screenshots.md` | Shot list and caption copy |
+| `release-runbook.md` | Beta/release pipeline: credentials, scripts, workflows, tagging |
 
 ## Before submitting
 

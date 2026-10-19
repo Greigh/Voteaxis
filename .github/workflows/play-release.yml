@@ -1,0 +1,157 @@
+name: Play Release (AAB)
+
+# Manual only — dispatch from the GitHub "Actions" tab. The workflow uploads a
+# signed release AAB to the chosen Play track; it does not run on push.
+#
+# Required repo secrets (Settings → Secrets and variables → Actions):
+#   PLAY_UPLOAD_KEYSTORE_BASE64     base64 of the upload keystore (.p12/.jks)
+#   PLAY_UPLOAD_STORE_PASSWORD      keystore password
+#   PLAY_UPLOAD_KEY_ALIAS           key alias (upload)
+#   PLAY_UPLOAD_KEY_PASSWORD        key password
+#   GOOGLE_PLAY_SERVICE_ACCOUNT_JSON  service-account JSON, pasted inline
+# Optional repo variable:
+#   GOOGLE_PLAY_PACKAGE             package id (default com.greighstudios.voteaxis)
+on:
+  workflow_dispatch:
+    inputs:
+      track:
+        description: "Google Play track"
+        type: choice
+        required: true
+        default: internal
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+      rollout:
+        description: "Staged rollout fraction, e.g. 0.1 (blank = full)"
+        required: false
+        default: ""
+      bump:
+        description: "Bump build number before building (needs docs/changelogs/<platform>/<N>.txt)"
+        required: false
+        type: boolean
+        default: false
+
+# Least-privilege default — this workflow only checks out, builds, and uploads;
+# it never needs to write to the repo, open PRs, etc.
+permissions:
+  contents: read
+
+jobs:
+  play-release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      # The ubuntu image's preinstalled toolchains we never touch are ~10 GB:
+      # .NET, Haskell, Swift, PowerShell, both browsers, the gcloud SDK and the
+      # stock docker images. The AAB build (Gradle + NDK + per-ABI native
+      # intermediates) is disk-hungry; freeing this space first is cheap
+      # insurance against ENOSPC mid-build.
+      - name: Free disk space
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet \
+                      /usr/local/lib/node_modules \
+                      /opt/ghc /usr/local/.ghcup /opt/cabal \
+                      /usr/share/swift \
+                      /usr/local/share/powershell \
+                      /opt/microsoft /opt/google \
+                      /usr/lib/google-cloud-sdk \
+                      /usr/local/sqlpackage
+          sudo docker image prune -af || true
+          df -h /
+
+      # Upload signing. The keystore and its passwords never live in the repo
+      # (mobile/android/key.properties and *.keystore are gitignored); on a
+      # runner they are reconstructed from repo secrets. build.gradle.kts
+      # reads mobile/android/key.properties, and storeFile resolves relative
+      # to mobile/android/app/, which is where the decoded keystore lands.
+      - name: Write upload signing key
+        shell: bash
+        env:
+          PLAY_UPLOAD_KEYSTORE_BASE64: ${{ secrets.PLAY_UPLOAD_KEYSTORE_BASE64 }}
+          PLAY_UPLOAD_STORE_PASSWORD: ${{ secrets.PLAY_UPLOAD_STORE_PASSWORD }}
+          PLAY_UPLOAD_KEY_ALIAS: ${{ secrets.PLAY_UPLOAD_KEY_ALIAS }}
+          PLAY_UPLOAD_KEY_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$PLAY_UPLOAD_KEYSTORE_BASE64" ]]; then
+            echo "::error::PLAY_UPLOAD_KEYSTORE_BASE64 is not set — cannot sign the release AAB"
+            exit 1
+          fi
+          install -m 600 /dev/null mobile/android/app/upload.keystore
+          printf '%s' "$PLAY_UPLOAD_KEYSTORE_BASE64" | base64 -d > mobile/android/app/upload.keystore
+          umask 077
+          cat > mobile/android/key.properties <<EOF
+          storeFile=upload.keystore
+          storePassword=${PLAY_UPLOAD_STORE_PASSWORD}
+          keyAlias=${PLAY_UPLOAD_KEY_ALIAS}
+          keyPassword=${PLAY_UPLOAD_KEY_PASSWORD}
+          EOF
+          echo "wrote mobile/android/key.properties and mobile/android/app/upload.keystore"
+
+      # AGP requests a JDK 25 toolchain with vendor=JetBrains — the running JVM
+      # counts as a detected installation, so a real JBR here satisfies it and
+      # the foojay resolver never has to download one at deploy time.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: jetbrains
+          java-version: "25"
+
+      # Plain git clone, not subosito/flutter-action — third-party actions are
+      # not mirrored on the Forgejo runner, and a clone works on both hosts.
+      # Pinned to the version the release was tested on locally.
+      - name: Install Flutter SDK
+        run: |
+          git clone https://github.com/flutter/flutter.git \
+            --depth 1 --branch 3.47.5 "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/flutter/bin/flutter" --version
+
+      - run: flutter pub get
+        working-directory: mobile
+
+      # The image's bundled npm lived in /usr/local/lib/node_modules, which the
+      # disk-cleanup step removes — node + npm come from the toolchain now.
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      # scripts/play-upload.js shells out to `flutter` and requires googleapis,
+      # which lives in the root package.json.
+      - run: npm ci
+
+      - name: Build and upload AAB
+        shell: bash
+        env:
+          # Inline service-account JSON — resolved by scripts/lib/
+          # service-account.js, which reads "the value starts with {" as
+          # "the value IS the JSON". GOOGLE_PLAY_SA_LOCAL stays for machines.
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_PLAY_PACKAGE: ${{ vars.GOOGLE_PLAY_PACKAGE }}
+          TRACK: ${{ inputs.track }}
+          ROLLOUT: ${{ inputs.rollout }}
+          BUMP: ${{ inputs.bump }}
+        run: |
+          set -euo pipefail
+          ARGS=(--build --track "$TRACK")
+          if [[ -n "$ROLLOUT" ]]; then
+            ARGS+=(--rollout "$ROLLOUT")
+          fi
+          if [[ "$BUMP" == "true" ]]; then
+            ARGS+=(--bump)
+          fi
+          node scripts/play-upload.js "${ARGS[@]}"
+
+      - name: Upload debug symbols artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-symbols-${{ github.run_number }}
+          path: mobile/build/symbols/android/
+          if-no-files-found: ignore
+          retention-days: 30

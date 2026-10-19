@@ -62,6 +62,11 @@ mobile/android/key.properties
 *.p12
 *.keystore
 
+# Store-release credentials — App Store Connect .p8 keys, Play service-account
+# JSON dropped locally, anything under secrets/
+*.p8
+secrets/
+
 # Mail server credentials — never commit
 mail-server-logins.md
 

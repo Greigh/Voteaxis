@@ -23,6 +23,17 @@
     "roster:check": "python3 scripts/check_roster_staleness.py",
     "scores:rollcall": "python3 scripts/score_rollcalls.py",
     "scores:test": "python3 scripts/test/test_score_rollcalls.py",
-    "waitlist:list": "bun run --cwd web waitlist:list"
+    "waitlist:list": "bun run --cwd web waitlist:list",
+    "check:credentials": "node scripts/check-credentials.js",
+    "check:credentials:play": "node scripts/check-credentials.js --play",
+    "check:credentials:apple": "node scripts/check-credentials.js --apple",
+    "version:check": "node scripts/native-versions.js",
+    "version:sync": "node scripts/native-versions.js --sync",
+    "version:bump": "node scripts/native-versions.js --bump",
+    "release:play": "node scripts/play-upload.js",
+    "release:ios": "./scripts/ios-testflight.sh"
+  },
+  "dependencies": {
+    "googleapis": "^186.0.0"
   }
 }
