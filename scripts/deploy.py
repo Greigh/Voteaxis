@@ -49,6 +49,7 @@ import argparse
 import atexit
 import json
 import os
+import re
 import shlex
 import shutil
 import socket
@@ -933,9 +934,17 @@ def verify_pm2(remote: Remote, apps: Sequence[str]) -> bool:
     if raw.returncode != 0:
         log_fail("Could not read pm2 jlist — deployment NOT verified.")
         return False
-    try:
-        procs = json.loads(raw.stdout or "[]")
-    except json.JSONDecodeError:
+    # PM2 prints chatter (the "In-memory PM2 is out-of-date" banner, restart
+    # notices) to stdout ahead of the array, so decode from each '[' until one
+    # yields a complete JSON value rather than requiring clean output.
+    procs = None
+    for match in re.finditer(r"\[", raw.stdout or ""):
+        try:
+            procs, _ = json.JSONDecoder().raw_decode(raw.stdout, match.start())
+            break
+        except json.JSONDecodeError:
+            continue
+    if not isinstance(procs, list):
         log_fail("pm2 jlist returned something that is not JSON.")
         return False
 
