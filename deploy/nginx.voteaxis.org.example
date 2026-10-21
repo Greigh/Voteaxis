@@ -87,6 +87,19 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
+    # The app declares applinks:/autoVerify for BOTH apex and www — Apple and
+    # Android fetch these from the exact host in the entitlement and do not
+    # follow redirects, so a 301 here silently breaks universal links on www.
+    # Serve them instead of redirecting; everything else still goes to apex.
+    location = /.well-known/apple-app-site-association {
+        proxy_pass http://127.0.0.1:3020;
+        proxy_set_header Host $host;
+    }
+    location = /.well-known/assetlinks.json {
+        proxy_pass http://127.0.0.1:3020;
+        proxy_set_header Host $host;
+    }
+
     return 301 https://voteaxis.org$request_uri;
 }
 

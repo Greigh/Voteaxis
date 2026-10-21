@@ -272,7 +272,7 @@ class Politician {
   (int, int)? get serviceSpan {
     var minY = 9999;
     var maxY = 0;
-    const now = 2026;
+    final now = DateTime.now().year;
     final ranges = RegExp(
       r'(\d{4})\s*[\u2013\-]\s*(present|\d{4})',
       caseSensitive: false,
