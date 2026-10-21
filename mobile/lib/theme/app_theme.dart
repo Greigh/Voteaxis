@@ -118,10 +118,28 @@ class AppTheme {
 
   static ThemeData _build(AppPalette colors, Brightness brightness) {
     final isDark = brightness == Brightness.dark;
-    final textTheme = GoogleFonts.manropeTextTheme().apply(
-      bodyColor: colors.ink,
-      displayColor: colors.ink,
-    );
+    // google_fonts 9.x builds its TextTheme on package:material_ui, the
+    // split-out Material fork — same field names, same dart:ui TextStyle
+    // fields, but a different class than flutter/material's. Copy field by
+    // field so the app's own ThemeData can consume it.
+    final gf = GoogleFonts.manropeTextTheme();
+    final textTheme = TextTheme(
+      displayLarge: gf.displayLarge,
+      displayMedium: gf.displayMedium,
+      displaySmall: gf.displaySmall,
+      headlineLarge: gf.headlineLarge,
+      headlineMedium: gf.headlineMedium,
+      headlineSmall: gf.headlineSmall,
+      titleLarge: gf.titleLarge,
+      titleMedium: gf.titleMedium,
+      titleSmall: gf.titleSmall,
+      bodyLarge: gf.bodyLarge,
+      bodyMedium: gf.bodyMedium,
+      bodySmall: gf.bodySmall,
+      labelLarge: gf.labelLarge,
+      labelMedium: gf.labelMedium,
+      labelSmall: gf.labelSmall,
+    ).apply(bodyColor: colors.ink, displayColor: colors.ink);
 
     final base = ThemeData(
       useMaterial3: true,
