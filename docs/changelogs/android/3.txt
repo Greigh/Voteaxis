@@ -1,0 +1,4 @@
+Voteaxis 1.0.0 (Build 3)
+
+• Office-history spans now resolve "present" against the current year
+• Deep-link manifest verified against the release signing certificate

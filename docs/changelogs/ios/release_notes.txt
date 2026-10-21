@@ -1,4 +1,4 @@
-Voteaxis 1.0.0 (Build 2)
+Voteaxis 1.0.0 (Build 3)
 
-• First beta build — political spectrum quiz, politician matching, Issue of the Week, and encrypted result sharing
-• Reliability fixes from the pre-release audit
+• Office-history spans now resolve "present" against the current year
+• Verified on iPad — onboarding, roster, quiz, and settings render cleanly
