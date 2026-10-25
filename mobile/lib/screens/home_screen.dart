@@ -1,7 +1,11 @@
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../duo/duo_rail.dart';
+import '../duo/duo_scope.dart';
 import '../data/us_states.dart';
+import '../models/issue_of_the_day.dart';
 import '../screens/contribute_screen.dart';
 import '../services/app_feel.dart';
 import '../services/voteaxis_api.dart';
@@ -26,6 +30,8 @@ class HomeScreen extends StatefulWidget {
     this.onExplore,
     this.onSettings,
     this.week,
+    this.day,
+    this.issueLabel,
     this.skipQuiz = false,
     this.reduceMotion = false,
   });
@@ -47,6 +53,13 @@ class HomeScreen extends StatefulWidget {
   final VoidCallback? onExplore;
   final VoidCallback? onSettings;
   final IssueOfTheWeek? week;
+
+  /// Resolved editorial/daily issue for the fold rail — always non-null
+  /// once data loads, so the secondary pane is never an empty panel.
+  final IssueOfTheDay? day;
+
+  /// Display label for [day]'s issue, resolved by the caller.
+  final String? issueLabel;
 
   /// Lead with hand-set placement instead of the quiz.
   final bool skipQuiz;
@@ -104,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future<void> _pickState() async {
-    final selected = await showModalBottomSheet<String>(
+    final selected = await showFoldAwareSheet<String>(
       context: context,
       showDragHandle: true,
       backgroundColor: AppColors.sheet,
@@ -152,227 +165,254 @@ class _HomeScreenState extends State<HomeScreen>
 
     return Scaffold(
       backgroundColor: AppColors.paper,
-      body: FadeTransition(
-        opacity: _fade,
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 12, 0),
-                child: Row(
-                  children: [
-                    const VoteaxisMark(size: 40),
-                    const SizedBox(width: 12),
-                    const VoteaxisWordmark(fontSize: 22),
-                    const Spacer(),
-                    _StatePill(code: widget.homeStateCode, onTap: _pickState),
-                    if (widget.onSettings != null)
-                      IconButton(
-                        tooltip: 'Settings',
-                        onPressed: widget.onSettings,
-                        icon: const Icon(Icons.settings_outlined, size: 22),
-                        color: AppColors.inkMuted,
-                      ),
-                    IconButton(
-                      tooltip: 'Methodology',
-                      onPressed: widget.onMethodology,
-                      icon: const Icon(Icons.info_outline, size: 22),
-                      color: AppColors.inkMuted,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 3,
-                margin: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(99),
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.liberal,
-                      AppColors.parchment,
-                      AppColors.conservative,
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
-                  children: [
-                    Text(
-                      _statusTitle,
-                      style: GoogleFonts.manrope(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.8,
-                        height: 1.15,
-                        color: AppColors.ink,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _statusBody,
-                      style: GoogleFonts.manrope(
-                        fontSize: 15,
-                        height: 1.45,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.inkMuted,
-                      ),
-                    ),
-                    const SizedBox(height: 26),
-                    if (widget.week != null) ...[
-                      _WeekCard(week: widget.week!),
-                      const SizedBox(height: 16),
-                    ],
-                    if (widget.hasSavedResult) ...[
-                      const _WidgetHint(),
-                      const SizedBox(height: 16),
-                    ],
-                    const SectionHeading('Start here'),
-                    if (leadWithLevel) ...[
-                      PrimaryAction(
-                        label: widget.hasSavedResult
-                            ? 'Adjust your level'
-                            : 'Set your level',
-                        subtitle:
-                            'Place yourself on the axis, then fine-tune by pillar',
-                        onTap: widget.onSetLevel!,
-                      ),
-                      const SizedBox(height: 12),
-                      ActionRow(
-                        icon: Icons.quiz_outlined,
-                        title: primaryLabel,
-                        subtitle: quizSubtitle,
-                        onTap: widget.onStartQuiz,
-                      ),
-                    ] else ...[
-                      PrimaryAction(
-                        label: primaryLabel,
-                        subtitle: quizSubtitle,
-                        onTap: widget.onStartQuiz,
-                      ),
-                      if (widget.onSetLevel != null) ...[
-                        const SizedBox(height: 12),
-                        ActionRow(
-                          icon: Icons.tune_rounded,
-                          title: widget.hasSavedResult
-                              ? 'Set your level by hand'
-                              : 'Skip the quiz — set your level',
-                          subtitle:
-                              'Place yourself on the axis, then fine-tune by pillar',
-                          onTap: widget.onSetLevel!,
+      body: DuoFoldBuilder(
+        builder: (context, fold, mode) {
+          final split =
+              mode == FoldMode.splitVertical ||
+              mode == FoldMode.splitHorizontal;
+          final main = FadeTransition(
+            opacity: _fade,
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 12, 0),
+                    child: Row(
+                      children: [
+                        const VoteaxisMark(size: 40),
+                        const SizedBox(width: 12),
+                        const VoteaxisWordmark(fontSize: 22),
+                        const Spacer(),
+                        _StatePill(
+                          code: widget.homeStateCode,
+                          onTap: _pickState,
                         ),
-                      ],
-                    ],
-                    if (widget.onExplore != null) ...[
-                      const SizedBox(height: 12),
-                      ActionRow(
-                        icon: Icons.manage_search_rounded,
-                        title: 'Explore the roster',
-                        subtitle:
-                            'Browse every figure and their record — no quiz needed',
-                        onTap: widget.onExplore!,
-                      ),
-                    ],
-                    if (widget.hasInProgress) ...[
-                      const SizedBox(height: 12),
-                      ActionRow(
-                        icon: Icons.play_circle_outline_rounded,
-                        title: 'Resume quiz',
-                        subtitle: 'Continue your saved answers',
-                        onTap: widget.onResumeQuiz,
-                        emphasize: true,
-                      ),
-                    ],
-                    if (widget.hasSavedResult) ...[
-                      const SizedBox(height: 12),
-                      ActionRow(
-                        icon: Icons.insights_outlined,
-                        title: 'Last results',
-                        subtitle: 'Your placement and closest matches',
-                        onTap: widget.onViewResults,
-                      ),
-                      if (widget.onFriendCompare != null) ...[
-                        const SizedBox(height: 12),
-                        ActionRow(
-                          icon: Icons.group_outlined,
-                          title: 'Compare with a friend',
-                          subtitle:
-                              'QR or a 6-digit code — both dots on one axis',
-                          onTap: widget.onFriendCompare!,
-                        ),
-                      ],
-                    ],
-                    if (!widget.hasSavedResult) ...[
-                      const SizedBox(height: 32),
-                      const SectionHeading('What you get'),
-                      const InfoRow(
-                        icon: Icons.how_to_vote_outlined,
-                        title: 'Your ballot',
-                        body: 'Matches prioritize candidates from your state',
-                      ),
-                      const SizedBox(height: 10),
-                      const InfoRow(
-                        icon: Icons.compare_arrows_rounded,
-                        title: 'Issue overlap',
-                        body: 'Ranked by how close they are to your answers',
-                      ),
-                      const SizedBox(height: 10),
-                      const InfoRow(
-                        icon: Icons.bar_chart_rounded,
-                        title: 'Five pillars',
-                        body:
-                            'Economy, rights, health, justice, and the world — '
-                            'each scored on its own',
-                      ),
-                      const SizedBox(height: 10),
-                      const InfoRow(
-                        icon: Icons.gavel_rounded,
-                        title: 'Receipts',
-                        body:
-                            'Roll-call votes blend into curated scores wherever '
-                            'the record exists',
-                      ),
-                      const SizedBox(height: 10),
-                      const InfoRow(
-                        icon: Icons.balance_rounded,
-                        title: 'Steel man',
-                        body:
-                            'The strongest case against your own strongest '
-                            'leans, not just agreement',
-                      ),
-                      const SizedBox(height: 10),
-                      const InfoRow(
-                        icon: Icons.lock_outline_rounded,
-                        title: 'Stays yours',
-                        body:
-                            'Answers are stored encrypted on this device — no '
-                            'account, no profile sold',
-                      ),
-                    ],
-                    const SizedBox(height: 32),
-                    const SectionHeading('Keep it independent'),
-                    ActionRow(
-                      icon: Icons.volunteer_activism_outlined,
-                      title: 'Contribute to Voteaxis',
-                      subtitle:
-                          'Keep scoring independent — the civic loop stays free',
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const ContributeScreen(),
+                        if (widget.onSettings != null)
+                          IconButton(
+                            tooltip: 'Settings',
+                            onPressed: widget.onSettings,
+                            icon: const Icon(Icons.settings_outlined, size: 22),
+                            color: AppColors.inkMuted,
                           ),
-                        );
-                      },
+                        IconButton(
+                          tooltip: 'Methodology',
+                          onPressed: widget.onMethodology,
+                          icon: const Icon(Icons.info_outline, size: 22),
+                          color: AppColors.inkMuted,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Container(
+                    height: 3,
+                    margin: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(99),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.liberal,
+                          AppColors.parchment,
+                          AppColors.conservative,
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
+                      children: [
+                        Text(
+                          _statusTitle,
+                          style: GoogleFonts.manrope(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.8,
+                            height: 1.15,
+                            color: AppColors.ink,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _statusBody,
+                          style: GoogleFonts.manrope(
+                            fontSize: 15,
+                            height: 1.45,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.inkMuted,
+                          ),
+                        ),
+                        const SizedBox(height: 26),
+                        if (widget.week != null && !split) ...[
+                          _WeekCard(week: widget.week!),
+                          const SizedBox(height: 16),
+                        ],
+                        if (widget.hasSavedResult) ...[
+                          const _WidgetHint(),
+                          const SizedBox(height: 16),
+                        ],
+                        const SectionHeading('Start here'),
+                        if (leadWithLevel) ...[
+                          PrimaryAction(
+                            label: widget.hasSavedResult
+                                ? 'Adjust your level'
+                                : 'Set your level',
+                            subtitle:
+                                'Place yourself on the axis, then fine-tune by pillar',
+                            onTap: widget.onSetLevel!,
+                          ),
+                          const SizedBox(height: 12),
+                          ActionRow(
+                            icon: Icons.quiz_outlined,
+                            title: primaryLabel,
+                            subtitle: quizSubtitle,
+                            onTap: widget.onStartQuiz,
+                          ),
+                        ] else ...[
+                          PrimaryAction(
+                            label: primaryLabel,
+                            subtitle: quizSubtitle,
+                            onTap: widget.onStartQuiz,
+                          ),
+                          if (widget.onSetLevel != null) ...[
+                            const SizedBox(height: 12),
+                            ActionRow(
+                              icon: Icons.tune_rounded,
+                              title: widget.hasSavedResult
+                                  ? 'Set your level by hand'
+                                  : 'Skip the quiz — set your level',
+                              subtitle:
+                                  'Place yourself on the axis, then fine-tune by pillar',
+                              onTap: widget.onSetLevel!,
+                            ),
+                          ],
+                        ],
+                        if (widget.onExplore != null) ...[
+                          const SizedBox(height: 12),
+                          ActionRow(
+                            icon: Icons.manage_search_rounded,
+                            title: 'Explore the roster',
+                            subtitle:
+                                'Browse every figure and their record — no quiz needed',
+                            onTap: widget.onExplore!,
+                          ),
+                        ],
+                        if (widget.hasInProgress) ...[
+                          const SizedBox(height: 12),
+                          ActionRow(
+                            icon: Icons.play_circle_outline_rounded,
+                            title: 'Resume quiz',
+                            subtitle: 'Continue your saved answers',
+                            onTap: widget.onResumeQuiz,
+                            emphasize: true,
+                          ),
+                        ],
+                        if (widget.hasSavedResult) ...[
+                          const SizedBox(height: 12),
+                          ActionRow(
+                            icon: Icons.insights_outlined,
+                            title: 'Last results',
+                            subtitle: 'Your placement and closest matches',
+                            onTap: widget.onViewResults,
+                          ),
+                          if (widget.onFriendCompare != null) ...[
+                            const SizedBox(height: 12),
+                            ActionRow(
+                              icon: Icons.group_outlined,
+                              title: 'Compare with a friend',
+                              subtitle:
+                                  'QR or a 6-digit code — both dots on one axis',
+                              onTap: widget.onFriendCompare!,
+                            ),
+                          ],
+                        ],
+                        if (!widget.hasSavedResult) ...[
+                          const SizedBox(height: 32),
+                          const SectionHeading('What you get'),
+                          const InfoRow(
+                            icon: Icons.how_to_vote_outlined,
+                            title: 'Your ballot',
+                            body:
+                                'Matches prioritize candidates from your state',
+                          ),
+                          const SizedBox(height: 10),
+                          const InfoRow(
+                            icon: Icons.compare_arrows_rounded,
+                            title: 'Issue overlap',
+                            body:
+                                'Ranked by how close they are to your answers',
+                          ),
+                          const SizedBox(height: 10),
+                          const InfoRow(
+                            icon: Icons.bar_chart_rounded,
+                            title: 'Five pillars',
+                            body:
+                                'Economy, rights, health, justice, and the world — '
+                                'each scored on its own',
+                          ),
+                          const SizedBox(height: 10),
+                          const InfoRow(
+                            icon: Icons.gavel_rounded,
+                            title: 'Receipts',
+                            body:
+                                'Roll-call votes blend into curated scores wherever '
+                                'the record exists',
+                          ),
+                          const SizedBox(height: 10),
+                          const InfoRow(
+                            icon: Icons.balance_rounded,
+                            title: 'Steel man',
+                            body:
+                                'The strongest case against your own strongest '
+                                'leans, not just agreement',
+                          ),
+                          const SizedBox(height: 10),
+                          const InfoRow(
+                            icon: Icons.lock_outline_rounded,
+                            title: 'Stays yours',
+                            body:
+                                'Answers are stored encrypted on this device — no '
+                                'account, no profile sold',
+                          ),
+                        ],
+                        const SizedBox(height: 32),
+                        const SectionHeading('Keep it independent'),
+                        ActionRow(
+                          icon: Icons.volunteer_activism_outlined,
+                          title: 'Contribute to Voteaxis',
+                          subtitle:
+                              'Keep scoring independent — the civic loop stays free',
+                          onTap: () {
+                            Navigator.of(context).push(
+                              foldAwareRoute<void>(
+                                context,
+                                builder: (_) => const ContributeScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+          // In a split the rail beside the fold carries the issue card;
+          // without a fold (or before data loads) home stays one canvas.
+          final day = widget.day;
+          if (!split || day == null) return main;
+          return FoldSplitView(
+            fold: fold,
+            mode: mode,
+            primary: main,
+            secondary: DuoRail(
+              day: day,
+              issueLabel: widget.issueLabel,
+              issueContext: widget.week?.context,
+            ),
+          );
+        },
       ),
     );
   }
@@ -404,11 +444,7 @@ class _StatePill extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.place_outlined,
-                size: 16,
-                color: AppColors.inkMuted,
-              ),
+              Icon(Icons.place_outlined, size: 16, color: AppColors.inkMuted),
               const SizedBox(width: 6),
               Text(
                 code ?? 'State',

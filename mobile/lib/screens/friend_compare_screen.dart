@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../duo/duo_scope.dart';
 import '../data/app_data.dart';
 import '../models/scoring.dart';
 import '../services/app_feel.dart';
@@ -142,7 +143,7 @@ class _FriendCompareScreenState extends State<FriendCompareScreen> {
 
   Future<void> _scanCode() async {
     final code = await Navigator.of(context).push<String>(
-      MaterialPageRoute<String>(builder: (_) => const QrScanScreen()),
+      foldAwareRoute<String>(context,builder: (_) => const QrScanScreen()),
     );
     if (code == null || !mounted) return;
     _codeController.text = code;

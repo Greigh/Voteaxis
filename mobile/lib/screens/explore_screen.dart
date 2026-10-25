@@ -1,8 +1,10 @@
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../data/app_data.dart';
 import '../data/us_states.dart';
+import '../duo/duo_scope.dart';
 import '../models/politician.dart';
 import '../models/scoring.dart';
 import '../theme/app_theme.dart';
@@ -34,6 +36,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String _officeFilter = 'all';
   String? _partyFilter;
   String? _stateFilter;
+
+  /// The figure showing in the split's secondary pane. Taps never leave
+  /// the screen while a fold split is in effect — the detail is the pane.
+  Politician? _selected;
 
   static const _offices = [
     ('governor', 'Governor'),
@@ -84,7 +90,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       (_stateFilter == null ? 0 : 1);
 
   Future<void> _pickState() async {
-    final selected = await showModalBottomSheet<String>(
+    final selected = await showFoldAwareSheet<String>(
       context: context,
       showDragHandle: true,
       backgroundColor: AppColors.sheet,
@@ -133,7 +139,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   void _openFilters() {
-    showModalBottomSheet<void>(
+    showFoldAwareSheet<void>(
       context: context,
       showDragHandle: true,
       backgroundColor: AppColors.sheet,
@@ -286,153 +292,210 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return Scaffold(
       backgroundColor: AppColors.paper,
       appBar: AppBar(title: const Text('Explore the roster')),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _searchCtrl,
-                  textInputAction: TextInputAction.search,
-                  autocorrect: false,
-                  onChanged: (value) =>
-                      setState(() => _query = value.trim().toLowerCase()),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    filled: true,
-                    fillColor: AppColors.sheet,
-                    hintText: 'Search name, office, or state',
-                    hintStyle: GoogleFonts.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.inkMuted,
-                    ),
-                    prefixIcon: const Icon(Icons.search_rounded, size: 20),
-                    suffixIcon: _query.isEmpty
-                        ? null
-                        : IconButton(
-                            tooltip: 'Clear search',
-                            icon: const Icon(Icons.close_rounded, size: 18),
-                            onPressed: () => setState(() {
-                              _searchCtrl.clear();
-                              _query = '';
-                            }),
-                          ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(
-                        color: AppColors.ink.withValues(alpha: 0.08),
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(
-                        color: AppColors.ink.withValues(alpha: 0.08),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(color: AppColors.navy),
+      body: DuoFoldBuilder(
+        builder: (context, fold, mode) {
+          final list = _listPane(context, shown, closenessById, mode);
+          final split =
+              mode == FoldMode.splitVertical ||
+              mode == FoldMode.splitHorizontal;
+          if (!split) return list;
+          final selected = _selected;
+          return FoldSplitView(
+            fold: fold,
+            mode: mode,
+            primary: list,
+            secondary: selected == null
+                ? const _SplitDetailPlaceholder()
+                : PoliticianDetailScreen(
+                    // Keyed to the person so a new pick resets the pane's
+                    // own scroll position.
+                    key: ValueKey(selected.id),
+                    politician: selected,
+                    userProfile: widget.userProfile,
+                    data: widget.data,
+                    match: closenessById[selected.id],
+                    figureFloor: widget.figureFloor,
+                    embedded: true,
+                    onOpenPolitician: (next) =>
+                        setState(() => _selected = next),
+                  ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// The roster column. It must be the same widget tree in single and
+  /// split modes so search text, scroll position, and filters survive a
+  /// fold transition without remounting.
+  Widget _listPane(
+    BuildContext context,
+    List<Politician> shown,
+    Map<String, MatchResult> closenessById,
+    FoldMode mode,
+  ) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
+          child: Column(
+            children: [
+              TextField(
+                controller: _searchCtrl,
+                textInputAction: TextInputAction.search,
+                autocorrect: false,
+                onChanged: (value) =>
+                    setState(() => _query = value.trim().toLowerCase()),
+                decoration: InputDecoration(
+                  isDense: true,
+                  filled: true,
+                  fillColor: AppColors.sheet,
+                  hintText: 'Search name, office, or state',
+                  hintStyle: GoogleFonts.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.inkMuted,
+                  ),
+                  prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: 'Clear search',
+                          icon: const Icon(Icons.close_rounded, size: 18),
+                          onPressed: () => setState(() {
+                            _searchCtrl.clear();
+                            _query = '';
+                          }),
+                        ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(
+                      color: AppColors.ink.withValues(alpha: 0.08),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ControlButton(
-                        icon: Icons.place_outlined,
-                        label: _stateFilter == null
-                            ? 'Everywhere'
-                            : UsStates.nameFor(_stateFilter) ?? _stateFilter!,
-                        selected: _stateFilter != null,
-                        onTap: _pickState,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ControlButton(
-                        icon: Icons.tune_rounded,
-                        label: 'Filters',
-                        badge: _activeFilterCount,
-                        selected: _activeFilterCount > 0,
-                        onTap: _openFilters,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    '${shown.length} of ${widget.data.politicians.length} figures'
-                    '${widget.userProfile == null ? ' — no match scores until you take the quiz' : ''}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.ibmPlexMono(
-                      fontSize: 10,
-                      letterSpacing: 0.8,
-                      color: AppColors.inkMuted,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(
+                      color: AppColors.ink.withValues(alpha: 0.08),
                     ),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(color: AppColors.navy),
+                  ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: ControlButton(
+                      icon: Icons.place_outlined,
+                      label: _stateFilter == null
+                          ? 'Everywhere'
+                          : UsStates.nameFor(_stateFilter) ?? _stateFilter!,
+                      selected: _stateFilter != null,
+                      onTap: _pickState,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ControlButton(
+                      icon: Icons.tune_rounded,
+                      label: 'Filters',
+                      badge: _activeFilterCount,
+                      selected: _activeFilterCount > 0,
+                      onTap: _openFilters,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  '${shown.length} of ${widget.data.politicians.length} figures'
+                  '${widget.userProfile == null ? ' — no match scores until you take the quiz' : ''}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.ibmPlexMono(
+                    fontSize: 10,
+                    letterSpacing: 0.8,
+                    color: AppColors.inkMuted,
+                  ),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: shown.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 2, 20, 32),
-                    child: EmptyState(
-                      icon: _query.isNotEmpty
-                          ? Icons.search_off_rounded
-                          : Icons.filter_alt_off_outlined,
-                      title: 'No one is left',
-                      body: _query.isNotEmpty
-                          ? 'No one in the roster matches “${_searchCtrl.text}”.'
-                          : 'These filters rule out everyone in the roster.',
-                      action: OutlinedButton(
-                        onPressed: () => setState(() {
-                          _searchCtrl.clear();
-                          _query = '';
-                          _officeFilter = 'all';
-                          _partyFilter = null;
-                          _stateFilter = null;
-                        }),
-                        child: const Text('Clear all'),
-                      ),
+        ),
+        Expanded(
+          child: shown.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 2, 20, 32),
+                  child: EmptyState(
+                    icon: _query.isNotEmpty
+                        ? Icons.search_off_rounded
+                        : Icons.filter_alt_off_outlined,
+                    title: 'No one is left',
+                    body: _query.isNotEmpty
+                        ? 'No one in the roster matches “${_searchCtrl.text}”.'
+                        : 'These filters rule out everyone in the roster.',
+                    action: OutlinedButton(
+                      onPressed: () => setState(() {
+                        _searchCtrl.clear();
+                        _query = '';
+                        _officeFilter = 'all';
+                        _partyFilter = null;
+                        _stateFilter = null;
+                      }),
+                      child: const Text('Clear all'),
                     ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(20, 2, 20, 32),
-                    itemCount: shown.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 10),
-                    itemBuilder: (context, index) {
-                      final p = shown[index];
-                      final match = closenessById[p.id];
-                      return _RosterCard(
-                        politician: p,
-                        match: match,
-                        axisScore: widget.data.profileFor(p).axisScore,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => PoliticianDetailScreen(
-                                politician: p,
-                                userProfile: widget.userProfile,
-                                data: widget.data,
-                                match: closenessById[p.id],
-                                figureFloor: widget.figureFloor,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
                   ),
-          ),
-        ],
+                )
+              : ListView.separated(
+                  // Shared storage keeps the scroll offset when the list
+                  // migrates between single canvas and a fold pane.
+                  key: const PageStorageKey('explore-roster'),
+                  padding: const EdgeInsets.fromLTRB(20, 2, 20, 32),
+                  itemCount: shown.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    final p = shown[index];
+                    final match = closenessById[p.id];
+                    return _RosterCard(
+                      politician: p,
+                      match: match,
+                      axisScore: widget.data.profileFor(p).axisScore,
+                      selected: _selected == p,
+                      onTap: () => _open(p, match, mode),
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+
+  /// Open [p]'s detail. In a fold split the detail is the secondary pane —
+  /// select in place instead of pushing; the push is for the one-canvas
+  /// layout and stays crease-confined via [foldAwareRoute].
+  void _open(Politician p, MatchResult? match, FoldMode mode) {
+    final split =
+        mode == FoldMode.splitVertical || mode == FoldMode.splitHorizontal;
+    if (split) {
+      setState(() => _selected = p);
+      return;
+    }
+    Navigator.of(context).push(
+      foldAwareRoute<void>(
+        context,
+        builder: (_) => PoliticianDetailScreen(
+          politician: p,
+          userProfile: widget.userProfile,
+          data: widget.data,
+          match: match,
+          figureFloor: widget.figureFloor,
+        ),
       ),
     );
   }
@@ -446,6 +509,7 @@ class _RosterCard extends StatelessWidget {
     required this.axisScore,
     required this.onTap,
     this.match,
+    this.selected = false,
   });
 
   final Politician politician;
@@ -455,6 +519,10 @@ class _RosterCard extends StatelessWidget {
   /// compare against.
   final double axisScore;
   final VoidCallback onTap;
+
+  /// Split-mode selection highlight — which figure's record is in the
+  /// secondary pane.
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -477,8 +545,13 @@ class _RosterCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
           decoration: BoxDecoration(
+            color: selected ? AppColors.accent.withValues(alpha: 0.10) : null,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.ink.withValues(alpha: 0.07)),
+            border: Border.all(
+              color: selected
+                  ? AppColors.accent.withValues(alpha: 0.55)
+                  : AppColors.ink.withValues(alpha: 0.07),
+            ),
           ),
           child: Row(
             children: [
@@ -523,6 +596,40 @@ class _RosterCard extends StatelessWidget {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// What the secondary pane shows before a figure is picked in a split.
+class _SplitDetailPlaceholder extends StatelessWidget {
+  const _SplitDetailPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(28),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.person_search_rounded,
+              size: 34,
+              color: AppColors.inkMuted,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Pick a figure to see their record',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.inkMuted,
+              ),
+            ),
+          ],
         ),
       ),
     );

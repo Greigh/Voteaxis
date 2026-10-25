@@ -1,3 +1,4 @@
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -153,7 +154,7 @@ class _SharedResultScreenState extends State<SharedResultScreen> {
       return;
     }
     final replace = widget.userProfile != null;
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showFoldAwareDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Use this as your placement?'),

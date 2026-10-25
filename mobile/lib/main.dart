@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'data/app_data.dart';
+import 'duo/duo_scope.dart';
 import 'models/app_settings.dart';
+import 'models/issue_of_the_day.dart';
 import 'models/politician.dart';
 import 'models/question.dart';
 import 'models/quiz_bank.dart';
@@ -21,6 +25,7 @@ import 'screens/quiz_screen.dart';
 import 'screens/results_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/shared_result_screen.dart';
+import 'screens/duo_glance_screen.dart';
 import 'screens/transfer_screen.dart';
 import 'services/app_feel.dart';
 import 'services/civic_sync.dart';
@@ -40,7 +45,10 @@ Future<void> main() async {
   GoogleFonts.config.allowRuntimeFetching = false;
   SystemChrome.setSystemUIOverlayStyle(_overlayStyleFor(Brightness.light));
   await initIssueWidget();
-  runApp(const VoteaxisApp());
+  // ProviderScope carries the iPhone Duo fold stream and its settings
+  // toggles. The rest of the app stays setState-based; fold-aware widgets
+  // read it through duo_scope.dart and degrade to single-pane without it.
+  runApp(const ProviderScope(child: VoteaxisApp()));
 }
 
 SystemUiOverlayStyle _overlayStyleFor(Brightness brightness) {
@@ -202,7 +210,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     final nav = _navKey.currentState;
     if (data == null || nav == null) return;
     final outcome = await nav.push<TransferOutcome>(
-      MaterialPageRoute<TransferOutcome>(
+      foldAwareRoute<TransferOutcome>(
+        nav.context,
         builder: (_) =>
             SharedResultScreen(resultId: id, data: data, userProfile: _profile),
       ),
@@ -216,7 +225,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     final nav = _navKey.currentState;
     if (data == null || nav == null) return;
     nav.push(
-      MaterialPageRoute<void>(
+      foldAwareRoute<void>(
+        nav.context,
         builder: (_) => FriendCompareScreen(
           data: data,
           profile: _profile,
@@ -511,6 +521,9 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     final data = _data;
     final nav = _navKey.currentState;
     if (data == null || nav == null) return;
+    // Plain route on purpose: Explore owns the fold split itself
+    // (roster/detail FoldSplitView), which needs the full window. A
+    // FoldConfinedRoute would squeeze it into the secondary pane.
     nav.push(
       MaterialPageRoute<void>(
         builder: (_) => ExploreScreen(
@@ -527,7 +540,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     final data = _data;
     if (data == null) return;
     final profile = await _navKey.currentState?.push<SpectrumProfile>(
-      MaterialPageRoute<SpectrumProfile>(
+      foldAwareRoute<SpectrumProfile>(
+        _navKey.currentContext!,
         builder: (_) =>
             ManualProfileScreen(data: data, initialProfile: _profile),
       ),
@@ -679,7 +693,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
             handSet: latest.isHandSet,
           );
     final outcome = await _navKey.currentState?.push<TransferOutcome>(
-      MaterialPageRoute<TransferOutcome>(
+      foldAwareRoute<TransferOutcome>(
+        _navKey.currentContext!,
         builder: (_) => TransferScreen(
           payload: payload,
           profile: profile,
@@ -705,7 +720,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
 
   void _openSettings() {
     _navKey.currentState?.push(
-      MaterialPageRoute<void>(
+      foldAwareRoute<void>(
+        _navKey.currentContext!,
         builder: (_) => SettingsScreen(
           settings: _settings,
           onSettings: _applySettings,
@@ -736,7 +752,10 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
 
   void _openMethodology() {
     _navKey.currentState?.push(
-      MaterialPageRoute<void>(builder: (_) => const MethodologyScreen()),
+      foldAwareRoute<void>(
+        _navKey.currentContext!,
+        builder: (_) => const MethodologyScreen(),
+      ),
     );
   }
 
@@ -764,7 +783,16 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         AppColors.sync(brightness);
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: _overlayStyleFor(brightness),
-          child: _RestoreSystemInsets(child: child ?? const SizedBox.shrink()),
+          child: _RestoreSystemInsets(
+            child: _DuoGlanceGate(
+              week: _week,
+              data: _data,
+              axisLabel: _profile == null
+                  ? null
+                  : Scoring.formatScore(_profile!.axisScore),
+              child: child ?? const SizedBox.shrink(),
+            ),
+          ),
         );
       },
       home: _currentView(),
@@ -812,6 +840,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     }
 
     final data = _data!;
+    final day = IssueOfTheDay.resolve(week: _week, questions: data.questions);
 
     return switch (_view) {
       _View.loading => const SizedBox.shrink(),
@@ -832,6 +861,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         skipQuiz: _settings.skipQuiz,
         reduceMotion: _settings.reduceMotion,
         week: _week,
+        day: day,
+        issueLabel: data.issuesById[day.issueId]?.label,
         onFriendCompare: _openFriendCompare,
         onSetLevel: _openManualLevel,
         onExplore: _openExplore,
@@ -860,9 +891,55 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         homeDistrict: _homeDistrict,
         figureFloor: _settings.figureFloor,
         timeBlind: _settings.timeBlind,
+        day: day,
+        issueLabel: data.issuesById[day.issueId]?.label,
         onRetake: () => _openQuiz(),
         onHome: () => setState(() => _view = _View.home),
       ),
     };
+  }
+}
+
+/// Propped pose (tent/laptop) swaps the whole UI for the Issue-of-the-Week
+/// glance card on the pane above the crease. The app tree stays mounted
+/// underneath — paused for ticks and semantics — so exiting the pose
+/// returns to the same screen, scroll offset, and quiz state.
+class _DuoGlanceGate extends StatelessWidget {
+  const _DuoGlanceGate({
+    required this.child,
+    required this.week,
+    required this.data,
+    this.axisLabel,
+  });
+
+  final Widget child;
+  final IssueOfTheWeek? week;
+  final AppData? data;
+  final String? axisLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return DuoFoldBuilder(
+      builder: (context, fold, mode) {
+        final data = this.data;
+        if (mode != FoldMode.glance || data == null) return child;
+        final day = IssueOfTheDay.resolve(
+          week: week,
+          questions: data.questions,
+        );
+        final issueLabel = data.issuesById[day.issueId]?.label;
+        return Stack(
+          children: [
+            Offstage(child: TickerMode(enabled: false, child: child)),
+            DuoGlanceScreen(
+              fold: fold,
+              day: day,
+              issueLabel: issueLabel,
+              axisLabel: axisLabel,
+            ),
+          ],
+        );
+      },
+    );
   }
 }

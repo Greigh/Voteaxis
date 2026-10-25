@@ -1,13 +1,17 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../duo/duo_rail.dart';
+import '../duo/duo_scope.dart';
 import '../data/app_data.dart';
+import '../models/issue_of_the_day.dart';
 import '../data/us_states.dart';
 import '../models/politician.dart';
 import '../models/scoring.dart';
@@ -35,6 +39,8 @@ class ResultsScreen extends StatefulWidget {
     this.figureFloor = FigureFloor.year2000,
     this.timeBlind = false,
     this.handSet = false,
+    this.day,
+    this.issueLabel,
   });
 
   final SpectrumProfile userProfile;
@@ -53,6 +59,10 @@ class ResultsScreen extends StatefulWidget {
   /// The placement was set by hand on the level screen, not scored from a
   /// quiz run. Says so above everything else.
   final bool handSet;
+
+  /// Resolved issue content for the Duo fold rail, when the app has it.
+  final IssueOfTheDay? day;
+  final String? issueLabel;
 
   @override
   State<ResultsScreen> createState() => _ResultsScreenState();
@@ -342,77 +352,93 @@ class _ResultsScreenState extends State<ResultsScreen>
           ),
         ],
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Column(
+      body: DuoFoldBuilder(
+        builder: (context, fold, mode) {
+          final main = Stack(
+            fit: StackFit.expand,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
-                child: Column(
-                  children: [
-                    if (widget.handSet) ...[
-                      const _HandSetBanner(),
-                      const SizedBox(height: 10),
-                    ],
-                    _scoreStrip(leadMatch),
-                    const SizedBox(height: 10),
-                    _tabSwitcher(matches.length),
-                  ],
-                ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                    child: Column(
+                      children: [
+                        if (widget.handSet) ...[
+                          const _HandSetBanner(),
+                          const SizedBox(height: 10),
+                        ],
+                        _scoreStrip(leadMatch),
+                        const SizedBox(height: 10),
+                        _tabSwitcher(matches.length),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabs,
+                      children: [
+                        _youTab(matches: matches, leadMatch: leadMatch),
+                        _matchesTab(matches),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabs,
-                  children: [
-                    _youTab(matches: matches, leadMatch: leadMatch),
-                    _matchesTab(matches),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          // Kept mounted whichever tab is up, so the app-bar share always has
-          // a laid-out card to rasterise.
-          if (topMatch != null)
-            Positioned(
-              left: 0,
-              top: 0,
-              width: 360,
-              height: 640,
-              child: Offstage(
-                offstage: true,
-                child: RepaintBoundary(
-                  key: _shareKey,
-                  child: _ShareCard(
-                    axisLabel:
-                        '${Scoring.labelForScore(_profile.axisScore)} · '
-                        '${Scoring.formatScore(_profile.axisScore)}',
-                    closestName: topMatch.politician.name,
-                    ballotName:
-                        _showsPastUi &&
-                            topBallot != null &&
-                            topBallot.politician.id != topMatch.politician.id
-                        ? topBallot.politician.name
-                        : null,
-                    historicalName:
-                        topHistorical != null &&
-                            topHistorical.politician.id !=
-                                topMatch.politician.id
-                        ? topHistorical.politician.name
-                        : null,
+              // Kept mounted whichever tab is up, so the app-bar share always has
+              // a laid-out card to rasterise.
+              if (topMatch != null)
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  width: 360,
+                  height: 640,
+                  child: Offstage(
+                    offstage: true,
+                    child: RepaintBoundary(
+                      key: _shareKey,
+                      child: _ShareCard(
+                        axisLabel:
+                            '${Scoring.labelForScore(_profile.axisScore)} · '
+                            '${Scoring.formatScore(_profile.axisScore)}',
+                        closestName: topMatch.politician.name,
+                        ballotName:
+                            _showsPastUi &&
+                                topBallot != null &&
+                                topBallot.politician.id !=
+                                    topMatch.politician.id
+                            ? topBallot.politician.name
+                            : null,
+                        historicalName:
+                            topHistorical != null &&
+                                topHistorical.politician.id !=
+                                    topMatch.politician.id
+                            ? topHistorical.politician.name
+                            : null,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-        ],
+            ],
+          );
+          final split =
+              mode == FoldMode.splitVertical ||
+              mode == FoldMode.splitHorizontal;
+          if (!split) return main;
+          return FoldSplitView(
+            fold: fold,
+            mode: mode,
+            primary: main,
+            secondary: DuoRail(day: widget.day, issueLabel: widget.issueLabel),
+          );
+        },
       ),
     );
   }
 
   void _openMethodology({String? topic}) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
+      foldAwareRoute<void>(
+        context,
         builder: (_) => MethodologyScreen(initialTopic: topic),
       ),
     );
@@ -669,7 +695,8 @@ class _ResultsScreenState extends State<ResultsScreen>
                 label: 'Compare with\na friend',
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(
+                    foldAwareRoute<void>(
+                      context,
                       builder: (_) => FriendCompareScreen(
                         data: widget.data,
                         profile: _profile,
@@ -686,7 +713,8 @@ class _ResultsScreenState extends State<ResultsScreen>
                 label: 'Compare\nsaved runs',
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(
+                    foldAwareRoute<void>(
+                      context,
                       builder: (_) => CompareScreen(
                         baseProfile: _profile,
                         data: widget.data,
@@ -921,7 +949,8 @@ class _ResultsScreenState extends State<ResultsScreen>
                       }
                     }
                     Navigator.of(context).push(
-                      MaterialPageRoute<void>(
+                      foldAwareRoute<void>(
+                        context,
                         builder: (_) => PoliticianDetailScreen(
                           politician: p,
                           userProfile: _profile,
@@ -1006,7 +1035,7 @@ class _ResultsScreenState extends State<ResultsScreen>
   }
 
   Future<void> _openFilters() async {
-    await showModalBottomSheet<void>(
+    await showFoldAwareSheet<void>(
       context: context,
       backgroundColor: AppColors.paper,
       isScrollControlled: true,

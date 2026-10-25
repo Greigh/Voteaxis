@@ -1,6 +1,9 @@
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../duo/duo_rail.dart';
+import '../duo/duo_scope.dart';
 import '../models/issue.dart';
 import '../models/question.dart';
 import '../models/scoring.dart';
@@ -195,7 +198,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void _showContext() {
     final issue = widget.issuesById[_question.issueId];
     final body = issue?.context;
-    showModalBottomSheet<void>(
+    showFoldAwareSheet<void>(
       context: context,
       showDragHandle: true,
       builder: (ctx) {
@@ -260,185 +263,240 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 8,
-                backgroundColor: AppColors.parchment,
-                color: AppColors.navy,
-                semanticsLabel:
-                    'Quiz progress, question ${_index + 1} of '
-                    '${widget.questions.length}',
-                semanticsValue: '${(progress * 100).round()}',
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              _encouragement,
-              style: TextStyle(
-                color: AppColors.ink.withValues(alpha: 0.55),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: DuoFoldBuilder(
+        builder: (context, fold, mode) {
+          final main = Padding(
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: LinearProgressIndicator(
+                    value: progress,
+                    minHeight: 8,
+                    backgroundColor: AppColors.parchment,
+                    color: AppColors.navy,
+                    semanticsLabel:
+                        'Quiz progress, question ${_index + 1} of '
+                        '${widget.questions.length}',
+                    semanticsValue: '${(progress * 100).round()}',
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  _encouragement,
+                  style: TextStyle(
+                    color: AppColors.ink.withValues(alpha: 0.55),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView(
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (_issueLabel != null) ...[
-                              MonoNote(_issueLabel!.toUpperCase(), size: 11),
-                              const SizedBox(height: 8),
-                            ],
-                            Text(
-                              _question.text,
-                              style: GoogleFonts.manrope(
-                                fontWeight: FontWeight.w800,
-                                height: 1.3,
-                                fontSize: 22,
-                                letterSpacing: -0.4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: 'What this means',
-                        onPressed: _showContext,
-                        icon: const Icon(Icons.help_outline_rounded),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  ...List.generate(Scoring.likertLabels.length, (i) {
-                    final isSelected = selected == i;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Material(
-                        color: isSelected
-                            ? AppColors.navy
-                            : AppColors.parchment.withValues(alpha: 0.8),
-                        borderRadius: BorderRadius.circular(12),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(12),
-                          onTap: _busy ? null : () => _select(i),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            child: Text(
-                              Scoring.likertLabels[i],
-                              style: TextStyle(
-                                color: isSelected
-                                    ? AppColors.cream
-                                    : AppColors.ink,
-                                fontWeight: isSelected
-                                    ? FontWeight.w700
-                                    : FontWeight.w500,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                  const SizedBox(height: 18),
-                  SurfaceCard(
-                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-                    title: 'How much does this matter to you?',
-                    subtitle: Scoring.importanceLabels[importance],
-                    child: Column(
-                      children: [
-                        Slider(
-                          value: importance.toDouble(),
-                          min: 0,
-                          max: 4,
-                          divisions: 4,
-                          label: Scoring.importanceLabels[importance],
-                          activeColor: AppColors.ink,
-                          onChanged: _busy
-                              ? null
-                              : (v) => _setImportance(v.round()),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const MonoNote('LOW'),
-                            const MonoNote('ESSENTIAL'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  if (widget.showDealbreakers)
-                    Material(
-                      color: isDealbreaker
-                          ? AppColors.conservative.withValues(alpha: 0.08)
-                          : AppColors.sheet,
-                      borderRadius: BorderRadius.circular(12),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: _busy ? null : _toggleDealbreaker,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 12,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                isDealbreaker
-                                    ? Icons.flag_rounded
-                                    : Icons.outlined_flag_rounded,
-                                color: isDealbreaker
-                                    ? AppColors.conservative
-                                    : AppColors.inkMuted,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  isDealbreaker
-                                      ? 'Dealbreaker — opposite views will be flagged'
-                                      : 'Mark as a dealbreaker (${_dealbreakers.length}/${Scoring.maxDealbreakers})',
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (_issueLabel != null) ...[
+                                  MonoNote(
+                                    _issueLabel!.toUpperCase(),
+                                    size: 11,
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
+                                Text(
+                                  _question.text,
                                   style: GoogleFonts.manrope(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.3,
+                                    fontSize: 22,
+                                    letterSpacing: -0.4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: 'What this means',
+                            onPressed: _showContext,
+                            icon: const Icon(Icons.help_outline_rounded),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      ...List.generate(Scoring.likertLabels.length, (i) {
+                        final isSelected = selected == i;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Material(
+                            color: isSelected
+                                ? AppColors.navy
+                                : AppColors.parchment.withValues(alpha: 0.8),
+                            borderRadius: BorderRadius.circular(12),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: _busy ? null : () => _select(i),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                child: Text(
+                                  Scoring.likertLabels[i],
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? AppColors.cream
+                                        : AppColors.ink,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w700
+                                        : FontWeight.w500,
+                                    fontSize: 15,
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
+                        );
+                      }),
+                      const SizedBox(height: 18),
+                      SurfaceCard(
+                        padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+                        title: 'How much does this matter to you?',
+                        subtitle: Scoring.importanceLabels[importance],
+                        child: Column(
+                          children: [
+                            Slider(
+                              value: importance.toDouble(),
+                              min: 0,
+                              max: 4,
+                              divisions: 4,
+                              label: Scoring.importanceLabels[importance],
+                              activeColor: AppColors.ink,
+                              onChanged: _busy
+                                  ? null
+                                  : (v) => _setImportance(v.round()),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const MonoNote('LOW'),
+                                const MonoNote('ESSENTIAL'),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      if (widget.showDealbreakers)
+                        Material(
+                          color: isDealbreaker
+                              ? AppColors.conservative.withValues(alpha: 0.08)
+                              : AppColors.sheet,
+                          borderRadius: BorderRadius.circular(12),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: _busy ? null : _toggleDealbreaker,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 12,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    isDealbreaker
+                                        ? Icons.flag_rounded
+                                        : Icons.outlined_flag_rounded,
+                                    color: isDealbreaker
+                                        ? AppColors.conservative
+                                        : AppColors.inkMuted,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      isDealbreaker
+                                          ? 'Dealbreaker — opposite views will be flagged'
+                                          : 'Mark as a dealbreaker (${_dealbreakers.length}/${Scoring.maxDealbreakers})',
+                                      style: GoogleFonts.manrope(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  onPressed: selected == null || _busy ? null : _next,
+                  child: Text(
+                    _index == widget.questions.length - 1
+                        ? 'See my results'
+                        : 'Next',
+                  ),
+                ),
+              ],
+            ),
+          );
+          final rail = DuoRail(
+            extra: [
+              DuoRailCard(
+                kicker: 'NOW ANSWERING',
+                title:
+                    widget.issuesById[_question.issueId]?.label ??
+                    _question.issueId,
+                body: 'Question ${_index + 1} of ${widget.questions.length}',
+              ),
+            ],
+          );
+          final split =
+              mode == FoldMode.splitVertical ||
+              mode == FoldMode.splitHorizontal;
+          if (split) {
+            return FoldSplitView(
+              fold: fold,
+              mode: mode,
+              primary: main,
+              secondary: rail,
+            );
+          }
+          // Unfolded-flat Duo (and any wide canvas — iPad) resolves `single`:
+          // no crease to split around, so compose the companion rail by hand.
+          // The question column keeps a readable measure instead of stretching
+          // edge to edge; phone landscapes are too short to spare the width.
+          final size = MediaQuery.sizeOf(context);
+          if (size.width >= 840 && size.height >= 480) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 680),
+                      child: main,
                     ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: selected == null || _busy ? null : _next,
-              child: Text(
-                _index == widget.questions.length - 1
-                    ? 'See my results'
-                    : 'Next',
-              ),
-            ),
-          ],
-        ),
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  color: AppColors.ink.withValues(alpha: 0.08),
+                ),
+                SizedBox(width: 340, child: rail),
+              ],
+            );
+          }
+          return main;
+        },
       ),
     );
   }

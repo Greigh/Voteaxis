@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../duo/duo_scope.dart';
 import '../data/app_data.dart';
 import '../models/scoring.dart';
 import '../services/result_store.dart';
@@ -170,7 +171,7 @@ class _CompareScreenState extends State<CompareScreen> {
                 data: widget.data,
                 onTap: (politician) {
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(
+                    foldAwareRoute<void>(context,
                       builder: (_) => PoliticianDetailScreen(
                         politician: politician,
                         userProfile: earlier,

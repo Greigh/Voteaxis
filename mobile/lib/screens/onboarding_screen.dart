@@ -1,7 +1,9 @@
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../data/us_states.dart';
+import '../duo/duo_scope.dart';
 import '../theme/app_theme.dart';
 import '../widgets/mist_backdrop.dart';
 import '../widgets/voteaxis_logo.dart';
@@ -54,196 +56,212 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget build(BuildContext context) {
     final canContinue = _stateCode != null;
 
-    return Scaffold(
-      backgroundColor: AppColors.ink,
-      body: FadeTransition(
-        opacity: _fade,
-        child: SlideTransition(
-          position: _slide,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                flex: 9,
-                child: MistBackdrop(
-                  child: SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(28, 36, 28, 20),
-                      child: Column(
-                        children: [
-                          const Spacer(flex: 2),
-                          const VoteaxisMark(size: 96),
-                          const SizedBox(height: 20),
-                          const VoteaxisWordmark(fontSize: 40),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Welcome',
-                            style: GoogleFonts.ibmPlexMono(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.6,
-                              color: AppColors.inkMuted,
-                            ),
-                          ),
-                          const Spacer(flex: 3),
-                          const SpectrumHeroRail(height: 52, markerScore: -28),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Liberal',
-                                style: GoogleFonts.manrope(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.liberal,
-                                ),
-                              ),
-                              Text(
-                                'Conservative',
-                                style: GoogleFonts.manrope(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.conservative,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+    final hero = MistBackdrop(
+      child: SafeArea(
+        bottom: false,
+        // Scrollable so the hero degrades on narrow/short windows
+        // (Duo panes) instead of overflowing the flex-9 panel.
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(28, 36, 28, 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                const VoteaxisMark(size: 96),
+                const SizedBox(height: 20),
+                const VoteaxisWordmark(fontSize: 40),
+                const SizedBox(height: 12),
+                Text(
+                  'Welcome',
+                  style: GoogleFonts.ibmPlexMono(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.6,
+                    color: AppColors.inkMuted,
+                  ),
+                ),
+                const SizedBox(height: 28),
+                const SpectrumHeroRail(height: 52, markerScore: -28),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Liberal',
+                      style: GoogleFonts.manrope(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.liberal,
                       ),
                     ),
+                    Text(
+                      'Conservative',
+                      style: GoogleFonts.manrope(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.conservative,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final form = Container(
+      color: AppColors.ink,
+      child: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(28, 28, 28, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Where do you vote?',
+                style: GoogleFonts.manrope(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.7,
+                  height: 1.15,
+                  color: AppColors.sheet,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'We’ll prioritize candidates from your state when we rank matches. You can change this later.',
+                style: GoogleFonts.manrope(
+                  fontSize: 15,
+                  height: 1.5,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.sheet.withValues(alpha: 0.72),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Your state',
+                style: GoogleFonts.ibmPlexMono(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1.1,
+                  color: AppColors.sheet.withValues(alpha: 0.45),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                decoration: BoxDecoration(
+                  color: AppColors.sheet.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: AppColors.sheet.withValues(alpha: 0.16),
+                  ),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    value: _stateCode,
+                    dropdownColor: AppColors.ink,
+                    hint: Text(
+                      'Select your state',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.sheet.withValues(alpha: 0.5),
+                      ),
+                    ),
+                    iconEnabledColor: AppColors.sheet,
+                    style: GoogleFonts.manrope(
+                      color: AppColors.sheet,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                    items: [
+                      for (final s in UsStates.all)
+                        DropdownMenuItem(
+                          value: s.code,
+                          child: Text('${s.name} (${s.code})'),
+                        ),
+                    ],
+                    onChanged: (value) => setState(() => _stateCode = value),
                   ),
                 ),
               ),
-              Expanded(
-                flex: 11,
-                child: Container(
-                  color: AppColors.ink,
-                  child: SafeArea(
-                    top: false,
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(28, 28, 28, 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Where do you vote?',
-                            style: GoogleFonts.manrope(
-                              fontSize: 26,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: -0.7,
-                              height: 1.15,
-                              color: AppColors.sheet,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'We’ll prioritize candidates from your state when we rank matches. You can change this later.',
-                            style: GoogleFonts.manrope(
-                              fontSize: 15,
-                              height: 1.5,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.sheet.withValues(alpha: 0.72),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            'Your state',
-                            style: GoogleFonts.ibmPlexMono(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.1,
-                              color: AppColors.sheet.withValues(alpha: 0.45),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14),
-                            decoration: BoxDecoration(
-                              color: AppColors.sheet.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: AppColors.sheet.withValues(alpha: 0.16),
-                              ),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: _stateCode,
-                                dropdownColor: AppColors.ink,
-                                hint: Text(
-                                  'Select your state',
-                                  style: GoogleFonts.manrope(
-                                    color: AppColors.sheet.withValues(
-                                      alpha: 0.5,
-                                    ),
-                                  ),
-                                ),
-                                iconEnabledColor: AppColors.sheet,
-                                style: GoogleFonts.manrope(
-                                  color: AppColors.sheet,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
-                                items: [
-                                  for (final s in UsStates.all)
-                                    DropdownMenuItem(
-                                      value: s.code,
-                                      child: Text('${s.name} (${s.code})'),
-                                    ),
-                                ],
-                                onChanged: (value) =>
-                                    setState(() => _stateCode = value),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 22),
-                          const _StepLine(
-                            index: '01',
-                            title: 'Answer',
-                            detail: 'Likert questions on real issues',
-                          ),
-                          const SizedBox(height: 12),
-                          const _StepLine(
-                            index: '02',
-                            title: 'Land',
-                            detail: 'One liberal ↔ conservative placement',
-                          ),
-                          const SizedBox(height: 12),
-                          const _StepLine(
-                            index: '03',
-                            title: 'Match',
-                            detail:
-                                'See who on your ballot overlaps your views',
-                          ),
-                          const SizedBox(height: 28),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: !canContinue
-                                  ? null
-                                  : () => widget.onContinue(_stateCode!),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.sheet,
-                                foregroundColor: AppColors.ink,
-                                disabledBackgroundColor: AppColors.sheet
-                                    .withValues(alpha: 0.25),
-                                disabledForegroundColor: AppColors.sheet
-                                    .withValues(alpha: 0.5),
-                              ),
-                              child: const Text('Get started'),
-                            ),
-                          ),
-                        ],
-                      ),
+              const SizedBox(height: 22),
+              const _StepLine(
+                index: '01',
+                title: 'Answer',
+                detail: 'Likert questions on real issues',
+              ),
+              const SizedBox(height: 12),
+              const _StepLine(
+                index: '02',
+                title: 'Land',
+                detail: 'One liberal ↔ conservative placement',
+              ),
+              const SizedBox(height: 12),
+              const _StepLine(
+                index: '03',
+                title: 'Match',
+                detail: 'See who on your ballot overlaps your views',
+              ),
+              const SizedBox(height: 28),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: !canContinue
+                      ? null
+                      : () => widget.onContinue(_stateCode!),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.sheet,
+                    foregroundColor: AppColors.ink,
+                    disabledBackgroundColor: AppColors.sheet.withValues(
+                      alpha: 0.25,
+                    ),
+                    disabledForegroundColor: AppColors.sheet.withValues(
+                      alpha: 0.5,
                     ),
                   ),
+                  child: const Text('Get started'),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+
+    return Scaffold(
+      backgroundColor: AppColors.ink,
+      body: DuoFoldBuilder(
+        builder: (context, fold, mode) {
+          final split =
+              mode == FoldMode.splitVertical ||
+              mode == FoldMode.splitHorizontal;
+          return FadeTransition(
+            opacity: _fade,
+            child: SlideTransition(
+              position: _slide,
+              child: split
+                  // Book pose reads as a book: brand left, the form right.
+                  ? FoldSplitView(
+                      fold: fold,
+                      mode: mode,
+                      primary: hero,
+                      secondary: form,
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(flex: 9, child: hero),
+                        Expanded(flex: 11, child: form),
+                      ],
+                    ),
+            ),
+          );
+        },
       ),
     );
   }

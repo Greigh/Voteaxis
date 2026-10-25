@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../data/app_data.dart';
+import '../duo/duo_scope.dart';
 import '../models/politician.dart';
 import '../models/scoring.dart';
 import '../services/voteaxis_api.dart';
@@ -18,6 +19,8 @@ class PoliticianDetailScreen extends StatelessWidget {
     required this.data,
     this.match,
     this.figureFloor = FigureFloor.year2000,
+    this.embedded = false,
+    this.onOpenPolitician,
   });
 
   final Politician politician;
@@ -29,6 +32,15 @@ class PoliticianDetailScreen extends StatelessWidget {
   final AppData data;
   final MatchResult? match;
   final int figureFloor;
+
+  /// Rendered inside a fold split's secondary pane rather than pushed as a
+  /// route: no back affordance, and ancestry taps are handed to the host
+  /// pane instead of navigating.
+  final bool embedded;
+
+  /// Host-pane navigation for ancestry taps when [embedded]. Null keeps the
+  /// ordinary push behavior.
+  final ValueChanged<Politician>? onOpenPolitician;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +101,10 @@ class PoliticianDetailScreen extends StatelessWidget {
         : null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(politician.name)),
+      appBar: AppBar(
+        title: Text(politician.name),
+        automaticallyImplyLeading: !embedded,
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
@@ -236,8 +251,14 @@ class PoliticianDetailScreen extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: () {
+                  final open = onOpenPolitician;
+                  if (open != null) {
+                    open(ancestor);
+                    return;
+                  }
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(
+                    foldAwareRoute<void>(
+                      context,
                       builder: (_) => PoliticianDetailScreen(
                         politician: ancestor,
                         userProfile: userProfile,

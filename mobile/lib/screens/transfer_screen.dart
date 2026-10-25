@@ -1,3 +1,4 @@
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -177,7 +178,7 @@ class _TransferScreenState extends State<TransferScreen> {
   Future<void> _revokeLink() async {
     final link = _link;
     if (link == null || _sharing) return;
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showFoldAwareDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Take the link down?'),

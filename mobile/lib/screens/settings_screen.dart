@@ -1,7 +1,10 @@
+import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../data/us_states.dart';
+import '../duo/duo_scope.dart';
 import '../services/civic_links.dart';
 import '../models/app_settings.dart';
 import '../models/politician.dart';
@@ -65,7 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _pickState() async {
     final onHomeState = widget.onHomeState;
     if (onHomeState == null) return;
-    final selected = await showModalBottomSheet<String>(
+    final selected = await showFoldAwareSheet<String>(
       context: context,
       showDragHandle: true,
       backgroundColor: AppColors.sheet,
@@ -112,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final onHomeDistrict = widget.onHomeDistrict;
     final seats = UsStates.districtCount(_homeState);
     if (onHomeDistrict == null || seats == 0) return;
-    final selected = await showModalBottomSheet<int>(
+    final selected = await showFoldAwareSheet<int>(
       context: context,
       showDragHandle: true,
       backgroundColor: AppColors.sheet,
@@ -179,7 +182,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _deleteEverything() async {
     final onDelete = widget.onDeleteEverything;
     if (onDelete == null) return;
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showFoldAwareDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Delete everything?'),
@@ -541,6 +544,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
 
+          // ── iPhone Duo ─────────────────────────────────────────────────
+          // Only exists on foldable hardware; everywhere else the stream is
+          // the constant unsupported state and this section collapses.
+          DuoFoldBuilder(
+            builder: (context, fold, mode) {
+              if (!fold.isDuo) return const SizedBox.shrink();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const _Section(
+                    title: 'iPhone Duo',
+                    blurb:
+                        'How the app uses the two halves of the display when '
+                        'the phone is half open.',
+                  ),
+                  _Group(
+                    children: [
+                      Consumer(
+                        builder: (context, ref, _) => SwitchListTile(
+                          contentPadding: _rowPadding,
+                          title: _title('Book split'),
+                          subtitle: _subtitle(
+                            'Half-open like a book: the roster stays on one '
+                            'side and the record opens on the other.',
+                          ),
+                          value: ref.watch(duoBookSplitProvider),
+                          onChanged: (value) => ref
+                              .read(duoBookSplitProvider.notifier)
+                              .set(value),
+                        ),
+                      ),
+                      Consumer(
+                        builder: (context, ref, _) => SwitchListTile(
+                          contentPadding: _rowPadding,
+                          title: _title('Glance card'),
+                          subtitle: _subtitle(
+                            'Propped like a tent: the Issue of the Week fills '
+                            'the top pane.',
+                          ),
+                          value: ref.watch(duoGlanceEnabledProvider),
+                          onChanged: (value) => ref
+                              .read(duoGlanceEnabledProvider.notifier)
+                              .set(value),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+
           // ── About ──────────────────────────────────────────────────────
           const _Section(
             title: 'About',
@@ -573,7 +628,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(
+                    foldAwareRoute<void>(
+                      context,
                       builder: (_) => const ContributeScreen(),
                     ),
                   );
