@@ -196,18 +196,9 @@ class _QuizScreenState extends State<QuizScreen> {
 
   String? get _issueLabel => widget.issuesById[_question.issueId]?.label;
 
-  bool _contextVisible = false;
-
-  void _showContext(FoldMode mode) {
-    // In a fold split the issue context has a home in the companion rail
-    // under the "now answering" card, so the tap toggles that card instead
-    // of opening a sheet.
-    final split =
-        mode == FoldMode.splitVertical || mode == FoldMode.splitHorizontal;
-    if (split) {
-      setState(() => _contextVisible = !_contextVisible);
-      return;
-    }
+  void _showContext() {
+    // Only reachable outside a fold split — during a split the context card
+    // is always alive in the companion rail, so no toggle exists.
     final issue = widget.issuesById[_question.issueId];
     final body = issue?.context;
     showFoldAwareSheet<void>(
@@ -339,11 +330,14 @@ class _QuizScreenState extends State<QuizScreen> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          tooltip: 'What this means',
-                          onPressed: () => _showContext(mode),
-                          icon: const Icon(Icons.help_outline_rounded),
-                        ),
+                        // In a fold split the rail already shows the
+                        // context card, so no tooltip affordance.
+                        if (!split)
+                          IconButton(
+                            tooltip: 'What this means',
+                            onPressed: _showContext,
+                            icon: const Icon(Icons.help_outline_rounded),
+                          ),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -471,7 +465,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   _question.issueId,
               body: 'Question ${_index + 1} of ${widget.questions.length}',
             ),
-            if (_contextVisible)
+            if (split)
               DuoRailCard(
                 kicker: 'ISSUE CONTEXT',
                 title: widget.issuesById[_question.issueId]?.label ?? 'Context',
