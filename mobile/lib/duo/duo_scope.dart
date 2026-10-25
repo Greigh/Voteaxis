@@ -60,6 +60,29 @@ class DuoFoldBuilder extends StatelessWidget {
   }
 }
 
+/// Corrects window insets for one [FoldSplitView] pane. A pane only feels
+/// the screen's insets on edges it physically touches — a left pane must
+/// not absorb the display's right-edge reserve — so strip the far-side
+/// padding before the child's own SafeArea re-applies what remains.
+/// [isPrimary] marks the rect the package calls primary (left of a vertical
+/// fold, above a horizontal one).
+Widget foldPane(
+  Widget child, {
+  required bool isPrimary,
+  required FoldMode mode,
+}) {
+  return Builder(
+    builder: (context) => MediaQuery.removePadding(
+      context: context,
+      removeRight: mode == FoldMode.splitVertical && isPrimary,
+      removeLeft: mode == FoldMode.splitVertical && !isPrimary,
+      removeBottom: mode == FoldMode.splitHorizontal && isPrimary,
+      removeTop: mode == FoldMode.splitHorizontal && !isPrimary,
+      child: child,
+    ),
+  );
+}
+
 /// A pushed route that confines itself to the fold's secondary pane during
 /// a book/flat split — the "readable content must not straddle the crease"
 /// idiom. Falls back to a plain [MaterialPageRoute] when nothing foldable

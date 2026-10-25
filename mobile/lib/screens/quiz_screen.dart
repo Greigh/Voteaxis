@@ -491,8 +491,16 @@ class _QuizScreenState extends State<QuizScreen> {
           body = FoldSplitView(
             fold: fold,
             mode: mode,
-            primary: mode == FoldMode.splitVertical ? rail : main,
-            secondary: mode == FoldMode.splitVertical ? main : rail,
+            primary: foldPane(
+              mode == FoldMode.splitVertical ? rail : main,
+              isPrimary: true,
+              mode: mode,
+            ),
+            secondary: foldPane(
+              mode == FoldMode.splitVertical ? main : rail,
+              isPrimary: false,
+              mode: mode,
+            ),
           );
         } else {
           // Unfolded-flat Duo (and any wide canvas — iPad) resolves

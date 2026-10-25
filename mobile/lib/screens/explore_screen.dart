@@ -304,22 +304,26 @@ class _ExploreScreenState extends State<ExploreScreen> {
           return FoldSplitView(
             fold: fold,
             mode: mode,
-            primary: list,
-            secondary: selected == null
-                ? const _SplitDetailPlaceholder()
-                : PoliticianDetailScreen(
-                    // Keyed to the person so a new pick resets the pane's
-                    // own scroll position.
-                    key: ValueKey(selected.id),
-                    politician: selected,
-                    userProfile: widget.userProfile,
-                    data: widget.data,
-                    match: closenessById[selected.id],
-                    figureFloor: widget.figureFloor,
-                    embedded: true,
-                    onOpenPolitician: (next) =>
-                        setState(() => _selected = next),
-                  ),
+            primary: foldPane(list, isPrimary: true, mode: mode),
+            secondary: foldPane(
+              selected == null
+                  ? const _SplitDetailPlaceholder()
+                  : PoliticianDetailScreen(
+                      // Keyed to the person so a new pick resets the pane's
+                      // own scroll position.
+                      key: ValueKey(selected.id),
+                      politician: selected,
+                      userProfile: widget.userProfile,
+                      data: widget.data,
+                      match: closenessById[selected.id],
+                      figureFloor: widget.figureFloor,
+                      embedded: true,
+                      onOpenPolitician: (next) =>
+                          setState(() => _selected = next),
+                    ),
+              isPrimary: false,
+              mode: mode,
+            ),
           );
         },
       ),

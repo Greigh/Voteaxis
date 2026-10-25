@@ -430,8 +430,16 @@ class _ResultsScreenState extends State<ResultsScreen>
           return FoldSplitView(
             fold: fold,
             mode: mode,
-            primary: mode == FoldMode.splitVertical ? rail : main,
-            secondary: mode == FoldMode.splitVertical ? main : rail,
+            primary: foldPane(
+              mode == FoldMode.splitVertical ? rail : main,
+              isPrimary: true,
+              mode: mode,
+            ),
+            secondary: foldPane(
+              mode == FoldMode.splitVertical ? main : rail,
+              isPrimary: false,
+              mode: mode,
+            ),
           );
         },
       ),
