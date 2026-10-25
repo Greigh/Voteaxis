@@ -327,6 +327,7 @@ class _ResultsScreenState extends State<ResultsScreen>
     return Scaffold(
       backgroundColor: AppColors.paper,
       appBar: duoAppBar(
+        pane: DuoPane.secondary,
         title: Text(
           'Your spectrum',
           style: GoogleFonts.manrope(fontWeight: FontWeight.w800),
@@ -425,11 +426,12 @@ class _ResultsScreenState extends State<ResultsScreen>
               mode == FoldMode.splitVertical ||
               mode == FoldMode.splitHorizontal;
           if (!split) return main;
+          final rail = DuoRail(day: widget.day, issueLabel: widget.issueLabel);
           return FoldSplitView(
             fold: fold,
             mode: mode,
-            primary: main,
-            secondary: DuoRail(day: widget.day, issueLabel: widget.issueLabel),
+            primary: mode == FoldMode.splitVertical ? rail : main,
+            secondary: mode == FoldMode.splitVertical ? main : rail,
           );
         },
       ),

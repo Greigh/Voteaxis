@@ -260,268 +260,292 @@ class _QuizScreenState extends State<QuizScreen> {
     final importance = _importance[_index];
     final isDealbreaker = _dealbreakers.contains(_question.issueId);
 
-    return Scaffold(
-      appBar: duoAppBar(
-        leading: IconButton(
-          tooltip: 'Back',
-          icon: const Icon(Icons.arrow_back),
-          onPressed: _busy ? null : _back,
-        ),
-        title: Text('Question ${_index + 1} of ${widget.questions.length}'),
-        actions: [
-          TextButton(
-            onPressed: _busy ? null : _exit,
-            child: const Text('Save & exit'),
+    return DuoFoldBuilder(
+      builder: (context, fold, mode) {
+        final split =
+            mode == FoldMode.splitVertical || mode == FoldMode.splitHorizontal;
+        final importanceCard = SurfaceCard(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+          title: 'How much does this matter to you?',
+          subtitle: Scoring.importanceLabels[importance],
+          child: Column(
+            children: [
+              Slider(
+                value: importance.toDouble(),
+                min: 0,
+                max: 4,
+                divisions: 4,
+                label: Scoring.importanceLabels[importance],
+                activeColor: AppColors.ink,
+                onChanged: _busy ? null : (v) => _setImportance(v.round()),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [const MonoNote('LOW'), const MonoNote('ESSENTIAL')],
+              ),
+            ],
           ),
-        ],
-      ),
-      body: DuoFoldBuilder(
-        builder: (context, fold, mode) {
-          final split =
-              mode == FoldMode.splitVertical ||
-              mode == FoldMode.splitHorizontal;
-          final importanceCard = SurfaceCard(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-            title: 'How much does this matter to you?',
-            subtitle: Scoring.importanceLabels[importance],
-            child: Column(
-              children: [
-                Slider(
-                  value: importance.toDouble(),
-                  min: 0,
-                  max: 4,
-                  divisions: 4,
-                  label: Scoring.importanceLabels[importance],
-                  activeColor: AppColors.ink,
-                  onChanged: _busy ? null : (v) => _setImportance(v.round()),
+        );
+        final main = Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 8,
+                  backgroundColor: AppColors.parchment,
+                  color: AppColors.navy,
+                  semanticsLabel:
+                      'Quiz progress, question ${_index + 1} of '
+                      '${widget.questions.length}',
+                  semanticsValue: '${(progress * 100).round()}',
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                _encouragement,
+                style: TextStyle(
+                  color: AppColors.ink.withValues(alpha: 0.55),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView(
                   children: [
-                    const MonoNote('LOW'),
-                    const MonoNote('ESSENTIAL'),
-                  ],
-                ),
-              ],
-            ),
-          );
-          final main = Padding(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: LinearProgressIndicator(
-                    value: progress,
-                    minHeight: 8,
-                    backgroundColor: AppColors.parchment,
-                    color: AppColors.navy,
-                    semanticsLabel:
-                        'Quiz progress, question ${_index + 1} of '
-                        '${widget.questions.length}',
-                    semanticsValue: '${(progress * 100).round()}',
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  _encouragement,
-                  style: TextStyle(
-                    color: AppColors.ink.withValues(alpha: 0.55),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (_issueLabel != null) ...[
+                                MonoNote(_issueLabel!.toUpperCase(), size: 11),
+                                const SizedBox(height: 8),
+                              ],
+                              Text(
+                                _question.text,
+                                style: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.3,
+                                  fontSize: 22,
+                                  letterSpacing: -0.4,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: 'What this means',
+                          onPressed: () => _showContext(mode),
+                          icon: const Icon(Icons.help_outline_rounded),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    ...List.generate(Scoring.likertLabels.length, (i) {
+                      final isSelected = selected == i;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Material(
+                          color: isSelected
+                              ? AppColors.navy
+                              : AppColors.parchment.withValues(alpha: 0.8),
+                          borderRadius: BorderRadius.circular(12),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: _busy ? null : () => _select(i),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              child: Text(
+                                Scoring.likertLabels[i],
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? AppColors.cream
+                                      : AppColors.ink,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w700
+                                      : FontWeight.w500,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 18),
+                    // Split modes park this beside the fold in the rail.
+                    if (!split) importanceCard,
+                    const SizedBox(height: 10),
+                    if (widget.showDealbreakers)
+                      Material(
+                        color: isDealbreaker
+                            ? AppColors.conservative.withValues(alpha: 0.08)
+                            : AppColors.sheet,
+                        borderRadius: BorderRadius.circular(12),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: _busy ? null : _toggleDealbreaker,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            child: Row(
                               children: [
-                                if (_issueLabel != null) ...[
-                                  MonoNote(
-                                    _issueLabel!.toUpperCase(),
-                                    size: 11,
-                                  ),
-                                  const SizedBox(height: 8),
-                                ],
-                                Text(
-                                  _question.text,
-                                  style: GoogleFonts.manrope(
-                                    fontWeight: FontWeight.w800,
-                                    height: 1.3,
-                                    fontSize: 22,
-                                    letterSpacing: -0.4,
+                                Icon(
+                                  isDealbreaker
+                                      ? Icons.flag_rounded
+                                      : Icons.outlined_flag_rounded,
+                                  color: isDealbreaker
+                                      ? AppColors.conservative
+                                      : AppColors.inkMuted,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    isDealbreaker
+                                        ? 'Dealbreaker — opposite views will be flagged'
+                                        : 'Mark as a dealbreaker (${_dealbreakers.length}/${Scoring.maxDealbreakers})',
+                                    style: GoogleFonts.manrope(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          IconButton(
-                            tooltip: 'What this means',
-                            onPressed: () => _showContext(mode),
-                            icon: const Icon(Icons.help_outline_rounded),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      ...List.generate(Scoring.likertLabels.length, (i) {
-                        final isSelected = selected == i;
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Material(
-                            color: isSelected
-                                ? AppColors.navy
-                                : AppColors.parchment.withValues(alpha: 0.8),
-                            borderRadius: BorderRadius.circular(12),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(12),
-                              onTap: _busy ? null : () => _select(i),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
-                                ),
-                                child: Text(
-                                  Scoring.likertLabels[i],
-                                  style: TextStyle(
-                                    color: isSelected
-                                        ? AppColors.cream
-                                        : AppColors.ink,
-                                    fontWeight: isSelected
-                                        ? FontWeight.w700
-                                        : FontWeight.w500,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                      const SizedBox(height: 18),
-                      // Split modes park this beside the fold in the rail.
-                      if (!split) importanceCard,
-                      const SizedBox(height: 10),
-                      if (widget.showDealbreakers)
-                        Material(
-                          color: isDealbreaker
-                              ? AppColors.conservative.withValues(alpha: 0.08)
-                              : AppColors.sheet,
-                          borderRadius: BorderRadius.circular(12),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: _busy ? null : _toggleDealbreaker,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 12,
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    isDealbreaker
-                                        ? Icons.flag_rounded
-                                        : Icons.outlined_flag_rounded,
-                                    color: isDealbreaker
-                                        ? AppColors.conservative
-                                        : AppColors.inkMuted,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      isDealbreaker
-                                          ? 'Dealbreaker — opposite views will be flagged'
-                                          : 'Mark as a dealbreaker (${_dealbreakers.length}/${Scoring.maxDealbreakers})',
-                                      style: GoogleFonts.manrope(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                  onPressed: selected == null || _busy ? null : _next,
-                  child: Text(
-                    _index == widget.questions.length - 1
-                        ? 'See my results'
-                        : 'Next',
-                  ),
-                ),
-              ],
-            ),
-          );
-          final rail = DuoRail(
-            extra: [
-              DuoRailCard(
-                kicker: 'NOW ANSWERING',
-                title:
-                    widget.issuesById[_question.issueId]?.label ??
-                    _question.issueId,
-                body: 'Question ${_index + 1} of ${widget.questions.length}',
               ),
-              if (_contextVisible)
-                DuoRailCard(
-                  kicker: 'ISSUE CONTEXT',
-                  title:
-                      widget.issuesById[_question.issueId]?.label ?? 'Context',
-                  body:
-                      widget.issuesById[_question.issueId]?.context ??
-                      'This question is scored on the same '
-                          'liberal–conservative issue scale as the '
-                          'rest of the quiz.',
-                ),
-              if (split) importanceCard,
-            ],
-          );
-          if (split) {
-            return FoldSplitView(
-              fold: fold,
-              mode: mode,
-              primary: main,
-              secondary: rail,
-            );
-          }
-          // Unfolded-flat Duo (and any wide canvas — iPad) resolves `single`:
-          // no crease to split around, so compose the companion rail by hand.
-          // The question column keeps a readable measure instead of stretching
-          // edge to edge; phone landscapes are too short to spare the width.
-          final size = MediaQuery.sizeOf(context);
-          if (size.width >= 840 && size.height >= 480) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 680),
-                      child: main,
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: selected == null || _busy ? null : _next,
+                      child: Text(
+                        _index == widget.questions.length - 1
+                            ? 'See my results'
+                            : 'Next',
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  width: 1,
-                  color: AppColors.ink.withValues(alpha: 0.08),
-                ),
-                SizedBox(width: 340, child: rail),
-              ],
-            );
-          }
-          return main;
-        },
-      ),
+                  // The back affordance leaves the app bar in a fold
+                  // split and sits in the working pane's lower corner.
+                  if (split) ...[
+                    const SizedBox(width: 10),
+                    Material(
+                      color: AppColors.sheet,
+                      shape: const CircleBorder(),
+                      child: IconButton(
+                        tooltip: 'Back',
+                        icon: const Icon(Icons.arrow_back),
+                        iconSize: 22,
+                        onPressed: _busy ? null : _back,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ),
+        );
+        final rail = DuoRail(
+          extra: [
+            DuoRailCard(
+              kicker: 'NOW ANSWERING',
+              title:
+                  widget.issuesById[_question.issueId]?.label ??
+                  _question.issueId,
+              body: 'Question ${_index + 1} of ${widget.questions.length}',
+            ),
+            if (_contextVisible)
+              DuoRailCard(
+                kicker: 'ISSUE CONTEXT',
+                title: widget.issuesById[_question.issueId]?.label ?? 'Context',
+                body:
+                    widget.issuesById[_question.issueId]?.context ??
+                    'This question is scored on the same '
+                        'liberal–conservative issue scale as the '
+                        'rest of the quiz.',
+              ),
+            if (split) importanceCard,
+          ],
+        );
+        final Widget body;
+        if (split) {
+          // Book pose puts the companion rail on the left and the working
+          // column on the right; on-table keeps the column up top.
+          body = FoldSplitView(
+            fold: fold,
+            mode: mode,
+            primary: mode == FoldMode.splitVertical ? rail : main,
+            secondary: mode == FoldMode.splitVertical ? main : rail,
+          );
+        } else {
+          // Unfolded-flat Duo (and any wide canvas — iPad) resolves
+          // `single`: no crease to split around, so compose the companion
+          // rail by hand. The question column keeps a readable measure
+          // instead of stretching edge to edge; phone landscapes are too
+          // short to spare the width.
+          final size = MediaQuery.sizeOf(context);
+          body = size.width >= 840 && size.height >= 480
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 680),
+                          child: main,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      color: AppColors.ink.withValues(alpha: 0.08),
+                    ),
+                    SizedBox(width: 340, child: rail),
+                  ],
+                )
+              : main;
+        }
+        return Scaffold(
+          appBar: duoAppBar(
+            // A fold split moves the back affordance into the working
+            // pane's lower corner beside Next.
+            leading: split
+                ? null
+                : IconButton(
+                    tooltip: 'Back',
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: _busy ? null : _back,
+                  ),
+            automaticallyImplyLeading: false,
+            title: Text('Question ${_index + 1} of ${widget.questions.length}'),
+            actions: [
+              TextButton(
+                onPressed: _busy ? null : _exit,
+                child: const Text('Save & exit'),
+              ),
+            ],
+            pane: DuoPane.secondary,
+          ),
+          body: body,
+        );
+      },
     );
   }
 }

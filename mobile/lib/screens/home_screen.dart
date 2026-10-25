@@ -398,19 +398,21 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
           );
-          // In a split the rail beside the fold carries the issue card;
-          // without a fold (or before data loads) home stays one canvas.
+          // In a split the rail beside the fold carries the issue card —
+          // leading left in book pose, below the content on-table. Without
+          // a fold (or before data loads) home stays one canvas.
           final day = widget.day;
           if (!split || day == null) return main;
+          final rail = DuoRail(
+            day: day,
+            issueLabel: widget.issueLabel,
+            issueContext: widget.week?.context,
+          );
           return FoldSplitView(
             fold: fold,
             mode: mode,
-            primary: main,
-            secondary: DuoRail(
-              day: day,
-              issueLabel: widget.issueLabel,
-              issueContext: widget.week?.context,
-            ),
+            primary: mode == FoldMode.splitVertical ? rail : main,
+            secondary: mode == FoldMode.splitVertical ? main : rail,
           );
         },
       ),
