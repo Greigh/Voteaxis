@@ -196,7 +196,18 @@ class _QuizScreenState extends State<QuizScreen> {
 
   String? get _issueLabel => widget.issuesById[_question.issueId]?.label;
 
-  void _showContext() {
+  bool _contextVisible = false;
+
+  void _showContext(FoldMode mode) {
+    // In a fold split the issue context has a home in the companion rail
+    // under the "now answering" card, so the tap toggles that card instead
+    // of opening a sheet.
+    final split =
+        mode == FoldMode.splitVertical || mode == FoldMode.splitHorizontal;
+    if (split) {
+      setState(() => _contextVisible = !_contextVisible);
+      return;
+    }
     final issue = widget.issuesById[_question.issueId];
     final body = issue?.context;
     showFoldAwareSheet<void>(
@@ -352,7 +363,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           ),
                           IconButton(
                             tooltip: 'What this means',
-                            onPressed: _showContext,
+                            onPressed: () => _showContext(mode),
                             icon: const Icon(Icons.help_outline_rounded),
                           ),
                         ],
@@ -461,6 +472,17 @@ class _QuizScreenState extends State<QuizScreen> {
                     _question.issueId,
                 body: 'Question ${_index + 1} of ${widget.questions.length}',
               ),
+              if (_contextVisible)
+                DuoRailCard(
+                  kicker: 'ISSUE CONTEXT',
+                  title:
+                      widget.issuesById[_question.issueId]?.label ?? 'Context',
+                  body:
+                      widget.issuesById[_question.issueId]?.context ??
+                      'This question is scored on the same '
+                          'liberal–conservative issue scale as the '
+                          'rest of the quiz.',
+                ),
               if (split) importanceCard,
             ],
           );
