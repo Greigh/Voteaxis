@@ -2,6 +2,7 @@ import 'package:duo_fold/duo_fold.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../duo/duo_app_bar.dart';
 import '../duo/duo_rail.dart';
 import '../duo/duo_scope.dart';
 import '../models/issue.dart';
@@ -249,7 +250,7 @@ class _QuizScreenState extends State<QuizScreen> {
     final isDealbreaker = _dealbreakers.contains(_question.issueId);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: duoAppBar(
         leading: IconButton(
           tooltip: 'Back',
           icon: const Icon(Icons.arrow_back),
@@ -265,6 +266,34 @@ class _QuizScreenState extends State<QuizScreen> {
       ),
       body: DuoFoldBuilder(
         builder: (context, fold, mode) {
+          final split =
+              mode == FoldMode.splitVertical ||
+              mode == FoldMode.splitHorizontal;
+          final importanceCard = SurfaceCard(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+            title: 'How much does this matter to you?',
+            subtitle: Scoring.importanceLabels[importance],
+            child: Column(
+              children: [
+                Slider(
+                  value: importance.toDouble(),
+                  min: 0,
+                  max: 4,
+                  divisions: 4,
+                  label: Scoring.importanceLabels[importance],
+                  activeColor: AppColors.ink,
+                  onChanged: _busy ? null : (v) => _setImportance(v.round()),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const MonoNote('LOW'),
+                    const MonoNote('ESSENTIAL'),
+                  ],
+                ),
+              ],
+            ),
+          );
           final main = Padding(
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             child: Column(
@@ -364,33 +393,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         );
                       }),
                       const SizedBox(height: 18),
-                      SurfaceCard(
-                        padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-                        title: 'How much does this matter to you?',
-                        subtitle: Scoring.importanceLabels[importance],
-                        child: Column(
-                          children: [
-                            Slider(
-                              value: importance.toDouble(),
-                              min: 0,
-                              max: 4,
-                              divisions: 4,
-                              label: Scoring.importanceLabels[importance],
-                              activeColor: AppColors.ink,
-                              onChanged: _busy
-                                  ? null
-                                  : (v) => _setImportance(v.round()),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const MonoNote('LOW'),
-                                const MonoNote('ESSENTIAL'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Split modes park this beside the fold in the rail.
+                      if (!split) importanceCard,
                       const SizedBox(height: 10),
                       if (widget.showDealbreakers)
                         Material(
@@ -457,11 +461,9 @@ class _QuizScreenState extends State<QuizScreen> {
                     _question.issueId,
                 body: 'Question ${_index + 1} of ${widget.questions.length}',
               ),
+              if (split) importanceCard,
             ],
           );
-          final split =
-              mode == FoldMode.splitVertical ||
-              mode == FoldMode.splitHorizontal;
           if (split) {
             return FoldSplitView(
               fold: fold,

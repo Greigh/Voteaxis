@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../data/app_data.dart';
 import '../data/us_states.dart';
+import '../duo/duo_app_bar.dart';
 import '../duo/duo_scope.dart';
 import '../models/politician.dart';
 import '../models/scoring.dart';
@@ -291,7 +292,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(title: const Text('Explore the roster')),
+      appBar: duoAppBar(title: const Text('Explore the roster')),
       body: DuoFoldBuilder(
         builder: (context, fold, mode) {
           final list = _listPane(context, shown, closenessById, mode);

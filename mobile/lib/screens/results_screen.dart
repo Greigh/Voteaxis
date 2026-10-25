@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../duo/duo_app_bar.dart';
 import '../duo/duo_rail.dart';
 import '../duo/duo_scope.dart';
 import '../data/app_data.dart';
@@ -325,7 +326,7 @@ class _ResultsScreenState extends State<ResultsScreen>
 
     return Scaffold(
       backgroundColor: AppColors.paper,
-      appBar: AppBar(
+      appBar: duoAppBar(
         title: Text(
           'Your spectrum',
           style: GoogleFonts.manrope(fontWeight: FontWeight.w800),
