@@ -75,4 +75,5 @@ AGENTS.md
 CLAUDE.md
 .claude/
 .freebuff/
-.gemini/generated_images/
+.gemini/
+generated_images/
