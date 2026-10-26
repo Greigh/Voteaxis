@@ -1,4 +1,37 @@
-# Voteaxis
+<p align="center">
+  <img src="brand/app_icon.png" alt="Voteaxis" width="150" />
+</p>
+
+<h1 align="center">Voteaxis</h1>
+
+<p align="center">
+  <b>See where you stand. Choose who to vote for.</b><br/>
+  A short quiz places you on Liberal 100 ← 0 → Conservative 100, then ranks
+  ballot candidates by how close they are to your issues.
+</p>
+
+<p align="center">
+  <a href="https://voteaxis.org">Website</a> ·
+  <a href="https://voteaxis.org/methodology">Methodology</a> ·
+  <a href="https://voteaxis.org/privacy">Privacy</a> ·
+  <a href="https://voteaxis.org/support">Support</a> ·
+  <a href="https://api.voteaxis.org/health">API</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Greigh/Voteaxis/actions/workflows/ci.yml"><img src="https://github.com/Greigh/Voteaxis/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-source--available-orange" alt="Source available" /></a>
+  <img src="https://img.shields.io/badge/platforms-iOS%20%C2%B7%20iPadOS%20%C2%B7%20Android-0A84FF" alt="Platforms" />
+  <img src="https://img.shields.io/badge/iOS-TestFlight%201.0.0%2B4-1c1c1e" alt="TestFlight 1.0.0+4" />
+  <a href="https://api.voteaxis.org/health"><img src="https://img.shields.io/badge/API-live-success" alt="API live" /></a>
+</p>
+
+<p align="center">
+  <img src="docs/store-screenshots/ios/iphone-6.9-01-onboarding.png" width="180" alt="Onboarding" />
+  <img src="docs/store-screenshots/ios/iphone-6.9-03-quiz.png" width="180" alt="Quiz" />
+  <img src="docs/store-screenshots/ios/iphone-6.9-04-results.png" width="180" alt="Results" />
+  <img src="docs/store-screenshots/ios/iphone-6.9-05-matches.png" width="180" alt="Matches" />
+</p>
 
 **Voteaxis** is a Greigh Studios product: take a short quiz on the issues that matter, land on a liberal↔conservative axis, and see which American presidents and political figures stand closest to you — and where you diverge.
 
@@ -7,6 +40,19 @@ The **quiz lives only on iOS and Android**. The website is the marketing, method
 **Status:** iOS on TestFlight (`1.0.0+4`), App Store submission in progress. Android next. Site and API live at [voteaxis.org](https://voteaxis.org) and [api.voteaxis.org](https://api.voteaxis.org/health).
 
 > **Source available, not open source.** Everything in this repo is public so the scoring, the privacy claims, and the data behind the roster can be read and verified — but the code, brand, and curated catalogs remain proprietary. See [`LICENSE`](LICENSE).
+
+## Why it’s worth a look
+
+- **Honest scoring** — every figure and every answer sit on the same Liberal 100 ← 0 → Conservative 100 scale. No black box: the full method is public on the [methodology page](https://voteaxis.org/methodology) and in [`mobile/lib/`](mobile/lib/).
+- **Private by design** — no account, no email, no analytics SDK. Answers are encrypted on-device; sharing is a QR or a 6-digit code you hand someone, and shared links are revocable and can be end-to-end encrypted (AES-GCM under a PBKDF2 key the server never sees).
+- **A real ballot, not a vibe** — 738 figures across all 50 states: sitting officials, challengers, and historical figures, with Congress roll-call receipts blended in where the record exists.
+- **Built for foldables** — first-class iPhone Duo support: the quiz opens like a book, context on one pane and answers on the other.
+
+<p align="center">
+  <img src="docs/store-screenshots/ios/duo-inner-landscape-02-quiz.png" width="640" alt="Voteaxis on iPhone Duo — issue context on the left pane, quiz on the right" />
+</p>
+
+<p align="center"><sub>Book pose on iPhone Duo — the rail leads left, the working column right.</sub></p>
 
 ## What’s in the repo
 
