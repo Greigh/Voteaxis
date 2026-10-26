@@ -1,4 +1,5 @@
-Voteaxis 1.0.0 (Build 3)
+Voteaxis 1.0.0 (Build 4)
 
-• Office-history spans now resolve "present" against the current year
-• Deep-link manifest verified against the release signing certificate
+• Reminders: notification permission is now asked only when you turn on
+  the weekly reminder — not at first launch
+• Internal: privacy manifests and release tooling updates

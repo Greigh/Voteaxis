@@ -53,9 +53,16 @@ class IssueReminder {
   static Future<void> init() async {
     if (_initialized) return;
     tz_data.initializeTimeZones();
+    // iOS init defaults would request permission immediately — that prompts
+    // at cold start, long before the user has seen the reminder toggle. Defer
+    // to the explicit request in setEnabled(true).
     const settings = InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      iOS: DarwinInitializationSettings(),
+      iOS: DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      ),
     );
     await _plugin.initialize(settings: settings);
     _initialized = true;
@@ -64,10 +71,7 @@ class IssueReminder {
   /// Enable or disable the daily nudge. Returns whether reminders are now
   /// armed — on iOS/Android the user can decline the permission prompt, in
   /// which case the toggle reports back as off so settings don't lie.
-  static Future<bool> setEnabled(
-    bool enabled, {
-    IssueOfTheWeek? week,
-  }) async {
+  static Future<bool> setEnabled(bool enabled, {IssueOfTheWeek? week}) async {
     await init();
     if (!enabled) {
       await _plugin.cancel(id: _id);
@@ -134,6 +138,8 @@ class IssueReminder {
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
     );
-    debugPrint('IssueReminder: scheduled at ${nextReminderTime(DateTime.now())}');
+    debugPrint(
+      'IssueReminder: scheduled at ${nextReminderTime(DateTime.now())}',
+    );
   }
 }

@@ -1,0 +1,10 @@
+Voteaxis 1.0.0 (Build 4)
+
+• iPhone Duo: book pose splits the working column to the right and the
+  glance rail to the left; propped pose shows the Issue of the Day above
+  the crease
+• Quiz: issue context is always on in the Duo rail; back sits in the
+  pane's lower corner during splits
+• Pane-aware safe areas — content runs right up to the fold instead of
+  leaving dead space
+• Added privacy manifests on the app and widget targets

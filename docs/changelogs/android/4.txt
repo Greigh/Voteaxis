@@ -1,0 +1,5 @@
+Voteaxis 1.0.0 (Build 4)
+
+• Reminders: notification permission is now asked only when you turn on
+  the weekly reminder — not at first launch
+• Internal: privacy manifests and release tooling updates
