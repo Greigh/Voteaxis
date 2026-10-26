@@ -1,0 +1,1492 @@
+{
+  "product": "Voteaxis",
+  "design_reference": "Sensecast Google Play screenshot campaign",
+  "design_reference_url": "https://play.google.com/store/apps/details?id=com.greighstudios.sensecast",
+  "source_platform": "iOS, including 16 native iPhone Duo Simulator captures",
+  "note": "All app panels use real captures. Duo variants use native outer and inner display captures in both orientations, not resized iPhone or iPad layouts. Duo spectrum and matches show a completed 25-question sample quiz with Neutral responses, standard importance, and no dealbreakers; these are demonstration values, not the owner's political preferences. Header and Search Results artwork uses real iPhone captures. Google Play variants adapt the original iOS captures with system bars removed. App UI is not regenerated. All screenshot panels are uniformly resized. The 5244×2950 creative is deliberately shared between Header and Search Results, as supported by Apple.",
+  "format": "24-bit opaque sRGB PNG",
+  "asset_count": 50,
+  "assets": [
+    {
+      "file": "app-store/iphone-6.9/01-onboarding.png",
+      "width": 1320,
+      "height": 2868,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/iphone-6.9-01-onboarding.png",
+      "source_sha256": "ee5c4956c4f4ba5a5b7401c964314b68eb7cda733a623df3eebce0f39fa46409",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 140,
+        "y": 736,
+        "width": 1040,
+        "height": 2110,
+        "radius": 48
+      },
+      "headline": "Where do you land?",
+      "caption": "Your views. Your spectrum. Start with the issues that matter.",
+      "alt_text": "Where do you land? Voteaxis onboarding screen.",
+      "sha256": "2c4d435274278eeaaeec13c6dc361e3c25ca9bb56ede5f5150c97b6dd44971b0",
+      "bytes": 1644286
+    },
+    {
+      "file": "app-store/iphone-6.9/02-home.png",
+      "width": 1320,
+      "height": 2868,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/iphone-6.9-02-home.png",
+      "source_sha256": "796b5116f5ba77f095c10fc77e31e08c504868dd892cd01b86ea54df735eab55",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 140,
+        "y": 736,
+        "width": 1040,
+        "height": 2110,
+        "radius": 48
+      },
+      "headline": "Your views. Your starting point.",
+      "caption": "Take a short quiz, explore the roster, or set your place on the axis.",
+      "alt_text": "Your views. Your starting point. Voteaxis home screen.",
+      "sha256": "53911b7cce4db8bb109e7b6f25b890468be9e6e743377563bafb9c22ba4218b1",
+      "bytes": 1286523
+    },
+    {
+      "file": "app-store/iphone-6.9/03-quiz.png",
+      "width": 1320,
+      "height": 2868,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/iphone-6.9-03-quiz.png",
+      "source_sha256": "ea6e1d70e26470ef1764fd223b54caa032bec691c8f232cc86ca31146c45479a",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 140,
+        "y": 736,
+        "width": 1040,
+        "height": 2110,
+        "radius": 48
+      },
+      "headline": "Make every answer count.",
+      "caption": "Answer real questions. Give more weight to the issues that matter to you.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "30519faab4131dac2b7194ec1d03655224594611c9a0efd1421f53a2f36d0074",
+      "bytes": 1139218
+    },
+    {
+      "file": "app-store/iphone-6.9/04-results.png",
+      "width": 1320,
+      "height": 2868,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+      "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 140,
+        "y": 736,
+        "width": 1040,
+        "height": 2110,
+        "radius": 48
+      },
+      "headline": "See your political spectrum.",
+      "caption": "One clear placement, with a breakdown across five pillars.",
+      "alt_text": "See your political spectrum. Voteaxis results screen.",
+      "sha256": "bda320e409f17cac3d32b99892c25217b020374d8ea05a309bada753b34eeccb",
+      "bytes": 1231514
+    },
+    {
+      "file": "app-store/iphone-6.9/05-matches.png",
+      "width": 1320,
+      "height": 2868,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/iphone-6.9-05-matches.png",
+      "source_sha256": "5ed803e105309fefe678eeb54f6100b155010dde8f2843474164011103436051",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 140,
+        "y": 736,
+        "width": 1040,
+        "height": 2110,
+        "radius": 48
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Explore politicians ranked by how closely their positions match yours.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "bd5c01efc5d9c7f054ec7a5b725ec20644c98c1010460809f2d4261271b09010",
+      "bytes": 1281528
+    },
+    {
+      "file": "app-store/ipad-13/01-home.png",
+      "width": 2064,
+      "height": 2752,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/ipad-13-01-home.png",
+      "source_sha256": "dcf7f623dc7f9938385769649ebfa8e142fd23915eb4f9cb6acc2e57ea82f5ac",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 322,
+        "y": 824,
+        "width": 1420,
+        "height": 1849,
+        "radius": 42
+      },
+      "headline": "Your views. Your starting point.",
+      "caption": "Take a short quiz, explore the roster, or set your place on the axis.",
+      "alt_text": "Your views. Your starting point. Voteaxis home screen.",
+      "sha256": "836bbe095517e40550df7204b6787f310cd5f64df5e9d839f7a4f70d4836121d",
+      "bytes": 1821155
+    },
+    {
+      "file": "app-store/ipad-13/02-quiz.png",
+      "width": 2064,
+      "height": 2752,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/ipad-13-02-quiz.png",
+      "source_sha256": "931ce1d094abe970f4f6adbd129448eda29de8fa62417bdbbd74fcec3859915c",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 322,
+        "y": 824,
+        "width": 1420,
+        "height": 1849,
+        "radius": 42
+      },
+      "headline": "Make every answer count.",
+      "caption": "Answer real questions. Give more weight to the issues that matter to you.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "25c8b07b959cd3159fd30b62997faa1dd14cc054b11313263ad8386157a2e545",
+      "bytes": 1719084
+    },
+    {
+      "file": "app-store/ipad-13/03-results.png",
+      "width": 2064,
+      "height": 2752,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/ipad-13-03-results.png",
+      "source_sha256": "bfcb9afaae84d4e3c4b8ace94a19537a32adda405b1d2398c0cb688532b26c61",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 322,
+        "y": 824,
+        "width": 1420,
+        "height": 1849,
+        "radius": 42
+      },
+      "headline": "See your political spectrum.",
+      "caption": "One clear placement, with a breakdown across five pillars.",
+      "alt_text": "See your political spectrum. Voteaxis results screen.",
+      "sha256": "f4597ad55afcaedb34fe3e88f309769a31ca447a6b61a1d9768a6575148d701e",
+      "bytes": 1781323
+    },
+    {
+      "file": "app-store/ipad-13/04-matches.png",
+      "width": 2064,
+      "height": 2752,
+      "platform": "App Store",
+      "source": "docs/store-screenshots/ios/ipad-13-04-matches.png",
+      "source_sha256": "38f70317920ea9aacd3c199054744e594df5d251cdcbedef68b250093d42e483",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 322,
+        "y": 824,
+        "width": 1420,
+        "height": 1849,
+        "radius": 42
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Explore politicians ranked by how closely their positions match yours.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "080882646afc1c2198092ab59b8f7c5825e56597881e11f5fe2681c064e21b63",
+      "bytes": 1874267
+    },
+    {
+      "file": "play-store/phone/01-onboarding.png",
+      "width": 1080,
+      "height": 1920,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/iphone-6.9-01-onboarding.png",
+      "source_sha256": "ee5c4956c4f4ba5a5b7401c964314b68eb7cda733a623df3eebce0f39fa46409",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 82,
+        "y": 568,
+        "width": 916,
+        "height": 1858,
+        "radius": 38
+      },
+      "headline": "Where do you land?",
+      "caption": "Your views. Your spectrum. Start with the issues that matter.",
+      "alt_text": "Where do you land? Voteaxis onboarding screen.",
+      "sha256": "7130aaa9e6e3b8c818aa773854853f5ccf8badce8735e75eb11a28c0e307f7d7",
+      "bytes": 1092637
+    },
+    {
+      "file": "play-store/phone/02-home.png",
+      "width": 1080,
+      "height": 1920,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/iphone-6.9-02-home.png",
+      "source_sha256": "796b5116f5ba77f095c10fc77e31e08c504868dd892cd01b86ea54df735eab55",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 82,
+        "y": 568,
+        "width": 916,
+        "height": 1858,
+        "radius": 38
+      },
+      "headline": "Your views. Your starting point.",
+      "caption": "Take a short quiz, explore the roster, or set your place on the axis.",
+      "alt_text": "Your views. Your starting point. Voteaxis home screen.",
+      "sha256": "b2ad72ee9c7127dcb902d56ec584d395648e49381b28785dc5effdda0702d571",
+      "bytes": 827538
+    },
+    {
+      "file": "play-store/phone/03-quiz.png",
+      "width": 1080,
+      "height": 1920,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/iphone-6.9-03-quiz.png",
+      "source_sha256": "ea6e1d70e26470ef1764fd223b54caa032bec691c8f232cc86ca31146c45479a",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 82,
+        "y": 568,
+        "width": 916,
+        "height": 1858,
+        "radius": 38
+      },
+      "headline": "Make every answer count.",
+      "caption": "Answer real questions. Give more weight to the issues that matter to you.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "b48b125b937f881dbaffc2d5d760b962502d8bddbef6cd6b59f8a00c1fa138d9",
+      "bytes": 731057
+    },
+    {
+      "file": "play-store/phone/04-results.png",
+      "width": 1080,
+      "height": 1920,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+      "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 82,
+        "y": 568,
+        "width": 916,
+        "height": 1858,
+        "radius": 38
+      },
+      "headline": "See your political spectrum.",
+      "caption": "One clear placement, with a breakdown across five pillars.",
+      "alt_text": "See your political spectrum. Voteaxis results screen.",
+      "sha256": "b82bfc1dda945f7e3a49e402e95b082c224bbead639c84ce4c1b8225873b8913",
+      "bytes": 722592
+    },
+    {
+      "file": "play-store/phone/05-matches.png",
+      "width": 1080,
+      "height": 1920,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/iphone-6.9-05-matches.png",
+      "source_sha256": "5ed803e105309fefe678eeb54f6100b155010dde8f2843474164011103436051",
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 82,
+        "y": 568,
+        "width": 916,
+        "height": 1858,
+        "radius": 38
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Explore politicians ranked by how closely their positions match yours.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "bac8f2acd6408ccf05ac7353e2557efeeb916e941032572bc2942e4b8d9c3d2c",
+      "bytes": 766619
+    },
+    {
+      "file": "play-store/tablet/01-home.png",
+      "width": 1440,
+      "height": 2560,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/ipad-13-01-home.png",
+      "source_sha256": "dcf7f623dc7f9938385769649ebfa8e142fd23915eb4f9cb6acc2e57ea82f5ac",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 90,
+        "y": 768,
+        "width": 1260,
+        "height": 1641,
+        "radius": 38
+      },
+      "headline": "Your views. Your starting point.",
+      "caption": "Take a short quiz, explore the roster, or set your place on the axis.",
+      "alt_text": "Your views. Your starting point. Voteaxis home screen.",
+      "sha256": "cc1c43614e331af86aafa4a07bf8824d6252de2fd982c993c20cd0613eb4a561",
+      "bytes": 1122643
+    },
+    {
+      "file": "play-store/tablet/02-quiz.png",
+      "width": 1440,
+      "height": 2560,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/ipad-13-02-quiz.png",
+      "source_sha256": "931ce1d094abe970f4f6adbd129448eda29de8fa62417bdbbd74fcec3859915c",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 90,
+        "y": 768,
+        "width": 1260,
+        "height": 1641,
+        "radius": 38
+      },
+      "headline": "Make every answer count.",
+      "caption": "Answer real questions. Give more weight to the issues that matter to you.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "1e18ec2ad37a3e83183f8c85d7817bb145a5668e60194a53ed51a436ea2cbcfa",
+      "bytes": 1045368
+    },
+    {
+      "file": "play-store/tablet/03-results.png",
+      "width": 1440,
+      "height": 2560,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/ipad-13-03-results.png",
+      "source_sha256": "bfcb9afaae84d4e3c4b8ace94a19537a32adda405b1d2398c0cb688532b26c61",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 90,
+        "y": 768,
+        "width": 1260,
+        "height": 1641,
+        "radius": 38
+      },
+      "headline": "See your political spectrum.",
+      "caption": "One clear placement, with a breakdown across five pillars.",
+      "alt_text": "See your political spectrum. Voteaxis results screen.",
+      "sha256": "173c9f5d03328eead9d190f5f877ccc45d7332d66263249731554f4614613d04",
+      "bytes": 1089686
+    },
+    {
+      "file": "play-store/tablet/04-matches.png",
+      "width": 1440,
+      "height": 2560,
+      "platform": "Google Play",
+      "source": "docs/store-screenshots/ios/ipad-13-04-matches.png",
+      "source_sha256": "38f70317920ea9aacd3c199054744e594df5d251cdcbedef68b250093d42e483",
+      "crop": {
+        "x": 0,
+        "y": 64,
+        "width": 2064,
+        "height": 2688
+      },
+      "panel": {
+        "x": 90,
+        "y": 768,
+        "width": 1260,
+        "height": 1641,
+        "radius": 38
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Explore politicians ranked by how closely their positions match yours.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "af6c9226481edd444f522a888660418904bff88fa3aaf050fc3ef674464a263a",
+      "bytes": 1164468
+    },
+    {
+      "file": "play-store/feature-graphic-1024x500.png",
+      "width": 1024,
+      "height": 500,
+      "platform": "Google Play",
+      "alt_text": "Voteaxis: Where do you land? A blue-to-red political spectrum with a center marker on a navy background.",
+      "sha256": "481b745fc4e3df95ffffe343206f2ac3cd74cfa99f31a2f71e58fb35a46df1fd",
+      "bytes": 382546
+    },
+    {
+      "file": "app-store/iphone-6.1/01-onboarding.png",
+      "width": 1179,
+      "height": 2556,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-01-onboarding.png",
+      "source_sha256": "ee5c4956c4f4ba5a5b7401c964314b68eb7cda733a623df3eebce0f39fa46409",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 125,
+        "y": 657,
+        "width": 929,
+        "height": 1885,
+        "radius": 43
+      },
+      "headline": "Where do you land?",
+      "caption": "Your views. Your spectrum. Start with the issues that matter.",
+      "alt_text": "Where do you land? Voteaxis onboarding screen.",
+      "sha256": "e35027ab52559a21133bba18d1ce0e4386af02d041cc6db5bb52b28eda71a169",
+      "bytes": 1353955
+    },
+    {
+      "file": "app-store/iphone-6.1/02-home.png",
+      "width": 1179,
+      "height": 2556,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-02-home.png",
+      "source_sha256": "796b5116f5ba77f095c10fc77e31e08c504868dd892cd01b86ea54df735eab55",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 125,
+        "y": 657,
+        "width": 929,
+        "height": 1885,
+        "radius": 43
+      },
+      "headline": "Your views. Your starting point.",
+      "caption": "Take a short quiz, explore the roster, or set your place on the axis.",
+      "alt_text": "Your views. Your starting point. Voteaxis home screen.",
+      "sha256": "8452a0fb752e0c76e3fb4f357800926fb9de7ae6a83d74e9691f1ca7602059c2",
+      "bytes": 1099177
+    },
+    {
+      "file": "app-store/iphone-6.1/03-quiz.png",
+      "width": 1179,
+      "height": 2556,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-03-quiz.png",
+      "source_sha256": "ea6e1d70e26470ef1764fd223b54caa032bec691c8f232cc86ca31146c45479a",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 125,
+        "y": 657,
+        "width": 929,
+        "height": 1885,
+        "radius": 43
+      },
+      "headline": "Make every answer count.",
+      "caption": "Answer real questions. Give more weight to the issues that matter to you.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "03ca21a20dc33d076330fce203144c0cc60da9a0c6c6c3698fa70f390e50d7ab",
+      "bytes": 975267
+    },
+    {
+      "file": "app-store/iphone-6.1/04-results.png",
+      "width": 1179,
+      "height": 2556,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+      "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 125,
+        "y": 657,
+        "width": 929,
+        "height": 1885,
+        "radius": 43
+      },
+      "headline": "See your political spectrum.",
+      "caption": "One clear placement, with a breakdown across five pillars.",
+      "alt_text": "See your political spectrum. Voteaxis results screen.",
+      "sha256": "ffb7a24ac698c9ca2a55fc159f0ac69253e8faced47b0b66c32c50985cefd3ee",
+      "bytes": 1046837
+    },
+    {
+      "file": "app-store/iphone-6.1/05-matches.png",
+      "width": 1179,
+      "height": 2556,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-05-matches.png",
+      "source_sha256": "5ed803e105309fefe678eeb54f6100b155010dde8f2843474164011103436051",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 125,
+        "y": 657,
+        "width": 929,
+        "height": 1885,
+        "radius": 43
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Explore politicians ranked by how closely their positions match yours.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "6630b3700996ce8f83c595bca3dfa6ab12b04801f91f0b7597d2cb3c068a143d",
+      "bytes": 1095579
+    },
+    {
+      "file": "app-store/iphone-6.3/01-onboarding.png",
+      "width": 1206,
+      "height": 2622,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-01-onboarding.png",
+      "source_sha256": "ee5c4956c4f4ba5a5b7401c964314b68eb7cda733a623df3eebce0f39fa46409",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 128,
+        "y": 672,
+        "width": 950,
+        "height": 1927,
+        "radius": 44
+      },
+      "headline": "Where do you land?",
+      "caption": "Your views. Your spectrum. Start with the issues that matter.",
+      "alt_text": "Where do you land? Voteaxis onboarding screen.",
+      "sha256": "1e0d960ec6d2d796122b786c04b80af8c5b034cdfd39c0f85bfab860a077d2b3",
+      "bytes": 1406835
+    },
+    {
+      "file": "app-store/iphone-6.3/02-home.png",
+      "width": 1206,
+      "height": 2622,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-02-home.png",
+      "source_sha256": "796b5116f5ba77f095c10fc77e31e08c504868dd892cd01b86ea54df735eab55",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 128,
+        "y": 672,
+        "width": 950,
+        "height": 1927,
+        "radius": 44
+      },
+      "headline": "Your views. Your starting point.",
+      "caption": "Take a short quiz, explore the roster, or set your place on the axis.",
+      "alt_text": "Your views. Your starting point. Voteaxis home screen.",
+      "sha256": "0ac08e0a215e7a82ac89d8283876cd91094f1e9377d6c615ee96b6fa8334a800",
+      "bytes": 1139418
+    },
+    {
+      "file": "app-store/iphone-6.3/03-quiz.png",
+      "width": 1206,
+      "height": 2622,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-03-quiz.png",
+      "source_sha256": "ea6e1d70e26470ef1764fd223b54caa032bec691c8f232cc86ca31146c45479a",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 128,
+        "y": 672,
+        "width": 950,
+        "height": 1927,
+        "radius": 44
+      },
+      "headline": "Make every answer count.",
+      "caption": "Answer real questions. Give more weight to the issues that matter to you.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "49ebc43e3749f9e4feb5bb61b75af5fdfd8c3adf844bf6775cdfb510173b288c",
+      "bytes": 1010328
+    },
+    {
+      "file": "app-store/iphone-6.3/04-results.png",
+      "width": 1206,
+      "height": 2622,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+      "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 128,
+        "y": 672,
+        "width": 950,
+        "height": 1927,
+        "radius": 44
+      },
+      "headline": "See your political spectrum.",
+      "caption": "One clear placement, with a breakdown across five pillars.",
+      "alt_text": "See your political spectrum. Voteaxis results screen.",
+      "sha256": "521fe531690d4f71903cdea97cd12c9b7177739668f6881c3553efeb09bd1f4d",
+      "bytes": 1085133
+    },
+    {
+      "file": "app-store/iphone-6.3/05-matches.png",
+      "width": 1206,
+      "height": 2622,
+      "platform": "App Store",
+      "capture_device": "iPhone 6.9-inch",
+      "source": "docs/store-screenshots/ios/iphone-6.9-05-matches.png",
+      "source_sha256": "5ed803e105309fefe678eeb54f6100b155010dde8f2843474164011103436051",
+      "source_dimensions": {
+        "width": 1320,
+        "height": 2868
+      },
+      "crop": {
+        "x": 0,
+        "y": 190,
+        "width": 1320,
+        "height": 2678
+      },
+      "panel": {
+        "x": 128,
+        "y": 672,
+        "width": 950,
+        "height": 1927,
+        "radius": 44
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Explore politicians ranked by how closely their positions match yours.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "587d1bfbb4c49d77b59ebdf47e620216a5537983ba4a6a3546add00300b31666",
+      "bytes": 1135622
+    },
+    {
+      "file": "app-store/duo-outer-portrait/01-home.png",
+      "width": 1398,
+      "height": 2034,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, portrait",
+      "source": "docs/store-screenshots/ios/duo-outer-portrait-01-home.png",
+      "source_sha256": "b4b908c90071c7a2ce29da233d9d0ca8e1dac8b9b7233632465e1e5f0cdb49e2",
+      "source_dimensions": {
+        "width": 1398,
+        "height": 2034
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 1398,
+        "height": 2034
+      },
+      "panel": {
+        "x": 279,
+        "y": 680,
+        "width": 840,
+        "height": 1222,
+        "radius": 38
+      },
+      "headline": "Your views. Room to explore.",
+      "caption": "Your quiz, spectrum, and matches. Ready on either Duo display.",
+      "alt_text": "Your views. Room to explore. Voteaxis home screen.",
+      "sha256": "ff6db6519baf761fc5adfbfba4fd6557413e46566c241900787f0ed55e6c7d33",
+      "bytes": 1347420
+    },
+    {
+      "file": "app-store/duo-outer-portrait/02-quiz.png",
+      "width": 1398,
+      "height": 2034,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, portrait",
+      "source": "docs/store-screenshots/ios/duo-outer-portrait-02-quiz.png",
+      "source_sha256": "e98f8df63c6e49ed02ee8c5671ab62270153e9be08714aae0a5590e7afd70611",
+      "source_dimensions": {
+        "width": 1398,
+        "height": 2034
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 1398,
+        "height": 2034
+      },
+      "panel": {
+        "x": 279,
+        "y": 680,
+        "width": 840,
+        "height": 1222,
+        "radius": 38
+      },
+      "headline": "Make every answer count.",
+      "caption": "Explore the issues in a layout that adapts as you unfold.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "a94c36ad9947afc73a9110491d7af4bedc8df4adce51198f5606384a58bfeb7d",
+      "bytes": 1308614
+    },
+    {
+      "file": "app-store/duo-outer-portrait/03-results.png",
+      "width": 1398,
+      "height": 2034,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, portrait",
+      "source": "docs/store-screenshots/ios/duo-outer-portrait-03-results.png",
+      "source_sha256": "e3255e251cf07ae6e8452b4b09e38837f0e0bf461662af7a30204bfdaec586f8",
+      "source_dimensions": {
+        "width": 1398,
+        "height": 2034
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 1398,
+        "height": 2034
+      },
+      "panel": {
+        "x": 279,
+        "y": 680,
+        "width": 840,
+        "height": 1222,
+        "radius": 38
+      },
+      "headline": "Your spectrum. Your way.",
+      "caption": "Take the quiz or set your level. See where your views land.",
+      "alt_text": "Your spectrum. Your way. Voteaxis results screen.",
+      "sha256": "b058208af785005ab682e83f16f6c00d32c7a409883813792862f2793a0e2646",
+      "bytes": 1287634
+    },
+    {
+      "file": "app-store/duo-outer-portrait/04-matches.png",
+      "width": 1398,
+      "height": 2034,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, portrait",
+      "source": "docs/store-screenshots/ios/duo-outer-portrait-04-matches.png",
+      "source_sha256": "0fe17760fdb794a76de64823b1de025badb9de216bddb6f9bf361193ff9dd286",
+      "source_dimensions": {
+        "width": 1398,
+        "height": 2034
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 1398,
+        "height": 2034
+      },
+      "panel": {
+        "x": 279,
+        "y": 680,
+        "width": 840,
+        "height": 1222,
+        "radius": 38
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Compare political figures by how their views overlap.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "4324860bcb9e3ecc25006891c062d95fed560f5bcb6c2a7ac068ce57254a8f70",
+      "bytes": 1333587
+    },
+    {
+      "file": "app-store/duo-inner-portrait/01-home.png",
+      "width": 2007,
+      "height": 2853,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, portrait",
+      "source": "docs/store-screenshots/ios/duo-inner-portrait-01-home.png",
+      "source_sha256": "f3170a9c9c40569d09c87f31785a9a5d858c68c9527427d2ccbb483d5243dd1e",
+      "source_dimensions": {
+        "width": 2007,
+        "height": 2853
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2007,
+        "height": 2853
+      },
+      "panel": {
+        "x": 334,
+        "y": 806,
+        "width": 1340,
+        "height": 1905,
+        "radius": 43
+      },
+      "headline": "Your views. Room to explore.",
+      "caption": "Your quiz, spectrum, and matches. Ready on either Duo display.",
+      "alt_text": "Your views. Room to explore. Voteaxis home screen.",
+      "sha256": "fd2c483d51356462c16b87cd60225e8a682c160d4f7799721c9e794829707540",
+      "bytes": 1940046
+    },
+    {
+      "file": "app-store/duo-inner-portrait/02-quiz.png",
+      "width": 2007,
+      "height": 2853,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, portrait",
+      "source": "docs/store-screenshots/ios/duo-inner-portrait-02-quiz.png",
+      "source_sha256": "8a67c0058bf61183c5830c825fa5e8b42a3650be6278924427e55eb2bb3d897f",
+      "source_dimensions": {
+        "width": 2007,
+        "height": 2853
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2007,
+        "height": 2853
+      },
+      "panel": {
+        "x": 334,
+        "y": 806,
+        "width": 1340,
+        "height": 1905,
+        "radius": 43
+      },
+      "headline": "Make every answer count.",
+      "caption": "Explore the issues in a layout that adapts as you unfold.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "ad7e702ff2f832dad49d148227a18e321ea0649da23de3de1a26b13b0fac2aee",
+      "bytes": 1816166
+    },
+    {
+      "file": "app-store/duo-inner-portrait/03-results.png",
+      "width": 2007,
+      "height": 2853,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, portrait",
+      "source": "docs/store-screenshots/ios/duo-inner-portrait-03-results.png",
+      "source_sha256": "fcaa5eec173d6c32c73bd17cd5b904a6f1919658cceb3bb802a446fffc5462fd",
+      "source_dimensions": {
+        "width": 2007,
+        "height": 2853
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2007,
+        "height": 2853
+      },
+      "panel": {
+        "x": 334,
+        "y": 806,
+        "width": 1340,
+        "height": 1905,
+        "radius": 43
+      },
+      "headline": "Your spectrum. Your way.",
+      "caption": "Take the quiz or set your level. See where your views land.",
+      "alt_text": "Your spectrum. Your way. Voteaxis results screen.",
+      "sha256": "54fd4f05c4c41f1865315bc66fc97f547c09bdf4de13b3c58f737bce7de0fc85",
+      "bytes": 1867795
+    },
+    {
+      "file": "app-store/duo-inner-portrait/04-matches.png",
+      "width": 2007,
+      "height": 2853,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, portrait",
+      "source": "docs/store-screenshots/ios/duo-inner-portrait-04-matches.png",
+      "source_sha256": "a6cadbd13704178d7552d5c3ed332543653332dc6c10d3696217bb79b7fa7a2f",
+      "source_dimensions": {
+        "width": 2007,
+        "height": 2853
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2007,
+        "height": 2853
+      },
+      "panel": {
+        "x": 334,
+        "y": 806,
+        "width": 1340,
+        "height": 1905,
+        "radius": 43
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Compare political figures by how their views overlap.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "f8c8a569026efabf26cef80fd770577843e81cfb8a50b6c5df968eb42dbf265b",
+      "bytes": 1915387
+    },
+    {
+      "file": "app-store/duo-outer-landscape/01-home.png",
+      "width": 2034,
+      "height": 1398,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, landscape",
+      "source": "docs/store-screenshots/ios/duo-outer-landscape-01-home.png",
+      "source_sha256": "c2c4e3282bcf6b29eb329f0dcb319d415980704417237cb1391d4c8cbb37d81b",
+      "source_dimensions": {
+        "width": 2034,
+        "height": 1398
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2034,
+        "height": 1398
+      },
+      "panel": {
+        "x": 790,
+        "y": 287,
+        "width": 1130,
+        "height": 777,
+        "radius": 36
+      },
+      "headline": "Your views. Room to explore.",
+      "caption": "Your quiz, spectrum, and matches. Ready on either Duo display.",
+      "alt_text": "Your views. Room to explore. Voteaxis home screen.",
+      "sha256": "1e001efb236cf71e6baadd8912c66703ed65491eadc03b1177148074ad6fc58b",
+      "bytes": 1334416
+    },
+    {
+      "file": "app-store/duo-outer-landscape/02-quiz.png",
+      "width": 2034,
+      "height": 1398,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, landscape",
+      "source": "docs/store-screenshots/ios/duo-outer-landscape-02-quiz.png",
+      "source_sha256": "f5afd8452d74b5ca12e8b5ab2110684ae444b9c2a667c07a3e6e14014e97f188",
+      "source_dimensions": {
+        "width": 2034,
+        "height": 1398
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2034,
+        "height": 1398
+      },
+      "panel": {
+        "x": 790,
+        "y": 287,
+        "width": 1130,
+        "height": 777,
+        "radius": 36
+      },
+      "headline": "Make every answer count.",
+      "caption": "Explore the issues in a layout that adapts as you unfold.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "a88132fe0909eb4ea2c388dbea57525e63681eaddb79fa8fde61451329bcded9",
+      "bytes": 1316273
+    },
+    {
+      "file": "app-store/duo-outer-landscape/03-results.png",
+      "width": 2034,
+      "height": 1398,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, landscape",
+      "source": "docs/store-screenshots/ios/duo-outer-landscape-03-results.png",
+      "source_sha256": "48d877b2644a34135ea568d63c44b1b18fd5ac57652b1a4ce8b76ef67072dc7b",
+      "source_dimensions": {
+        "width": 2034,
+        "height": 1398
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2034,
+        "height": 1398
+      },
+      "panel": {
+        "x": 790,
+        "y": 287,
+        "width": 1130,
+        "height": 777,
+        "radius": 36
+      },
+      "headline": "Your spectrum. Your way.",
+      "caption": "Take the quiz or set your level. See where your views land.",
+      "alt_text": "Your spectrum. Your way. Voteaxis results screen.",
+      "sha256": "0984dd65232fbbc4ba7ed59901943053dc50c22cc7134a011f33cc63712e1c69",
+      "bytes": 1282814
+    },
+    {
+      "file": "app-store/duo-outer-landscape/04-matches.png",
+      "width": 2034,
+      "height": 1398,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo outer display, landscape",
+      "source": "docs/store-screenshots/ios/duo-outer-landscape-04-matches.png",
+      "source_sha256": "a11936c24f449671787177b984eaa87912fb54a246737b5a963fee41bc5750c8",
+      "source_dimensions": {
+        "width": 2034,
+        "height": 1398
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2034,
+        "height": 1398
+      },
+      "panel": {
+        "x": 790,
+        "y": 287,
+        "width": 1130,
+        "height": 777,
+        "radius": 36
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Compare political figures by how their views overlap.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "6b14b86eba1d8026df9f7058f7f1405b3110e9f9043efa782427a2c0a0d9bc5c",
+      "bytes": 1310733
+    },
+    {
+      "file": "app-store/duo-inner-landscape/01-home.png",
+      "width": 2853,
+      "height": 2007,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, landscape",
+      "source": "docs/store-screenshots/ios/duo-inner-landscape-01-home.png",
+      "source_sha256": "7a139c138793e7e46831b2d5b3d82cb8f220e3ceab8291ef3a50b839af7a8d99",
+      "source_dimensions": {
+        "width": 2853,
+        "height": 2007
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2853,
+        "height": 2007
+      },
+      "panel": {
+        "x": 1080,
+        "y": 396,
+        "width": 1650,
+        "height": 1161,
+        "radius": 44
+      },
+      "headline": "Your views. Room to explore.",
+      "caption": "Your quiz, spectrum, and matches. Ready on either Duo display.",
+      "alt_text": "Your views. Room to explore. Voteaxis home screen.",
+      "sha256": "fa7629120b3eaffed98d05b9bd31525e82e8a5f926e03b1711993da28ae0375d",
+      "bytes": 2168024
+    },
+    {
+      "file": "app-store/duo-inner-landscape/02-quiz.png",
+      "width": 2853,
+      "height": 2007,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, landscape",
+      "source": "docs/store-screenshots/ios/duo-inner-landscape-02-quiz.png",
+      "source_sha256": "a90b8c9029eec6b98c9bcf5730f866392b6fbee49fd766b239dde4bdbf8f079b",
+      "source_dimensions": {
+        "width": 2853,
+        "height": 2007
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2853,
+        "height": 2007
+      },
+      "panel": {
+        "x": 1080,
+        "y": 396,
+        "width": 1650,
+        "height": 1161,
+        "radius": 44
+      },
+      "headline": "Make every answer count.",
+      "caption": "Explore the issues in a layout that adapts as you unfold.",
+      "alt_text": "Make every answer count. Voteaxis quiz screen.",
+      "sha256": "ea668cffe0a5f0052b8b51d64db498dfaf363e38e734f48fb6c803ea0e05f58b",
+      "bytes": 2189378
+    },
+    {
+      "file": "app-store/duo-inner-landscape/03-results.png",
+      "width": 2853,
+      "height": 2007,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, landscape",
+      "source": "docs/store-screenshots/ios/duo-inner-landscape-03-results.png",
+      "source_sha256": "ca8ac1b476076b728b14799a9362b884bc97ca0e1626791006fffc48c33d7679",
+      "source_dimensions": {
+        "width": 2853,
+        "height": 2007
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2853,
+        "height": 2007
+      },
+      "panel": {
+        "x": 1080,
+        "y": 396,
+        "width": 1650,
+        "height": 1161,
+        "radius": 44
+      },
+      "headline": "Your spectrum. Your way.",
+      "caption": "Take the quiz or set your level. See where your views land.",
+      "alt_text": "Your spectrum. Your way. Voteaxis results screen.",
+      "sha256": "cbbe43c3e7a080b725f29a2298bdca27ebe3007bc9cbfc78c0f0187ed6e3dd54",
+      "bytes": 2120500
+    },
+    {
+      "file": "app-store/duo-inner-landscape/04-matches.png",
+      "width": 2853,
+      "height": 2007,
+      "platform": "App Store",
+      "capture_device": "iPhone Duo inner display, landscape",
+      "source": "docs/store-screenshots/ios/duo-inner-landscape-04-matches.png",
+      "source_sha256": "b3481a14232f93a6e523801c43d0bbd881501a7a98f359a9076a45b7cfd9380e",
+      "source_dimensions": {
+        "width": 2853,
+        "height": 2007
+      },
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 2853,
+        "height": 2007
+      },
+      "panel": {
+        "x": 1080,
+        "y": 396,
+        "width": 1650,
+        "height": 1161,
+        "radius": 44
+      },
+      "headline": "Find who stands closest.",
+      "caption": "Compare political figures by how their views overlap.",
+      "alt_text": "Find who stands closest. Voteaxis matches screen.",
+      "sha256": "f3322767cf173907e1eb3b8515f5f0d3dd3538c9083dafc92e25a07db2694e24",
+      "bytes": 2161670
+    },
+    {
+      "file": "app-store/header/header-5244x2950.png",
+      "width": 5244,
+      "height": 2950,
+      "platform": "App Store",
+      "placement": "Product page Header",
+      "headline": "Where do you land?",
+      "source_panels": [
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-05-matches.png",
+          "source_sha256": "5ed803e105309fefe678eeb54f6100b155010dde8f2843474164011103436051",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 4138,
+            "y": 765,
+            "width": 915,
+            "height": 1856,
+            "radius": 74
+          }
+        },
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+          "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 3032,
+            "y": 423,
+            "width": 1311,
+            "height": 2660,
+            "radius": 74
+          }
+        }
+      ],
+      "sha256": "9146eb5a1fe94e32099937719ce4f8847dd7410268f4eaaff39c976baeb107dd",
+      "bytes": 4558628
+    },
+    {
+      "file": "app-store/header/header-3840x1646.png",
+      "width": 3840,
+      "height": 1646,
+      "platform": "App Store",
+      "placement": "Product page Header",
+      "headline": "Where do you land?",
+      "source_panels": [
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-05-matches.png",
+          "source_sha256": "5ed803e105309fefe678eeb54f6100b155010dde8f2843474164011103436051",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 2900,
+            "y": 354,
+            "width": 660,
+            "height": 1339,
+            "radius": 54
+          }
+        },
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+          "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 2190,
+            "y": 176,
+            "width": 780,
+            "height": 1582,
+            "radius": 54
+          }
+        }
+      ],
+      "sha256": "6b86ee0c62e7f43366322b4c18ed0807f23b31170006722ff2edb095e66665aa",
+      "bytes": 2534529
+    },
+    {
+      "file": "app-store/search-results/search-results-3840x2560.png",
+      "width": 3840,
+      "height": 2560,
+      "platform": "App Store",
+      "placement": "Search Results",
+      "headline": "Find your political spectrum.",
+      "source_panels": [
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+          "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 2268,
+            "y": 320,
+            "width": 1254,
+            "height": 2544,
+            "radius": 77
+          }
+        }
+      ],
+      "sha256": "8de05a562a3b628363fe9f0f2f2ad5fb7f3db772f9b83df25e263181aef9aa4e",
+      "bytes": 3267156
+    },
+    {
+      "file": "app-store/search-results/search-results-1920x1280.png",
+      "width": 1920,
+      "height": 1280,
+      "platform": "App Store",
+      "placement": "Search Results",
+      "headline": "Find your political spectrum.",
+      "source_panels": [
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+          "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 1134,
+            "y": 160,
+            "width": 627,
+            "height": 1272,
+            "radius": 38
+          }
+        }
+      ],
+      "sha256": "d9a8a02cddd5f066fb623924d8f79b8896bb463a195b31b2bc75cd04dbd35906",
+      "bytes": 1282117
+    },
+    {
+      "file": "app-store/search-results/search-results-5244x2950.png",
+      "width": 5244,
+      "height": 2950,
+      "platform": "App Store",
+      "placement": "Search Results",
+      "headline": "Where do you land?",
+      "source_panels": [
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-05-matches.png",
+          "source_sha256": "5ed803e105309fefe678eeb54f6100b155010dde8f2843474164011103436051",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 4138,
+            "y": 765,
+            "width": 915,
+            "height": 1856,
+            "radius": 74
+          }
+        },
+        {
+          "source": "docs/store-screenshots/ios/iphone-6.9-04-results.png",
+          "source_sha256": "84e50caa50f13477333419ef7173f78cb1bd0f24961ec03e5908cd240081c7c5",
+          "crop": {
+            "x": 0,
+            "y": 190,
+            "width": 1320,
+            "height": 2678
+          },
+          "panel": {
+            "x": 3032,
+            "y": 423,
+            "width": 1311,
+            "height": 2660,
+            "radius": 74
+          }
+        }
+      ],
+      "sha256": "9146eb5a1fe94e32099937719ce4f8847dd7410268f4eaaff39c976baeb107dd",
+      "bytes": 4558628,
+      "shared_with": "app-store/header/header-5244x2950.png"
+    }
+  ],
+  "creative_specifications": "https://developer.apple.com/help/app-store-connect/reference/app-information/creative-assets-specifications/"
+}

@@ -1,0 +1,25 @@
+{
+  "asset_count": 50,
+  "groups": {
+    "app-store/iphone-6.9": 5,
+    "app-store/ipad-13": 4,
+    "play-store/phone": 5,
+    "play-store/tablet": 4,
+    "play-store": 1,
+    "app-store/iphone-6.1": 5,
+    "app-store/iphone-6.3": 5,
+    "app-store/duo-outer-portrait": 4,
+    "app-store/duo-inner-portrait": 4,
+    "app-store/duo-outer-landscape": 4,
+    "app-store/duo-inner-landscape": 4,
+    "app-store/header": 2,
+    "app-store/search-results": 3
+  },
+  "format": "All 50 upload PNGs are 8-bit RGB with no alpha",
+  "dimensions": "All exact dimensions and output SHA-256 values match the manifest",
+  "source_integrity": "All nine provided captures match their committed SHA-256 values; all 16 native Duo captures match their recorded source hashes",
+  "screenshot_integrity": "All 52 visible app panel interiors match the cropped and uniformly resized real captures exactly; rounded corners and deliberate front-panel overlaps are excluded",
+  "native_duo": "16 native captures, all four display/orientation combinations; no yellow Flutter overflow stripes in the final captures",
+  "demo_profile": "Completed 25-question sample quiz: Neutral responses, standard importance, no dealbreakers",
+  "manual_profile_issue": "Separate manual-placement outer-landscape Matches overflow recorded in capture-notes.md; app code not modified"
+}
