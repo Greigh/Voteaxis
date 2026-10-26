@@ -1,13 +1,169 @@
-Voteaxis — Spectrum Issue Index v1
+Greigh Studios Source Available License
+Version 1.0, July 2026
+
 Copyright (c) 2026 The Greigh Studios LLC. All rights reserved.
 
-This software and its associated data files (including the politician,
-question, issue, and roll-call catalogs) are proprietary to
-The Greigh Studios LLC.
+This is the Greigh Studios Source Available License ("License"). It is a
+reusable license used across Greigh Studios projects. The specific project it
+applies to — its source repository and its hosted service — is identified in
+Schedule A at the end of this file. Software under this License is **source
+available**, not open source. Using the hosted service is governed separately
+by that service's Terms of Use.
 
-No part of this repository may be reproduced, distributed, or used to
-create derivative works without prior written permission from
-The Greigh Studios LLC, except as required by the licenses of its
-third-party dependencies.
+────────────────────────────────────────────────────────────────
+1. Definitions
+────────────────────────────────────────────────────────────────
 
-Contact: hello@greighstudios.com
+"Project" means the project identified in Schedule A.
+
+"Software" means the source code of the Project published in the repository
+identified in Schedule A.
+
+"Service" means the website, APIs, and any official applications for the
+Project operated by the copyright holder, as identified in Schedule A.
+
+"Content" means the non-code material in the Software, including copy, case
+studies, photographs, screenshots, illustrations, names, logos, and brand
+assets.
+
+"You" means the individual or legal entity exercising permissions granted by
+this License.
+
+"Production use" means making the Software, or a derivative of it, available
+to anyone other than yourself — including publishing it as a public website,
+operating a network service or SaaS, or distributing an application to others.
+
+────────────────────────────────────────────────────────────────
+2. Permissions
+────────────────────────────────────────────────────────────────
+
+You may, without a separate agreement:
+
+  (a) View and study the Software for personal, educational, or
+      security-research purposes.
+
+  (b) Run the Software locally on your own devices for personal evaluation
+      and development, provided it is not Production use and is not used to
+      circumvent any paid entitlement of the Service.
+
+  (c) Reuse small, generic code portions (for example, a utility function or
+      a configuration snippet) in your own projects, provided you do not
+      reproduce the Project's overall design, structure, or Content.
+
+  (d) Submit contributions (for example, pull requests) to the official
+      repository. By submitting a contribution, you grant the copyright
+      holder a perpetual, worldwide, royalty-free license to use, modify, and
+      distribute that contribution under this License and any future license
+      the Project adopts.
+
+────────────────────────────────────────────────────────────────
+3. Restrictions
+────────────────────────────────────────────────────────────────
+
+Unless you have prior written permission from the copyright holder, you may
+not:
+
+  (a) Use the Software for Production use.
+
+  (b) Publish the Software, or a derivative, as your own website, application,
+      or service, or as that of any other person or organization.
+
+  (c) Offer the Software, or a derivative, as a commercial product, template,
+      or theme, whether free or paid.
+
+  (d) Sublicense, sell, or redistribute the Software or substantial portions
+      of it, except as part of a contribution merged into the official
+      repository with the copyright holder's acceptance.
+
+  (e) Reproduce the Project's distinctive look and feel in a way likely to
+      cause confusion about its source or to suggest affiliation with Greigh
+      Studios LLC.
+
+  (f) Remove, disable, or bypass any authentication, entitlement, billing, or
+      rate-limiting mechanism present in the Software or the Service.
+
+  (g) Operate the Software, or a derivative, as a service that competes with
+      the Service and is aimed at the general public.
+
+Personal use of the official Service under its Terms of Use is always
+permitted. This License does not restrict end users of the Service.
+
+────────────────────────────────────────────────────────────────
+4. Brand assets and content
+────────────────────────────────────────────────────────────────
+
+The Content is proprietary and is NOT licensed for reuse under this License.
+The permissions in Section 2 apply to the source code only.
+
+In particular, the Greigh Studios and Project names, logos, and marks, the
+written copy, and any case-study material or imagery (including third-party
+client work shown as examples) may not be copied, redistributed, or used to
+represent yourself or any other party. This License grants no right to use the
+Greigh Studios or Project name, logo, or branding in a way that suggests
+endorsement or affiliation.
+
+────────────────────────────────────────────────────────────────
+5. Additional project terms
+────────────────────────────────────────────────────────────────
+
+Schedule A may state additional terms specific to the Project. Those terms are
+part of this License for that Project and control over the general terms above
+only where they expressly say so.
+
+────────────────────────────────────────────────────────────────
+6. Third-party components
+────────────────────────────────────────────────────────────────
+
+The Software includes third-party libraries and assets under their own
+licenses (for example MIT, Apache-2.0, BSD-3-Clause, SIL OFL 1.1, and vendor
+SDK terms). Those components remain governed by their respective licenses.
+Schedule A may list notable examples for the Project.
+
+────────────────────────────────────────────────────────────────
+7. Disclaimer
+────────────────────────────────────────────────────────────────
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING
+FROM USE OF THE SOFTWARE.
+
+────────────────────────────────────────────────────────────────
+8. Contact
+────────────────────────────────────────────────────────────────
+
+For commercial licensing, self-hosting or reuse permission, or other
+questions, use the contact address in Schedule A.
+
+════════════════════════════════════════════════════════════════
+Schedule A — Project terms
+════════════════════════════════════════════════════════════════
+
+Project:          Voteaxis — Spectrum Issue Index
+Repository:       https://github.com/Greigh/Voteaxis
+Service:          https://voteaxis.org and https://api.voteaxis.org (website,
+                  API, and official iOS / Android applications)
+Copyright holder: The Greigh Studios LLC
+Contact:          hello@greighstudios.com
+
+Notable third-party components:
+  - Flutter and the Dart SDK (BSD-3-Clause)
+  - Next.js and React (MIT); Bun (MIT)
+  - Platform and vendor SDKs from Apple and Google (under their respective
+    terms)
+  - Manrope and IBM Plex Mono typefaces (SIL OFL 1.1)
+
+Additional terms:
+
+  1. Spectrum Issue Index data. The curated catalogs in
+     mobile/assets/data/ — including politicians.json, questions.json,
+     issues.json, pillars.json, rollcall_scores.json, and the Issue of the
+     Week pool — are Content, not code: they are proprietary to
+     The Greigh Studios LLC and are not licensed for reuse, redistribution,
+     or ingestion into another dataset or service without prior written
+     permission. This term controls over Section 2(c) for these files.
+
+  2. Competing service. For clarity, Section 3(g) includes operating a
+     hosted candidate-matching, political-spectrum, or voter-guide service
+     aimed at the general public.

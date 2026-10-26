@@ -4,6 +4,10 @@
 
 The **quiz lives only on iOS and Android**. The website is the marketing, methodology, and waitlist surface — plus the page a shared result opens on.
 
+**Status:** iOS on TestFlight (`1.0.0+4`), App Store submission in progress. Android next. Site and API live at [voteaxis.org](https://voteaxis.org) and [api.voteaxis.org](https://api.voteaxis.org/health).
+
+> **Source available, not open source.** Everything in this repo is public so the scoring, the privacy claims, and the data behind the roster can be read and verified — but the code, brand, and curated catalogs remain proprietary. See [`LICENSE`](LICENSE).
+
 ## What’s in the repo
 
 | Path | Role |
@@ -14,6 +18,7 @@ The **quiz lives only on iOS and Android**. The website is the marketing, method
 | [`shared/`](shared/) | Cross-language fixtures — the encrypted-envelope interop vectors both Dart and WebCrypto must satisfy |
 | [`scripts/`](scripts/) | Python/bash tooling — roll-call scoring, roster ingest, deploy |
 | [`deploy/`](deploy/) · [`brand/`](brand/) | Server config samples and brand assets |
+| [`docs/`](docs/) | Store changelogs, App Store screenshots, listing metadata |
 
 Package READMEs: [`web/README.md`](web/README.md) · [`mobile/README.md`](mobile/README.md) · [`server/README.md`](server/README.md)
 
@@ -77,6 +82,8 @@ In-app Methodology and [`web/app/methodology`](web/app/methodology) explain the 
 - Home state → “Your ballot”  
 - Dealbreaker prompts, haptics, reduce motion  
 - Issue of the Day widget — Agree/Disagree on the home or lock screen nudges one SII issue in the background (one per calendar day; does not replace the quiz)  
+- Weekly reminder — a local notification pointing at the Issue of the Week; permission is only asked when the toggle is turned on  
+- **iPhone Duo** — fold-aware layouts on `duo_fold`: book pose opens the app like a book (context rail on one pane, working column on the other), propped pose shows a glance card above the crease, on-table pose stacks them, closed pose uses the cover display. Settings → iPhone Duo toggles book split and the glance card  
 - Discard an in-progress quiz, or delete everything  
 
 Quiz answers never leave the device. Friend codes and shared links carry issue scores only — never Likert answers, email, or a device id.
@@ -95,7 +102,7 @@ Quiz answers never leave the device. Friend codes and shared links carry issue s
 
 Endpoints live in [`server/README.md`](server/README.md). In short: `/v1/codes` (48-hour friend profiles), `/v1/results` (publish · read · revoke a shared link), `/v1/week`, the Congress surface (`/v1/congress`, `/v1/members/:bioguideId`, `/v1/bills/…`, `/v1/receipts/:bioguideId`), and `/v1/politicians` — the curated roster in `mobile/assets/data/politicians.json`, ours to serve rather than only bundled into the app. Everything is rate-limited per IP. The API never scores.
 
-The app fetches `/v1/politicians` at launch to refresh its bundled roster (ETag-conditional, so an unchanged roster is a `304`, not a ~1.5 MB re-download) and caches the result on-device; it always has the bundled asset to fall back on offline or on a fresh install. See [`mobile/lib/data/app_data.dart`](mobile/lib/data/app_data.dart) and [`mobile/lib/services/politicians_cache.dart`](mobile/lib/services/politicians_cache.dart).
+The app fetches `/v1/politicians` at launch to refresh its bundled roster (ETag-conditional, so an unchanged roster is a `304`, not a ~1.5 MB re-download) and caches the result on-device; it always has the bundled asset to fall back on offline or on a fresh install. The endpoint is gated — production authorizes a per-install Ed25519 device keypair registered through `/v1/device-tokens` and signed per request (see [`mobile/lib/services/device_token.dart`](mobile/lib/services/device_token.dart)); the server stores only the public key and timestamps. See [`mobile/lib/data/app_data.dart`](mobile/lib/data/app_data.dart) and [`mobile/lib/services/politicians_cache.dart`](mobile/lib/services/politicians_cache.dart).
 
 ## Quick start
 
@@ -174,7 +181,7 @@ There is deliberately no `.env` for these. [`scripts/`](scripts/) is invoked dir
 | `python3 scripts/sync_politicians.py` (`bun run sync:politicians`) | Copy `mobile/assets/data/politicians.json` to `server/data/politicians.json` so `/v1/politicians` serves it. Run after every roster edit, before `bun run deploy` |
 | `python3 scripts/check_roster_staleness.py` (`bun run roster:check`) | Cross-check every senator/representative against the live congress-legislators roster — flags resignations, party/chamber/district drift, and missing bioguide ids. Congress seat changes only; still web-search governors, AGs, state legislators, and in-flight races by hand |
 
-A weekly scheduled Claude Code routine runs `roster:check` on its own, verifies anything it flags against a fresh web search, and opens a PR with the fix — or reports the issue without touching the repo if it can't confirm a fact confidently. It never pushes to `main` directly.
+A weekly automated routine runs `roster:check`, verifies anything it flags against a fresh web search, and opens a PR with the fix — or reports the issue without touching the repo if it can't confirm a fact confidently. It never pushes to `main` directly.
 
 ## Deploy
 
@@ -187,6 +194,21 @@ bun run deploy:rollback     # restore the newest backup
 The deploy reads the repo-root `.env` (see [`.env.example`](.env.example)) and fails before it touches production rather than halfway through. It never rsyncs over `server/data/` — friend codes, the BICAM index, and the waitlist JSONL survive every deploy.
 
 See [`DEPLOY.md`](DEPLOY.md) for the full VPS runbook (both processes under PM2 behind nginx, TLS, mail, Stripe webhook; a Caddy sample lives in [`deploy/`](deploy/)).
+
+## License
+
+[Source available](LICENSE), not open source — Greigh Studios Source
+Available License 1.0. You can read, study, and run everything here for
+personal evaluation and security research; production use, redistribution,
+and the curated catalogs in `mobile/assets/data/` require written
+permission. Contributions (Section 2(d)) are welcome.
+
+## Contributing & security
+
+Issues and pull requests on GitHub. For security reports — the envelope
+crypto, device-key signing, or the API — email
+[hello@greighstudios.com](mailto:hello@greighstudios.com) rather than
+opening a public issue.
 
 ## Ownership
 
