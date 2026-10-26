@@ -87,6 +87,18 @@ const WHAT_YOU_GET = [
     title: "Clear placement",
     body: "See yourself on Liberal 100 ← 0 → Conservative 100. In the quiz, you say how much each question matters.",
   },
+  {
+    title: "Issue of the Week",
+    body: "One national question every week, with its context — answer it from the app or the Home Screen widget.",
+  },
+  {
+    title: "Steel man",
+    body: "The strongest case against your own strongest leans — not just agreement.",
+  },
+  {
+    title: "Stays yours",
+    body: "Answers are encrypted on your device. No account, no profile, nothing sold — sharing is a code you hand someone.",
+  },
 ] as const;
 
 export default function HomePage() {
@@ -187,8 +199,9 @@ export default function HomePage() {
               <p className={styles.waitlistKicker}>Beta list</p>
               <h2 id="waitlist-heading">Get notified at launch</h2>
               <p className={styles.waitlistLede}>
-                TestFlight and Play invites when the first builds are ready. No
-                spam — just launch access for Voteaxis.
+                The iOS beta is on TestFlight now and the App Store submission
+                is in motion — join the list for launch day and the Play
+                release. No spam.
               </p>
             </div>
             <WaitlistForm />

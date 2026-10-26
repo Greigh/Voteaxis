@@ -36,7 +36,9 @@ export function HomeIntro() {
             How scoring works
           </a>
         </div>
-        <p className={styles.meta}>Coming soon on iOS &amp; Android</p>
+        <p className={styles.meta}>
+          Now in TestFlight on iOS — App Store next · Android to follow
+        </p>
       </div>
     </header>
   );
